@@ -1,6 +1,15 @@
 from django.shortcuts import render, redirect
 from .lstm_prediction import *
 
+from django.views.generic import ListView
+from astocks.models import StockList
+
+class StockListView(ListView):
+    model = StockList
+    context_object_name = 'stocks'
+    template_name = 'prediction/index.html'
+
+
 # --------------- MAIN WEB PAGES -----------------------------
 def redirect_root(request):
     return redirect('/pred_app/index')

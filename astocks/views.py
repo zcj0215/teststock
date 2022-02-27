@@ -1,5 +1,5 @@
 from tkinter import EXCEPTION
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 
 # Create your views here.
 from django.http import HttpResponse
@@ -10,6 +10,7 @@ import time
 from .models import StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stockme
 from django.http import Http404
 from django.db.models import Q
+from .forms import DateDataForm
 
 ts.set_token('357f92fd3836f2d018d20b9b840897abb3e5c9a62e17895b413e05fe')
 pro = ts.pro_api()
@@ -183,15 +184,14 @@ def single(request,code='000001',):
                
     return HttpResponse(json.dumps(jsonlist))
 
-def enter(request):
-    for index in range(2908,4717):
+def enter(beginindex,endindex,start,end):
+    for index in range(int(beginindex),int(endindex)):
          stock = get_object_or_404(StockList, pk=index+1)
          code = stock.ts_code[:6]
          flag = stock.ts_code[7:]
          #start = time.strftime("%Y%m%d", time.localtime())
          #end = time.strftime("%Y%m%d", time.localtime())
-         start = "20220216"
-         end = "20220216"
+          
          data = pro.daily(ts_code=stock.ts_code, start_date=start, end_date=end)
          
          column_list = []
@@ -293,7 +293,7 @@ def enter(request):
                    p_change = dict['pct_chg'],
                    date = mydate
                  )
-    return HttpResponse(json.dumps({'OK':'OK'}))
+    return 'OK'
  
 def selectStock(page, limit):
     queryset = StockList.objects.all().order_by('symbol')
@@ -349,13 +349,9 @@ def search(request):
            
     return HttpResponse(json.dumps(jsonlist))
 
-def turnover(request):
-    
-    trade_date1 = "2022-02-16"
-    trade_date2 = "2022-02-17"
-    
-    
-    for index in range(3000, 4000):
+def turnover(beginindex,endindex,trade_date1,trade_date2):
+
+    for index in range(int(beginindex),int(endindex)):
     # for index in range(4618, 4635):
          stock = get_object_or_404(StockList, pk=index+1)
          code = stock.ts_code[:6]
@@ -413,4 +409,32 @@ def turnover(request):
                  stock.save()
                except Http404:
                  pass
-    return HttpResponse(json.dumps({'OK':'OK'}))
+    return 'OK'
+  
+def handledd(request):
+    if request.method == 'POST':
+        form = DateDataForm(request.POST)
+        if form.is_valid():
+            beginindex = request.POST['beginindex']
+            endindex = request.POST['endindex']
+            begindate = request.POST['begindate']
+            enddate = request.POST['enddate']
+            enter(beginindex,endindex,begindate,enddate)
+            return redirect('home')
+    else:
+        form = DateDataForm()
+    return render(request, 'handledd.html', {'form': form})
+  
+def handleto(request):
+    if request.method == 'POST':
+        form = DateDataForm(request.POST)
+        if form.is_valid():
+            beginindex = request.POST['beginindex']
+            endindex = request.POST['endindex']
+            begindate = request.POST['begindate']
+            enddate = request.POST['enddate']
+            turnover(beginindex,endindex,begindate,enddate)
+            return redirect('home')
+    else:
+        form = DateDataForm()
+    return render(request, 'handledd.html', {'form': form})

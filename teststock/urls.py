@@ -20,9 +20,11 @@ from django.contrib.auth import views as auth_views
 from boards import views
 from accounts import views as accounts_views
 from astocks import views as astocks_views
+from prediction import views as prediction_views
 
 urlpatterns = [
     re_path(r'^$', views.BoardListView.as_view(), name='home'),
+    re_path(r'^prediction/$', prediction_views.StockListView.as_view(), name='prediction'),
     re_path(r'^signup/$', accounts_views.signup, name='signup'),
     re_path(r'^login/$', accounts_views.login, name='login'),
     re_path(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
@@ -37,7 +39,7 @@ urlpatterns = [
     re_path(r'^api/stockSql/$',astocks_views.stockList),
     re_path(r'^api/search/$',astocks_views.search),
     re_path(r'^api/query/$',astocks_views.query),
-    re_path(r'^api/enter/$', astocks_views.enter),
-    re_path(r'^api/turnover/$', astocks_views.turnover),
+    re_path(r'^handledd/$', astocks_views.handledd,name='handledd'),
+    re_path(r'^handleto/$', astocks_views.handleto,name='handleto'),
     path('admin/', admin.site.urls),
 ]

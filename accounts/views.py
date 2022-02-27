@@ -49,6 +49,7 @@ def login(request):
               else:  
                 return redirect('home')
             else:
+              next = request.POST['next'] 
               form._errors[NON_FIELD_ERRORS] = form.error_class(['请输入正确的用户名和密码。'])
               
     else:
