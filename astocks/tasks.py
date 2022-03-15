@@ -8,12 +8,12 @@ app.conf.beat_schedule = {
     # Executes every afternoon at 15:30 p.m.
     'add-every-afternoon': {
         'task': 'doenter',
-        'schedule': crontab(hour=15, minute=50),
+        'schedule': crontab(hour=16, minute=1),
         'args': (),
     },
     'test-every-afternoon':{
         'task':'turnover',
-        'schedule': crontab(hour=15, minute=50),
+        'schedule': crontab(hour=16, minute=1),
         'args':()
     }   
 }
