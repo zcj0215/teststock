@@ -34,22 +34,28 @@ class StockChooseForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     reasons = forms.CharField(
         label=_('选股理由'),
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     boards = forms.ModelMultipleChoiceField(
         label=_('热点题材'),
+        required=False,
         queryset=Board.objects.all(),
         widget=forms.CheckboxSelectMultiple)
     short = forms.CharField(
         label=_('警惕缺点'),
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     ndperformance = forms.CharField(
         label=_('次日表现'),
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     tenday_limits = forms.CharField(
         label=_('10日涨停次数'),
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     summary = forms.CharField(
         label=_('经验总结'),
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     person =  forms.ModelChoiceField(
         label=_('选股人'),
