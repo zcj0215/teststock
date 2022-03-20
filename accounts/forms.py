@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.utils.html import format_html
 from django.contrib.auth.models import User
+from .models import Persons
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
@@ -31,7 +32,7 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
         
 class SignInForm(forms.Form):
-    username = forms.CharField(\
+    username = forms.CharField(
         label=_('用户名'),
         required=True,
         error_messages={'required':'这是必填栏。'},
@@ -45,3 +46,20 @@ class SignInForm(forms.Form):
     class Meta:
         model = User
         fields = ('username', 'password',)
+        
+
+class PersonsForm(forms.ModelForm):
+    name = forms.CharField(
+        label=_('选股人'),
+        required=True,
+        error_messages={'required':'这是必填栏。'},
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    description = forms.CharField(
+        label=_('说明'),
+        required=True,
+        error_messages={'required':'这是必填栏。'},
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Persons
+        fields = ['name', 'description']

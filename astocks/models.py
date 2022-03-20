@@ -1,6 +1,24 @@
 from django.db import models
+from accounts.models import Persons
+from boards.models import Board
 
 # Create your models here.
+class StockChoose(models.Model):
+    pick_date = models.DateField(max_length=10,db_index=True)
+    code = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+    reasons = models.CharField(max_length=100,null=True)
+    boards = models.ManyToManyField(Board, related_name="stockchooses")
+    short = models.CharField(max_length=100,null=True)
+    ndperformance = models.CharField(max_length=50,null=True)
+    tenday_limits = models.PositiveIntegerField(null=True)
+    summary = models.TextField(max_length=1000,null=True)
+    person = models.ForeignKey(Persons, related_name='stockchooses',on_delete=models.CASCADE)
+    
+    
+    def __str__(self):
+        return self.name
+
 class StockList(models.Model):
     ts_code = models.CharField(max_length=50, unique=True)
     symbol = models.CharField(max_length=10, unique=True,db_index=True)

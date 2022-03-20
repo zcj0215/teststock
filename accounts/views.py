@@ -3,9 +3,10 @@ from django.shortcuts import render
 # Create your views here.from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .forms import SignUpForm, SignInForm
+from .models import Persons
+from .forms import SignUpForm, SignInForm, PersonsForm
 from django.contrib.auth import login as auth_login, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.forms.forms import NON_FIELD_ERRORS
 
 from django.urls import reverse_lazy
@@ -60,3 +61,15 @@ def login(request):
           next = ''  
         
     return render(request, 'login.html', {'form': form, 'next':next})
+
+@login_required
+def new_person(request):
+    if request.method == 'POST':
+        form = PersonsForm(request.POST)
+        if form.is_valid():
+            person = form.save(commit=False)
+            person.save()
+            return redirect('home')
+    else:
+        form = PersonsForm()
+    return render(request, 'person.html', {'form': form})

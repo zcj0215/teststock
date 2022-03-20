@@ -18,7 +18,7 @@ app.conf.beat_schedule = {
     }   
 }
 
-@app.task(name='doenter',)
+@app.task(name='doenter')
 def doenter():
     start = time.strftime("%Y%m%d", time.localtime())
     end = time.strftime("%Y%m%d", time.localtime())
@@ -34,7 +34,8 @@ def doenter():
 @app.task(name='doturnover')
 def doturnover():
     start = time.strftime("%Y-%m-%d", time.localtime())
-    end = time.strftime("%Y-%m-%d", time.localtime())
+    ltime = time.localtime()
+    end = str(ltime.tm_year)+'-'+str(ltime.tm_mon)+'-'+str(ltime.tm_mday+1)
     for i in range(0,2585,200):
         if(i+200>2585):
            result = turnover(i,2585,start,end)

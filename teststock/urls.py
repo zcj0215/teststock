@@ -39,6 +39,7 @@ urlpatterns = [
     re_path(r'^api/stockSql/$',astocks_views.stockList),
     re_path(r'^api/search/$',astocks_views.search),
     re_path(r'^api/query/$',astocks_views.query),
+    re_path(r'^person/$', accounts_views.new_person,name='new_person'),
     re_path(r'^handledd/$', astocks_views.handledd,name='handledd'),
     re_path(r'^handleto/$', astocks_views.handleto,name='handleto'),
     path('admin/', admin.site.urls),
