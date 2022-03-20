@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Persons
 from .forms import SignUpForm, SignInForm, PersonsForm
+from astocks.forms import StockChooseForm
 from django.contrib.auth import login as auth_login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms.forms import NON_FIELD_ERRORS
@@ -73,3 +74,15 @@ def new_person(request):
     else:
         form = PersonsForm()
     return render(request, 'person.html', {'form': form})
+
+@login_required
+def new_pick(request):
+    if request.method == 'POST':
+        form = StockChooseForm(request.POST)
+        if form.is_valid():
+            pick = form.save(commit=False)
+            pick.save()
+            return redirect('home')
+    else:
+        form = StockChooseForm()
+    return render(request, 'pickstock.html', {'form': form})
