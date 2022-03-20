@@ -67,7 +67,8 @@ CORS_ORIGIN_ALLOW_ALL = True   # 允许所有源访问
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8000',    #设置白名单
     'http://localhost:8000',
-    'http://10.24.11.197:8000'
+    'http://172.27.16.14:8000',
+    'http://139.155.129.63:8000'
 )
 
 CORS_ALLOW_METHODS = (
