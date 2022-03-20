@@ -51,9 +51,12 @@ class StockChooseForm(forms.ModelForm):
     summary = forms.CharField(
         label=_('经验总结'),
         widget=forms.TextInput(attrs={'class': 'form-control'}))
-    person = forms.CharField(
+    person =  forms.ModelChoiceField(
         label=_('选股人'),
-        widget=forms.ModelChoiceField(queryset=Persons.objects.all(),initial=0))
+        queryset=Persons.objects.all().order_by('id'), 
+        required=True,
+        error_messages={'required':'这是必填栏。'})
+   
     
     class Meta:
         model = StockChoose
