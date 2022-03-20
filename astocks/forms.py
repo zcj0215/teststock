@@ -49,7 +49,7 @@ class StockChooseForm(forms.ModelForm):
         label=_('次日表现'),
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}))
-    tenday_limits = forms.CharField(
+    tenday_limits = forms.IntegerField(
         label=_('10日涨停次数'),
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'}))
