@@ -13,7 +13,7 @@ app.conf.beat_schedule = {
     },
     'doturnover-every-afternoon':{
         'task':'doturnover',
-        'schedule': crontab(hour=16, minute=45),
+        'schedule': crontab(hour=17, minute=45),
         'args':()
     }   
 }
@@ -33,8 +33,12 @@ def doenter():
 
 @app.task(name='doturnover')
 def doturnover():
-    start = time.strftime("%Y-%m-%d", time.localtime())
     ltime = time.localtime()
+    start = ''
+    if(ltime.tm_mday-1)==0:
+        start = str(ltime.tm_year)+'-'+str(ltime.tm_mon)+'-'+str(ltime.tm_mday)
+    else:
+        start = str(ltime.tm_year)+'-'+str(ltime.tm_mon)+'-'+str(ltime.tm_mday-1)
     end = str(ltime.tm_year)+'-'+str(ltime.tm_mon)+'-'+str(ltime.tm_mday+1)
     for i in range(0,2585,200):
         if(i+200>2585):
