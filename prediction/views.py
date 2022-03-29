@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .lstm_prediction import *
 
 from django.views.generic import ListView
 from astocks.models import StockList
-# from django.http import HttpResponse
+
+
 
 class StockListView(ListView):
     model = StockList
@@ -24,10 +25,13 @@ def pred(request):
 def contact(request):
 	return render(request, 'prediction/contact.html')
 
-def search(request, se, stock_symbol):
-	import json
-	predicted_result_df = lstm_prediction(se, stock_symbol)
-	return render(request, 'prediction/search.html', {"predicted_result_df": predicted_result_df})
+def search(request):
+    if request.method == 'POST':
+        stock_symbol = request.POST['stock_symbol']
+        se = get_object_or_404(StockList, symbol=stock_symbol).name
+        
+        predicted_result_df = lstm_prediction(se, stock_symbol)
+        return render(request, 'prediction/search.html', {"predicted_result_df": predicted_result_df})
 
 
 

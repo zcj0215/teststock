@@ -17,13 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,re_path,include
 from django.contrib.auth import views as auth_views
-from boards import views as boards_views
 from accounts import views as accounts_views
 from astocks import views as astocks_views
 
 
 urlpatterns = [
-    re_path(r'^$', boards_views.redirect_root, name='home'),
+    re_path(r'^$', accounts_views.home, name='home'),
     re_path(r'^signup/$', accounts_views.signup, name='signup'),
     re_path(r'^login/$', accounts_views.login, name='login'),
     re_path(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),

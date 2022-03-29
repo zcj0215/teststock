@@ -2,7 +2,7 @@
 {% load static %}
 {% block nav %}
 <li class="active">
-    <a href="/boards/" style='float:right;padding-right:20px'>
+    <a href="/boards/" style='float:right;padding-right:10px;margin:10px'>
         返回
     </a>
 </li>
@@ -10,26 +10,15 @@
 {% block content %}
 <div class="content">
     <img alt="" height="180" src="https://thelinknewspaper.ca/images/articles/Volume_36/Special/_resized/mediadem.polls.LauraLalonde.gif" width="500"/>
-    <div class="sidebar">
-        <div class="gadget">
-            <br>
-                <br>
-                    <div class="clr">
-                    </div>
-                    <form action="http://www.baidu.com/" target="_blank" method="get">
-                        <input maxlength="255" name="q" size="25" type="text" value=""/>
-                        <input type="submit" value="百度"/>
-                    </form>
-                </br>
-            </br>
-        </div>
-    </div>
+     
     <div class="form-group col-sm-6 col-sm-offset-1">
         <h2 align="center">
             获取您的预测！
         </h2>
-        <form align="left" class="" id="search">
-            <input class="form-control typeahead" data-url2="{% static 'prediction/data/stock2.json' %}" data-url="{% static 'pred_app/data/stock.json' %}" id="typeahead" placeholder="搜索股票代码..." type="text" usr-url=""/>
+        <form align="left" class="" id="search" action="/prediction/search" method="post">
+            {% csrf_token %}
+            <input class="form-control typeahead" id="stock_symbol" name="stock_symbol" placeholder="填写股票代码..." type="text" />
+            <input type="submit" value="搜索"/>
         </form>
     </div>
     <br>
