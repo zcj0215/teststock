@@ -6,13 +6,13 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'home' %}">板块</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
   <li class="breadcrumb-item active">{{ board.name }}</li>
 {% endblock %}
 
 {% block content %}
   <div class="mb-4">
-    <a href="{% url 'new_topic' board.pk %}" class="btn btn-primary">新建主题</a>
+    <a href="{% url 'boards:new_topic' board.pk %}" class="btn btn-primary">新建主题</a>
   </div>
 
   <table class="table">
@@ -27,7 +27,7 @@
     </thead>
     <tbody>
       {% for topic in topics %} 
-        {% url 'topic_posts' board.pk topic.pk as topic_url %}
+        {% url 'boards:topic_posts' board.pk topic.pk as topic_url %}
         <tr>
           <td>
             <p class="mb-0">

@@ -15,25 +15,18 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path,re_path
+from django.urls import path,re_path,include
 from django.contrib.auth import views as auth_views
-from boards import views
+from boards import views as boards_views
 from accounts import views as accounts_views
 from astocks import views as astocks_views
-from prediction import views as prediction_views
+
 
 urlpatterns = [
-    re_path(r'^$', views.BoardListView.as_view(), name='home'),
-    re_path(r'^prediction/$', prediction_views.StockListView.as_view(), name='prediction'),
+    re_path(r'^$', boards_views.redirect_root, name='home'),
     re_path(r'^signup/$', accounts_views.signup, name='signup'),
     re_path(r'^login/$', accounts_views.login, name='login'),
     re_path(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
-    re_path(r'^boards/(?P<pk>\d+)/$', views.TopicListView.as_view(), name='board_topics'),
-    re_path(r'^boards/(?P<pk>\d+)/new/$', views.new_topic, name='new_topic'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.PostListView.as_view(), name='topic_posts'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic, name='reply_topic'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
-        views.PostUpdateView.as_view(), name='edit_post'),
     re_path(r'^settings/account/$', accounts_views.UserUpdateView.as_view(), name='my_account'),
     re_path(r'^api/(?P<code>\d+)$', astocks_views.single),
     re_path(r'^api/stockSql/$',astocks_views.stockList),
@@ -44,4 +37,6 @@ urlpatterns = [
     re_path(r'^handledd/$', astocks_views.handledd,name='handledd'),
     re_path(r'^handleto/$', astocks_views.handleto,name='handleto'),
     path('admin/', admin.site.urls),
+    path('boards/', include(('boards.urls','boards'),namespace='boards')),
+    path('prediction/', include(('prediction.urls','prediction'),namespace='prediction')),
 ]

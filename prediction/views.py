@@ -3,6 +3,7 @@ from .lstm_prediction import *
 
 from django.views.generic import ListView
 from astocks.models import StockList
+# from django.http import HttpResponse
 
 class StockListView(ListView):
     model = StockList
@@ -12,22 +13,22 @@ class StockListView(ListView):
 
 # --------------- MAIN WEB PAGES -----------------------------
 def redirect_root(request):
-    return redirect('/pred_app/index')
+    return redirect('/prediction/pred')
 
 def index(request):
-	return render(request, 'pred_app/index.html') 
+	return render(request, 'prediction/index.html') 
 
 def pred(request):
-    return render(request, 'pred_app/prediction.html')
+    return render(request, 'prediction/prediction.html')
 
 def contact(request):
-	return render(request, 'pred_app/contact.html')
+	return render(request, 'prediction/contact.html')
 
 def search(request, se, stock_symbol):
 	import json
 	predicted_result_df = lstm_prediction(se, stock_symbol)
-	return render(request, 'pred_app/search.html', {"predicted_result_df": predicted_result_df})
-# -----------------------------------------------------------
+	return render(request, 'prediction/search.html', {"predicted_result_df": predicted_result_df})
+
 
 
 

@@ -16,8 +16,8 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'home' %}">板块</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'board_topics' board.pk %}">{{ board.name }}</a></li>
+  {% comment %} <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li> {% endcomment %}
+  <li class="breadcrumb-item"><a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a></li>
   <li class="breadcrumb-item active">新建主题</li>
 {% endblock %}
 
@@ -26,6 +26,6 @@
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <button type="submit" class="btn btn-success">发布</button>
-    <a href="{% url 'board_topics' board.pk %}" class="btn btn-outline-secondary" role="button">取消</a>
+    <a href="{% url 'boards:board_topics' board.pk %}" class="btn btn-outline-secondary" role="button">取消</a>
   </form>
 {% endblock %}

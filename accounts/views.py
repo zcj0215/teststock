@@ -14,7 +14,6 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 
-
 @method_decorator(login_required, name='dispatch')
 class UserUpdateView(UpdateView):
     model = User
@@ -24,14 +23,16 @@ class UserUpdateView(UpdateView):
 
     def get_object(self):
         return self.request.user
-
+def home(request):
+    return redirect('boards:home')   
+     
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect('home')
+            return redirect('boards:home')
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
@@ -49,7 +50,7 @@ def login(request):
               if next != '':
                   return redirect(next)
               else:  
-                return redirect('home')
+                return redirect('boards:home')
             else:
               next = request.POST['next'] 
               form._errors[NON_FIELD_ERRORS] = form.error_class(['请输入正确的用户名和密码。'])
@@ -70,7 +71,7 @@ def new_person(request):
         if form.is_valid():
             person = form.save(commit=False)
             person.save()
-            return redirect('home')
+            return redirect('boards:home')
     else:
         form = PersonsForm()
     return render(request, 'person.html', {'form': form})
@@ -82,7 +83,7 @@ def new_pick(request):
         if form.is_valid():
             pick = form.save(commit=False)
             pick.save()
-            return redirect('home')
+            return redirect('boards:home')
     else:
         form = StockChooseForm()
     return render(request, 'pickstock.html', {'form': form})

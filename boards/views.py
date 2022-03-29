@@ -68,7 +68,7 @@ def new_topic(request, pk):
                 topic=topic,
                 created_by=request.user
             )
-            return redirect('topic_posts', pk=pk, topic_pk=topic.pk)
+            return redirect('boards:topic_posts', pk=pk, topic_pk=topic.pk)
     else:
         form = NewTopicForm()
     return render(request, 'new_topic.html', {'board': board, 'form': form})
@@ -84,7 +84,7 @@ def reply_topic(request, pk, topic_pk):
             post.topic = topic
             post.created_by = request.user
             post.save()
-            return redirect('topic_posts', pk=pk, topic_pk=topic_pk)
+            return redirect('boards:topic_posts', pk=pk, topic_pk=topic_pk)
     else:
         form = PostForm()
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
@@ -106,4 +106,8 @@ class PostUpdateView(UpdateView):
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
         post.save()
-        return redirect('topic_posts', pk=post.topic.board.pk, topic_pk=post.topic.pk)
+        return redirect('boards:topic_posts', pk=post.topic.board.pk, topic_pk=post.topic.pk)
+
+
+def redirect_root(request):
+    return redirect('boards:home')

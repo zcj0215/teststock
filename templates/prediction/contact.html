@@ -1,0 +1,74 @@
+{% extends "prediction/base.html" %}
+{% load static %}
+{% block nav %}
+<li>
+    <a href="/prediction/index">
+        首页
+    </a>
+</li>
+<li>
+    <a href="/prediction/pred">
+        预测
+    </a>
+</li>
+<li class="active">
+    <a href="/prediction/contact">
+        联系我们
+    </a>
+</li>
+{% endblock nav %}
+{% block content %}
+<div class="content">
+    <div class="article">
+        <h2>
+            <span>
+                联系我们
+            </span>
+        </h2>
+        <div class="clr">
+        </div>
+    </div>
+    <div class="article">
+        <h2>
+            <span>
+                给我们发
+            </span>
+            邮件
+        </h2>
+        <div class="clr">
+        </div>
+        <form action="#" id="sendemail" method="post">
+            <ol>
+                <li>
+                    <label for="name">
+                        名称 (required)
+                    </label>
+                    <input class="text" id="name" name="name"/>
+                </li>
+                <li>
+                    <label for="email">
+                        邮件地址 (required)
+                    </label>
+                    <input class="text" id="email" name="email"/>
+                </li>
+                <li>
+                    <label for="website">
+                        网址
+                    </label>
+                    <input class="text" id="website" name="website"/>
+                </li>
+                <li>
+                    <label for="message">
+                        您的信息
+                    </label>
+                    <textarea cols="50" id="message" name="message" rows="8">
+                    </textarea>
+                </li>
+                <li>
+                    <input class="send" id="imageField" name="imageField" src="{% static 'pred_app/img/submit.gif' %}" type="image"/>
+                </li>
+            </ol>
+        </form>
+    </div>
+</div>
+{% endblock content %}

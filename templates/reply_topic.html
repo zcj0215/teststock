@@ -17,9 +17,9 @@
 
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'home' %}">板块</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'board_topics' topic.board.pk %}">{{ topic.board.name }}</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'topic_posts' topic.board.pk topic.pk %}">{{ topic.subject }}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'boards:board_topics' topic.board.pk %}">{{ topic.board.name }}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'boards:topic_posts' topic.board.pk topic.pk %}">{{ topic.subject }}</a></li>
   <li class="breadcrumb-item active">发布一个回帖</li>
 {% endblock %}
 

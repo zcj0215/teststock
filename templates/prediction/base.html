@@ -3,34 +3,28 @@
     <head>
         {% load static %}
         <title>
-            PredStocks
+            爱校码股票预测
         </title>
         <!-- get the required files from 3rd party sources -->
         <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
             <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
             <link href="{% static 'pred_app/css/style.css' %}" rel="stylesheet" type="text/css"/>
             <!-- Bootstrap -->
-            <link href="{% static 'pred_app/css/bootstrap.css' %}" rel="stylesheet" type="text/css">
-                <link href="{% static 'pred_app/fonts/font-awesome/css/font-awesome.css' %}" rel="stylesheet" type="text/css">
-                    <link href="{% static 'pred_app/css/menusearch.css' %}" rel="stylesheet" type="text/css">
+            <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+                <link href="{% static 'prediction/fonts/font-awesome/css/font-awesome.css' %}" rel="stylesheet" type="text/css">
+                    <link href="{% static 'prediction/css/menusearch.css' %}" rel="stylesheet" type="text/css">
                         <!-- Stylesheet================================================== -->
-                        <link href="{% static 'pred_app/css/style.css' %}" rel="stylesheet" type="text/css">
-                            <link href="{% static 'pred_app/css/responsive.css' %}" rel="stylesheet" type="text/css">
-                                <script src="{% static 'pred_app/js/modernizr.custom.js' %}" type="text/javascript">
+                        <link href="{% static 'prediction/css/style.css' %}" rel="stylesheet" type="text/css">
+                            
+                                <script src="{% static 'prediction/js/modernizr.custom.js' %}" type="text/javascript">
                                 </script>
                                 <link href="http://fonts.googleapis.com/css?family=Raleway:500,600,700,100,800,900,400,200,300" rel="stylesheet" type="text/css">
                                     <link href="http://fonts.googleapis.com/css?family=Playball" rel="stylesheet" type="text/css">
-                                        <script src="{% static 'pred_app/js/jquery.1.11.1.js' %}" type="text/javascript">
-                                        </script>
-                                        <script src="{% static 'pred_app/js/jquery-1.10.2.min.js' %}" type="text/javascript">
-                                        </script>
-                                        <script src="{% static 'pred_app/js/handlebars.js' %}">
-                                        </script>
-                                        <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js" type="text/javascript">
+                                        <script src="{% static 'js/jquery-3.6.0.min.js' %}" type="text/javascript">
                                         </script>
                                     </link>
                                 </link>
-                            </link>
+                            
                         </link>
                     </link>
                 </link>
@@ -39,32 +33,30 @@
     </head>
     <body>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
-        </script>
-        <script src="{% static 'pred_app/js/jquery.1.11.1.js'%}" type="text/javascript">
+        <script src="{% static 'js/jquery-3.6.0.min.js'%}" type="text/javascript">
         </script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="{% static 'pred_app/js/bootstrap.js'%}" type="text/javascript">
+        <script src="{% static 'js/bootstrap.min.js'%}" type="text/javascript">
         </script>
         <!-- Javascripts
     ================================================== -->
-        <script src="{% static 'pred_app/js/typeahead.js'%}">
+        <script src="{% static 'prediction/js/typeahead.js'%}">
         </script>
-        <script src="{% static 'pred_app/js/search.js'%}">
+        <script src="{% static 'prediction/js/search.js'%}">
         </script>
         <div class="header" style="background-color: rgb(40, 40, 40); color: white;">
             <div class="logo">
                 <h1>
                     <a href="index" onmouseover="mouseOver()" onmouseout="mouseOut()">
                         <span id="preds_logo">
-                            Pred
+                           预测
                         </span>
                         <span id="stocks_logo">
-                        Stocks
-                    </span>
+                           股票
+                        </span>
                         <br>
                             <small>
-                                One stop solution to smart prediction !
+                                智能预测一站式解决方案！
                             </small>
                         </br>
                     </a>
@@ -78,7 +70,7 @@
             <div class="clr">
             </div>
             <div class="hbg">
-                <img alt="" class="fl" height="400px" src="{% static 'pred_app/img/header_b.jpg' %}" width="100%"/>
+                <img alt="" class="fl" height="400px" src="{% static 'prediction/img/header_b.jpg' %}" width="100%"/>
             </div>
             <div class="clr">
             </div>
@@ -91,37 +83,36 @@
                 <div class="col c1">
                     <h2>
                         <span>
-                            Image Gallery
+                            图片库
                         </span>
                     </h2>
                     <a href="#">
-                        <img alt="" height="58" src="{% static 'pred_app/img/image2.jpg' %}" width="58"/>
+                        <img alt="" height="58" src="{% static 'prediction/img/image2.jpg' %}" width="58"/>
                     </a>
                     <a href="#">
-                        <img alt="" height="58" src="{% static 'pred_app/img/image3.jpg' %}" width="58"/>
+                        <img alt="" height="58" src="{% static 'prediction/img/image3.jpg' %}" width="58"/>
                     </a>
                     <a href="#">
-                        <img alt="" height="58" src="{% static 'pred_app/img/image4.jpg' %}" width="58"/>
+                        <img alt="" height="58" src="{% static 'prediction/img/image4.jpg' %}" width="58"/>
                     </a>
                     <a href="#">
-                        <img alt="" height="58" src="{% static 'pred_app/img/image5.jpg' %}" width="58"/>
+                        <img alt="" height="58" src="{% static 'prediction/img/image5.jpg' %}" width="58"/>
                     </a>
                     <a href="#">
-                        <img alt="" height="58" src="{% static 'pred_app/img/image6.jpg' %}" width="58"/>
+                        <img alt="" height="58" src="{% static 'prediction/img/image6.jpg' %}" width="58"/>
                     </a>
                     <a href="#">
-                        <img alt="" height="58" src="{% static 'pred_app/img/image7.jpg' %}" width="58"/>
+                        <img alt="" height="58" src="{% static 'prediction/img/image7.jpg' %}" width="58"/>
                     </a>
                 </div>
                 <div class="col c3" style="width:620px">
                     <h2>
                         <span>
-                            About Us
+                            关于我们
                         </span>
                     </h2>
-                    The stock market can be a confusing place for the average investor. But you don't need to be a hedge-fund manager or a billionaire to beat Wall Street at its own game. 
-        We seek to help the ordinary individual investor make intelligent investments by providing information that gives you an edge. 
-        PredStocks uses state of the art software to predict stock prices and generate trading "Buy-Sell" signals that will help you make your decision.
+                    对于普通投资者来说，股市可能是一个令人困惑的地方。 我们寻求通过提供给您优势的信息来帮助普通个人投资者进行明智的投资。
+                    《爱校码股票预测》 使用最先进的软件来预测股票价格并生成交易“买入-卖出”信号，帮助您做出决定。
                 </div>
             </div>
         </div>
@@ -132,11 +123,7 @@
 <div class="footer">
     <div class="footer_resize">
         <p class="lf">
-            © Copyright
-            <a href="#">
-                MyWebSite
-            </a>
-            .
+           &copy; 2020 - <script>document.write(new Date().getFullYear())</script> ischoolcode.cn 爱校码.中国 版权所有 <a href="http://beian.miit.gov.cn">粤ICP备19044405号</a>     
         </p>
         <div class="clr">
         </div>
@@ -144,11 +131,11 @@
 </div>
 <script type="text/javascript">
     function mouseOver() {
-  document.getElementById("stocks_logo").style.color = "#fe001a";
-  document.getElementById("preds_logo").style.color = "#97c950";
-}
-function mouseOut() {
-  document.getElementById("stocks_logo").style.color = "#97c950";
-  document.getElementById("preds_logo").style.color = "#fe001a";
-}
+       document.getElementById("stocks_logo").style.color = "#fe001a";
+       document.getElementById("preds_logo").style.color = "#97c950";
+    }
+    function mouseOut() {
+      document.getElementById("stocks_logo").style.color = "#97c950";
+      document.getElementById("preds_logo").style.color = "#fe001a";
+    }
 </script>

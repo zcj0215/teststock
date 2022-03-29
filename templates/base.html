@@ -13,7 +13,7 @@
     {% block body %}
       <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container">
-          <a class="navbar-brand" href="{% url 'home' %}">
+          <a class="navbar-brand" href="{% url 'boards:home' %}">
             <img src="{% static 'img/logo.png' %}" alt="爱校码股票" style="width:40px;">
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,13 +22,13 @@
           <div class="collapse navbar-collapse" id="mainMenu">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">股票论坛</a>
+                <a class="nav-link" href="{% url 'boards:home' %}">股票论坛</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="http://stock.ischoolcode.cn:9000">股票分析</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'prediction' %}">智能预测</a>
+                <a class="nav-link" href="{% url 'prediction:home' %}">智能预测</a>
               </li>
             </ul>
             {% if user.is_authenticated %}
