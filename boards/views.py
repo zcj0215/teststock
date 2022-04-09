@@ -10,6 +10,9 @@ from .models import Board, Topic, Post
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 
+from astocks.models  import StockChoose
+from astocks.models  import StockList
+
 
 class BoardListView(ListView):
     model = Board

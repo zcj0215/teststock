@@ -36,6 +36,7 @@ urlpatterns = [
     re_path(r'^handledd/$', astocks_views.handledd,name='handledd'),
     re_path(r'^handleto/$', astocks_views.handleto,name='handleto'),
     path('admin/', admin.site.urls),
+    path('astocks/', include(('astocks.urls','astocks'),namespace='astocks')),
     path('boards/', include(('boards.urls','boards'),namespace='boards')),
     path('prediction/', include(('prediction.urls','prediction'),namespace='prediction')),
 ]

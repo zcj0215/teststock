@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}删除确认 - {{ block.super }}{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'astocks:home' %}">选股</a></li>
+  <li class="breadcrumb-item active">删除确认</li>
+{% endblock %}
+
+{% block content %}
+<form method="post">{% csrf_token %}
+    <p> 您确定! 您要删除 " {{ obj.name }} " ?</p>
+    <input type="hidden" name='id' value="{{ obj.id }}">
+    <button type="submit" class="btn btn-success">确认</button>
+    <a href="{% url 'astocks:home' %}" class="btn btn-outline-secondary" role="button">取消</a>
+</form>
+{% endblock %}

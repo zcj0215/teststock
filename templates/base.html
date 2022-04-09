@@ -30,6 +30,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'prediction:home' %}">智能预测</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'astocks:home' %}">选股信息</a>
+              </li>
             </ul>
             {% if user.is_authenticated %}
               <ul class="navbar-nav ml-auto">

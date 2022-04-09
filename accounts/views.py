@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Persons
+from boards.models import Board
 from .forms import SignUpForm, SignInForm, PersonsForm
 from astocks.forms import StockChooseForm
 from django.contrib.auth import login as auth_login, authenticate
@@ -83,7 +83,14 @@ def new_pick(request):
         if form.is_valid():
             pick = form.save(commit=False)
             pick.save()
-            return redirect('boards:home')
+            formboards = request.POST.getlist('boards')
+            for bid in formboards:
+                board = get_object_or_404(Board, pk=bid) 
+                if board:
+                    pick.boards.add(board)         
+            
+            pick.save()
+            return redirect('astocks:home')
     else:
         form = StockChooseForm()
     return render(request, 'pickstock.html', {'form': form})

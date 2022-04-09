@@ -1,11 +1,14 @@
 from django.db import models
 
 # Create your models here.
+
+
 import math
 from django.contrib.auth.models import User
 from django.utils.html import mark_safe
 from django.utils.text import Truncator 
 from markdown import markdown
+
 
 class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -19,6 +22,14 @@ class Board(models.Model):
 
     def get_last_post(self):
         return Post.objects.filter(topic__board=self).order_by('-created_at').first()
+    
+    def to_json(self):
+        json_board = {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description
+        }
+        return json_board
 
 
 class Topic(models.Model):
