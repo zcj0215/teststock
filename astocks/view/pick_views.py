@@ -26,7 +26,11 @@ class EditStockChooseView(UpdateView):
     template_name = 'pickstock/pickstock_edit.html'
     pk_url_kwarg = 'id'
     context_object_name = 'stockchoose'
-
+    
+    def get_queryset(self):
+        queryset = queryset = super().get_queryset()
+        return queryset.filter(pk=self.kwargs.get('id'))
+    
     def form_valid(self, form):
         stockchoose = form.save(commit=False)
         stockchoose.boards.clear()
