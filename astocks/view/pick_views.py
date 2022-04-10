@@ -1,6 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from astocks.forms import StockChooseForm
-from django.views.generic import UpdateView, ListView
+from django.views.generic import ListView
+from django.views.generic.edit import UpdateView
 from django.views import View
 from ..models import StockChoose
 from boards.models import Board
@@ -32,7 +33,6 @@ class EditStockChooseView(UpdateView):
         stockchoose.save()
          
         formboards = self.request.POST.getlist('boards')
-        print(formboards)
         for bid in formboards:
             board = get_object_or_404(Board, pk=bid) 
             if board:
