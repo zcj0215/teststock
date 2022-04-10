@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+
 {% block breadcrumb %}
-  <li class="breadcrumb-item active">选股</li>
+  <li class="breadcrumb-item"><a href="{% url 'astocks:home' %}">选股</a></li>
+  <li class="breadcrumb-item active">选股日期</li>
 {% endblock %}
 
 {% block content %}
@@ -26,7 +28,7 @@
       {% for choose in chooses %}
         <tr>
           <td>
-            <a href="/astocks/choose_date?by={{ choose.pick_date|date:'Y-m-d' }}">{{ choose.pick_date|date:'Y-m-d' }}</a> 
+            {{ choose.pick_date | date:'Y-m-d'  }}
           </td>
           <td class="align-middle">
             {{ choose.code }}
@@ -74,10 +76,10 @@
           </td>
           {% if user.is_authenticated and user.is_superuser %}
             <td class="align-middle" >
-              <a href="{% url 'astocks:edit_pick' choose.pk %}" class="btn btn-outline-primary" role="button">编辑</a>
+              <a href="{% url 'astocks:edit_pick_by_date' choose.pk 'date' %}" class="btn btn-outline-primary" role="button">编辑</a>
             </td>
             <td class="align-middle" >
-              <a href="{% url 'astocks:delete_pick' choose.pk %}" class="btn btn-outline-danger" role="button">删除</a>
+              <a href="{% url 'astocks:delete_pick_by_date' choose.pk 'date' %}" class="btn btn-outline-danger" role="button">删除</a>
             </td>
           {% endif %}
         </tr>

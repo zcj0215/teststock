@@ -8,16 +8,25 @@ from boards.models import Board
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
 
 class StockChooseListView(ListView):
     model = StockChoose
     context_object_name = 'chooses'
     template_name = 'pickstock/home.html'
     
-class ByDateListView(View):
-    def get(self,request):
-       return HttpResponse("OK") 
+    def get_queryset(self):
+        self.chooses = StockChoose.objects.all()
+        queryset = self.chooses.order_by('-pick_date')
+        return queryset
+    
+def byDateListView(request):
+    by = request.GET.get('by')
+    print(by)
+    chooses = StockChoose.objects.all().filter(pick_date=by)
+    print(chooses)
+     
+    return render(request, 'pickstock/pickstock_list_by_date.html', {'chooses': chooses })
+        
    
 @method_decorator(login_required, name='dispatch')    
 class EditStockChooseView(UpdateView):
@@ -27,9 +36,11 @@ class EditStockChooseView(UpdateView):
     pk_url_kwarg = 'id'
     context_object_name = 'stockchoose'
     
-    def get_queryset(self):
-        queryset = queryset = super().get_queryset()
-        return queryset.filter(pk=self.kwargs.get('id'))
+    def get_context_data(self, **kwargs):
+        by = self.kwargs.get('by')
+        if by:
+            self.request.session['by'] = by
+        return super().get_context_data(**kwargs)
     
     def form_valid(self, form):
         stockchoose = form.save(commit=False)
@@ -43,23 +54,38 @@ class EditStockChooseView(UpdateView):
                 stockchoose.boards.add(board)         
             
         stockchoose.save()
-        return redirect('astocks:home')
+        
+        if self.request.session['by']:
+            del self.request.session['by']
+            pick_date_str = str(stockchoose.pick_date)
+            return redirect('/astocks/choose_date?by='+pick_date_str)
+        else:    
+            return redirect('astocks:home')
 
 @method_decorator(login_required, name='dispatch')    
 class DeleteStockChooseView(View):
-    def get(self,request,id):
+    def get(self,request,id,by):
         
        pick = get_object_or_404(StockChoose, pk=id)
-       print("name:"+pick.name) 
        if pick:
-           return render(request, 'pickstock/stockchoose_confirm_delete.html', {'obj': pick })
+            if by:
+               request.session['by'] = by
+               
+            return render(request, 'pickstock/stockchoose_confirm_delete.html', {'obj': pick })
        else:
            return redirect('astocks:home')
        
-    def post(self,request,id):
+    def post(self,request,id,by):
         id = request.POST.get("id") 
         pick = get_object_or_404(StockChoose, pk=id)
         pick.boards.clear()
         pick.save()
+        pick_date_str = str(pick.pick_date)
         pick.delete()
-        return redirect('astocks:home')
+        
+        if request.session['by']:
+            del request.session['by']
+            return redirect('/astocks/choose_date?by='+pick_date_str)
+        else:    
+            return redirect('astocks:home')
+         

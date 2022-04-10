@@ -21,7 +21,9 @@ class StockChooseForm(forms.ModelForm):
         label=_('选股日期'),
         required=True,
         error_messages={'required':'这是必填栏。'},
-        widget=forms.DateInput(attrs={'type': 'date'}))
+        input_formats=['%Y-%m-%d'],
+        widget=forms.DateInput(format='%Y-%m-%d',attrs={'type': 'date'})
+        )
     code = forms.CharField(
         label=_('股票代码'),
         required=True,
