@@ -25,6 +25,10 @@
     {% csrf_token %}
     {% include '../includes/form.html' %}
     <button type="submit" class="btn btn-success">更新</button>
-    <a href="{% url 'astocks:home' %}" class="btn btn-outline-secondary" role="button">取消</a>
+    {% if 'by' in request.session.keys %}
+       <a href="/astocks/choose_date?by={{stockchoose.pick_date|date:'Y-m-d'}}" class="btn btn-outline-secondary" role="button">取消</a>
+    {% else %}
+       <a href="{% url 'astocks:home' %}" class="btn btn-outline-secondary" role="button">取消</a>
+    {% endif %}
   </form>
 {% endblock %}

@@ -14,20 +14,23 @@ class StockChooseListView(ListView):
     context_object_name = 'chooses'
     template_name = 'pickstock/home.html'
     
+    def get_context_data(self, **kwargs):
+        keys = self.request.session.keys()
+        if 'by' in keys and self.request.session['by']:
+            del self.request.session['by']
+        return super().get_context_data(**kwargs)
+    
     def get_queryset(self):
         self.chooses = StockChoose.objects.all()
         queryset = self.chooses.order_by('-pick_date')
         return queryset
     
 def byDateListView(request):
-    by = request.GET.get('by')
-    print(by)
+    by = request.GET.get('by') 
     chooses = StockChoose.objects.all().filter(pick_date=by)
-    print(chooses)
-     
+    
     return render(request, 'pickstock/pickstock_list_by_date.html', {'chooses': chooses })
         
-   
 @method_decorator(login_required, name='dispatch')    
 class EditStockChooseView(UpdateView):
     model = StockChoose
@@ -55,22 +58,43 @@ class EditStockChooseView(UpdateView):
             
         stockchoose.save()
         
-        if self.request.session['by']:
+        keys = self.request.session.keys()
+        
+        if 'by' in keys and self.request.session['by']:
             del self.request.session['by']
             pick_date_str = str(stockchoose.pick_date)
             return redirect('/astocks/choose_date?by='+pick_date_str)
         else:    
             return redirect('astocks:home')
-
+        
 @method_decorator(login_required, name='dispatch')    
 class DeleteStockChooseView(View):
+    def get(self,request,id):
+        
+       pick = get_object_or_404(StockChoose, pk=id)
+       if pick:    
+          return render(request, 'pickstock/stockchoose_confirm_delete.html', {'obj': pick })
+       else:
+          return redirect('astocks:home')
+       
+    def post(self,request,id):
+        id = request.POST.get("id") 
+        pick = get_object_or_404(StockChoose, pk=id)
+        pick.boards.clear()
+        pick.save()
+        pick_date_str = str(pick.pick_date)
+        pick.delete()
+        
+        return redirect('astocks:home')        
+
+@method_decorator(login_required, name='dispatch')    
+class DeleteStockChooseByDateView(View):
     def get(self,request,id,by):
         
        pick = get_object_or_404(StockChoose, pk=id)
        if pick:
             if by:
-               request.session['by'] = by
-               
+               request.session['by'] = by        
             return render(request, 'pickstock/stockchoose_confirm_delete.html', {'obj': pick })
        else:
            return redirect('astocks:home')
@@ -83,7 +107,8 @@ class DeleteStockChooseView(View):
         pick_date_str = str(pick.pick_date)
         pick.delete()
         
-        if request.session['by']:
+        keys = request.session.keys()
+        if 'by' in keys and request.session['by']:
             del request.session['by']
             return redirect('/astocks/choose_date?by='+pick_date_str)
         else:    
