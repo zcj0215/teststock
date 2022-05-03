@@ -8,11 +8,14 @@ from boards.models import Board
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+
 
 class StockChooseListView(ListView):
     model = StockChoose
     context_object_name = 'chooses'
     template_name = 'pickstock/home.html'
+    paginate_by = 20
     
     def get_context_data(self, **kwargs):
         keys = self.request.session.keys()
