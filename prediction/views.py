@@ -1,51 +1,41 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .lstm_prediction import *
 
-from django.views.generic import ListView
-from django.http import HttpResponse
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from astocks.models import StockList
 from .models import Company
 from . import models
 from .LSTMPredictStock import predic
 from .add_companies_to_db import add_company
-
+from .forms import CodeForm
 import json
 import os
 from datetime import datetime as dt
-from apscheduler.scheduler import Scheduler
+
+# from apscheduler.scheduler import Scheduler
 import pandas as pd
 
 LOCAL = False
-
-class StockListView(ListView):
-    model = StockList
-    context_object_name = 'stocks'
-    template_name = 'prediction/index.html'
-
 
 # --------------- MAIN WEB PAGES -----------------------------
 def redirect_root(request):
     return redirect('/prediction/pred')
 
-def index(request):
-	return render(request, 'prediction/index.html') 
-
 def pred(request):
-    return render(request, 'prediction/prediction.html')
-
-def contact(request):
-	return render(request, 'prediction/contact.html')
-
-def search(request):
     if request.method == 'POST':
-        stock_symbol = request.POST['stock_symbol']
-        se = get_object_or_404(StockList, symbol=stock_symbol).name
-        
-        predicted_result_df = lstm_prediction(se, stock_symbol)
-        return render(request, 'prediction/search.html', {"predicted_result_df": predicted_result_df})
-
-
+        form = CodeForm(request.POST)
+        if form.is_valid():
+            stock_code = request.POST['code']
+            predic.train_model(stock_code)
+            recent_data, predict_data,code,name = get_hist_predict_data(stock_code)
+            data = {"recent_data": recent_data, "predict_data": predict_data,"stock_code": code,"stock_name": name}
+            # data['indexs'] = get_stock_index(code)
+            return render(request, "prediction/home.html", {"data": json.dumps(data),'form': form}) 
+    else:
+        form = CodeForm()
+     
+    return render(request, 'prediction/prediction.html',{'form': form})
 
 
 ######################################################
@@ -53,10 +43,17 @@ def search(request):
 #
 ######################################################
 def get_hist_predict_data(stock_code):
-    recent_data,predict_data = None,None
-    # company = models.Company.objects.get(stock_code=stock_code)
-    company = get_object_or_404(Company, stock_code=stock_code)
+    try:
+        company = get_object_or_404(Company, stock_code=stock_code)
+    except Http404:
+        stock = get_object_or_404(StockList, symbol=stock_code)
+        company = Company()
+        company.name = stock.name
+        company.stock_code = stock_code
+        company.save()
 
+    recent_data,predict_data = None,None
+    
     if company.historydata_set.count() <= 0:
         history_data = models.HistoryData()
         history_data.company = company
@@ -126,24 +123,6 @@ def get_stock_index(stock_code):
     indexs = company.stockindex_set.all().order_by('-ri_qi')[:3].values()
     return list(indexs)
 
-def home2(request):
-    predic.train_model("000715")
-    recent_data,predict_data,code,name = get_hist_predict_data("000715")
-    data = {"recent_data": recent_data, "predict_data": predict_data,"stock_code": code,"stock_name": name}
-    # data['indexs'] = get_stock_index(code)
-    return render(request,"prediction/home.html",{"data":json.dumps(data)}) 
-
-
-def predict_stock_action(request):
-    stock_code = request.POST.get('stock_code',None)
-    predic.train_model(stock_code)
-    # print("stock_code:\n",stock_code)
-    recent_data, predict_data,code,name = get_hist_predict_data(stock_code)
-    data = {"recent_data": recent_data, "predict_data": predict_data,"stock_code": code,"stock_name": name}
-    # data['indexs'] = get_stock_index(code)
-    return render(request, "prediction/home.html", {"data": json.dumps(data)})  # json.dumps(list)   
-
-
 """ sched = Scheduler()
 # 定时任务
 # @sched.interval_schedule(seconds=2)   # 每2s执行一次
@@ -156,4 +135,3 @@ sched.start() """
 #
 #
 #########################################################################################
-
