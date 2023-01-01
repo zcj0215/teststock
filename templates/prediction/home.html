@@ -1,0 +1,45 @@
+{% extends "prediction/base.html" %}
+{% load static %}
+{% block nav %}
+<li class="active">
+    <a href="/boards/" style='float:right;padding-right:10px;margin:10px'>
+        返回
+    </a>
+</li>
+{% endblock nav %}
+{% block javascript %}
+    <script src="{% static 'prediction/js/echarts.min.js' %}"></script>
+{% endblock %}
+{% block content %}
+
+    <script type="text/javascript">
+        var stock_data = null
+        {% if data %}
+            stock_data = {{data|safe}};
+            var recent_data = stock_data['recent_data'];
+            var stock_code = stock_data['stock_code'];
+            var predict_data = stock_data['predict_data'];
+            var stock_name = stock_data['stock_name'];
+            var indexs = null;
+            //indexs = stock_data['indexs']
+        {% endif %}
+        console.log(stock_data);
+    </script>
+    <center>
+    <div style="position:center;margin-top: 50px">
+        <form id="commit_stock_code" action="{% url 'prediction:predict' %}" method="post">
+            {% csrf_token %}
+            <input name="stock_code" type="text" style="width: 200px; text-align: center; padding:5px;" placeholder="填写股票代码..." required />
+            <input type="submit" value="查询" style="padding:5px;">
+        </form>
+    </div>
+    <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
+    <div style="width:100%;height:400px;margin-top:50px;">
+        <div id="hist_futu" style="float:left;width: 100%;height:450px;"></div>
+        <div id="radar" style="width:50%;height:600px;"></div>
+    </div>
+    </center>
+    {% endblock content %}
+    {% block javascript1 %}
+        <script src="{% static 'prediction/js/draw_charts.js' %}"></script>
+    {% endblock %}

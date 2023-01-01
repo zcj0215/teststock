@@ -15,10 +15,10 @@
         <h2 align="center">
             获取您的预测！
         </h2>
-        <form align="left" class="" id="search" action="/prediction/search" method="post">
+        <form align="left" class="" id="search" action="/prediction/predict" method="post">
             {% csrf_token %}
-            <input class="form-control typeahead" id="stock_symbol" name="stock_symbol" placeholder="填写股票代码..." type="text" />
-            <input type="submit" value="搜索"/>
+            <input class="form-control typeahead" id="stock_code" name="stock_code" placeholder="填写股票代码..." type="text" required /><br/>
+            <input type="submit" value="查询"/>
         </form>
     </div>
     <br>
