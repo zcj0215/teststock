@@ -7,8 +7,9 @@ function draw_chart(){
         title: {
                 text: stock_name +"("+stock_code+")" + "过去20天历史数据以及未来10天预测数据",
                 textStyle:{
-                  fontSize:15
-                }
+                  fontSize:15,
+                },
+                left: 50,
             },
         tooltip : {
                     trigger: 'item'

@@ -2,14 +2,14 @@
 {% load static %}
 {% block nav %}
 <li class="active">
-    <a href="/boards/" style='float:right;padding-right:10px;margin:10px'>
+    <a href="/boards/" class="btn btn-success" style='float:right;margin:10px'>
         返回
     </a>
 </li>
 {% endblock nav %}
 {% block content %}
 <div class="content">
-    <img alt="" height="180" src="https://thelinknewspaper.ca/images/articles/Volume_36/Special/_resized/mediadem.polls.LauraLalonde.gif" width="500"/>
+    <img alt="" height="180" src="{% static 'prediction/img/mediadem_polls_LauraLalonde.gif' %}" width="500"/>
      
     <div class="form-group col-sm-6 col-sm-offset-1">
         <h2 align="center">
