@@ -51,13 +51,14 @@ class Model():
 		print('[Model] 模型已编译')
 		timer.stop()	#输出构建一个模型耗时
 
-	def train(self, x, y, epochs, batch_size, save_dir):
+	def train(self, x, y, epochs, batch_size, save_dir,save_name):
 		timer = Timer()
 		timer.start()
 		print('[Model] 正在训练已开始')
 		print('[Model] %s epochs, %s batch size' % (epochs, batch_size))
 		
-		save_fname = os.path.join(save_dir, '%s-e%s.h5' % (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), str(epochs)))
+		# save_fname = os.path.join(save_dir, '%s-e%s.h5' % (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), str(epochs)))
+		save_fname = os.path.join(save_dir, save_name+'.h5')
 		callbacks = [
 			EarlyStopping(monitor='val_loss', patience=2),
 			ModelCheckpoint(filepath=save_fname, monitor='val_loss', save_best_only=True)

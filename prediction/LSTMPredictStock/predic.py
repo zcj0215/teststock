@@ -66,34 +66,42 @@ def train_model(stock_code, predict=False):  # 训练指定股票代码的模型
     )
 
     model = Model()
-    model.build_model(configs)  # 根据配置文件新建模型
-
-    '''
-    # in-memory training
-    model.train(
-        x,
-        y,
-        epochs = configs['training']['epochs'],
-        batch_size = configs['training']['batch_size'],
-        save_dir = configs['model']['save_dir']
-    )
-    '''
-    # 训练模型：
-    # out-of memory generative training
-    steps_per_epoch = math.ceil(
-        (data.len_train - configs['data']['sequence_length']) / configs['training']['batch_size'])
-    model.train_generator(
-        data_gen=data.generate_train_batch(
-            seq_len=configs['data']['sequence_length'],
+    
+    if os.path.exists(os.path.join(get_parent_dir(),os.path.join('saved_models', stock_code + ".h5"))):
+        x, y = data.get_train_data(
+	        seq_len = configs['data']['sequence_length'],
+	        normalise = configs['data']['normalise']
+        )
+        keras.backend.clear_session()
+        model.load_model(os.path.join(get_parent_dir(),os.path.join('saved_models', stock_code + ".h5")))
+        # 记忆训练
+        model.train(
+            x,
+            y,
+            epochs = configs['training']['epochs'],
+            batch_size = configs['training']['batch_size'],
+            save_dir=os.path.join(get_parent_dir(),configs['model']['save_dir']),
+            save_name=stock_code
+        )
+    
+    else:
+        model.build_model(configs)  # 根据配置文件新建模型
+        # 训练模型：
+        # 记忆外生成训练
+        steps_per_epoch = math.ceil(
+            (data.len_train - configs['data']['sequence_length']) / configs['training']['batch_size'])
+        model.train_generator(
+            data_gen=data.generate_train_batch(
+                seq_len=configs['data']['sequence_length'],
+                batch_size=configs['training']['batch_size'],
+                normalise=configs['data']['normalise']
+            ),
+            epochs=configs['training']['epochs'],
             batch_size=configs['training']['batch_size'],
-            normalise=configs['data']['normalise']
-        ),
-        epochs=configs['training']['epochs'],
-        batch_size=configs['training']['batch_size'],
-        steps_per_epoch=steps_per_epoch,
-        save_dir=os.path.join(get_parent_dir(),configs['model']['save_dir']),
-        save_name=stock_code
-    )
+            steps_per_epoch=steps_per_epoch,
+            save_dir=os.path.join(get_parent_dir(),configs['model']['save_dir']),
+            save_name=stock_code
+        )
 
     # 预测
     if predict:

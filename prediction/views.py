@@ -16,7 +16,6 @@ from datetime import datetime as dt
 # from apscheduler.scheduler import Scheduler
 import pandas as pd
 
-LOCAL = False
 
 # --------------- MAIN WEB PAGES -----------------------------
 def redirect_root(request):
@@ -66,7 +65,8 @@ def get_hist_predict_data(stock_code):
             now = dt.now()
             end_date = single.get_data()[-1][0]
             end_date = dt.strptime(end_date,"%Y-%m-%d")
-            if LOCAL & (now.date() > end_date.date()):        # 更新预测数据
+           
+            if  (now.date() > end_date.date()):        # 更新历史数据
                 single.set_data(predic.get_hist_data(stock_code=stock_code,recent_day=20))
                 single.save()
 
@@ -84,7 +84,7 @@ def get_hist_predict_data(stock_code):
         for single in all_data:
             now = dt.now()
             start_date = dt.strptime(single.start_date,"%Y-%m-%d")
-            if LOCAL & (now.date() > start_date.date()):  # 更新预测数据
+            if (now.date() > start_date.date()):  # 更新预测数据
                 single.set_data(predic.prediction(stock_code, pre_len=10))
                 single.save()
 
