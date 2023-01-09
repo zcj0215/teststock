@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .lstm_prediction import *
-
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from astocks.models import StockList
 from .models import Company
@@ -12,10 +10,8 @@ from .forms import CodeForm
 import json
 import os
 from datetime import datetime as dt
-
 # from apscheduler.scheduler import Scheduler
 import pandas as pd
-
 
 # --------------- MAIN WEB PAGES -----------------------------
 def redirect_root(request):
@@ -30,7 +26,8 @@ def pred(request):
             recent_data, predict_data,code,name = get_hist_predict_data(stock_code)
             data = {"recent_data": recent_data, "predict_data": predict_data,"stock_code": code,"stock_name": name}
             # data['indexs'] = get_stock_index(code)
-            return render(request, "prediction/home.html", {"data": json.dumps(data),'form': form}) 
+            return JsonResponse({"data": json.dumps(data)}) 
+            # return render(request, "prediction/home.html", {"data": json.dumps(data),'form': form}) 
     else:
         form = CodeForm()
      

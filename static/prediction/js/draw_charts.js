@@ -219,16 +219,3 @@ function draw_radar(){
     radar.setOption(option);
 }
 
-
-if(recent_data != null && predict_data != null){
-    draw_chart();
-}
-
-var ops = document.getElementById(stock_code);
-if (ops!= null){
-    ops.selected = true;
-}
-  
-if(indexs != null){
-    draw_radar();
-}

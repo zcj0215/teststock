@@ -6,6 +6,7 @@
         <title>
             爱校码股票预测
         </title>
+        <link rel="stylesheet" href="{% static 'prediction/css/bootstrap.min.css'%}" type="text/css">
         <!-- get the required files from 3rd party sources -->
         <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
             <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
@@ -15,13 +16,12 @@
                 <link href="{% static 'prediction/fonts/font-awesome/css/font-awesome.css' %}" rel="stylesheet" type="text/css">
                     <link href="{% static 'prediction/css/menusearch.css' %}" rel="stylesheet" type="text/css">
                         <!-- Stylesheet================================================== -->
-                        <link href="{% static 'prediction/css/style.css' %}" rel="stylesheet" type="text/css">
-                            
+                        <link href="{% static 'prediction/css/style.css' %}" rel="stylesheet" type="text/css"> 
                                 <script src="{% static 'prediction/js/modernizr.custom.js' %}" type="text/javascript">
                                 </script>
                                 <link href="http://fonts.googleapis.com/css?family=Raleway:500,600,700,100,800,900,400,200,300" rel="stylesheet" type="text/css">
                                     <link href="http://fonts.googleapis.com/css?family=Playball" rel="stylesheet" type="text/css">
-                                        <script src="{% static 'prediction/js/jquery-1.10.2.min.js' %}" type="text/javascript">
+                                        <script src="{% static 'prediction/js/jquery.1.11.1.js' %}" type="text/javascript">
                                         </script>
                                     </link>
                                 </link>
@@ -34,13 +34,22 @@
         {% block stylesheet %}{% endblock %} 
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="{% static 'prediction/js/jquery-1.10.2.min.js'%}" type="text/javascript">
+        <script src="{% static 'prediction/js/jquery.1.11.1.js'%}" type="text/javascript">
         </script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="{% static 'prediction/js/bootstrap.min.js'%}" type="text/javascript">
         </script>
-        <!-- Javascripts
-    ================================================== -->
+        <script type="text/javascript">
+            function mouseOver() {
+               document.getElementById("stocks_logo").style.color = "#fe001a";
+               document.getElementById("preds_logo").style.color = "#97c950";
+            }
+            function mouseOut() {
+               document.getElementById("stocks_logo").style.color = "#97c950";
+               document.getElementById("preds_logo").style.color = "#fe001a";
+            }
+        </script>
+        <!-- Javascripts -->
         {% block javascript %}{% endblock %}
     </head>
     <body>
@@ -130,16 +139,6 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            function mouseOver() {
-               document.getElementById("stocks_logo").style.color = "#fe001a";
-               document.getElementById("preds_logo").style.color = "#97c950";
-            }
-            function mouseOut() {
-              document.getElementById("stocks_logo").style.color = "#97c950";
-              document.getElementById("preds_logo").style.color = "#fe001a";
-            }
-        </script>
         {% block javascript1 %}{% endblock %}
     </body>
 </html>
