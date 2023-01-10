@@ -16,7 +16,7 @@ function draw_chart(){
                 },
         legend: {
                 x : 'center',
-                data:['过去20天','未来10天']
+                data:['过去22天','未来5天']
             },
         //工具框，可以选择
         toolbox: {
@@ -42,7 +42,7 @@ function draw_chart(){
         ,
         series: [
             {
-            name:'过去20天',
+            name:'过去22天',
             type: 'line',
             color:['#FF0000'],
             data: [],   // x坐标对应y值
@@ -55,7 +55,7 @@ function draw_chart(){
                 },
             },
             {
-            name:'未来10天',
+            name:'未来5天',
             data: [],   // x坐标对应y值
             itemStyle : { normal: {label : {show: true}}},
             type: 'line',

@@ -61,6 +61,8 @@ MIDDLEWARE = [
     
 ]
 
+# Cross-Origin Opener Policy
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'None'
 #配置 django-cors-headers 中的参数
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 CORS_ORIGIN_ALLOW_ALL = True   # 允许所有源访问
@@ -187,7 +189,6 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
