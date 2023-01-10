@@ -17,9 +17,15 @@
 
             $('#myform').submit(function(){
                 var code = $("#id_code").val();
+                var again = 'off';
+                
+                if ($('input[name="again"]:checked').val()){
+                    again = 'on';
+                }
+               
                 $.ajax({
                     type:"POST",
-                    data: {code:code},
+                    data: {code:code,again:again},
                     url: "{% url 'prediction:pred' %}",
                     cache: false,
                     dataType: "json",
@@ -72,7 +78,13 @@
         <form align="left"  id="myform">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-success" >查询</button>
+            <button type="submit" class="btn btn-success" >查询</button> 
+            <div class="checkbox" style="float : left; margin-right: 20px">
+                <label>
+                  <input type="checkbox" name="again">
+                    再学习训练一次
+                </label>
+            </div>
         </form>
     </div> 
 </div>

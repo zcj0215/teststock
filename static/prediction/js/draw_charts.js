@@ -5,7 +5,7 @@ function draw_chart(){
     // 指定图表的配置项和数据
      var option = {
         title: {
-                text: stock_name +"("+stock_code+")" + "过去20天历史数据以及未来10天预测数据",
+                text: stock_name +"("+stock_code+")" + "过去22天历史数据以及未来5天预测数据",
                 textStyle:{
                   fontSize:15,
                 },

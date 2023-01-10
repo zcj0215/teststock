@@ -22,8 +22,9 @@ def pred(request):
         form = CodeForm(request.POST)
         if form.is_valid():
             stock_code = request.POST['code']
+            again = request.POST['again']
             predic.train_model(stock_code)
-            recent_data, predict_data,code,name = get_hist_predict_data(stock_code)
+            recent_data, predict_data,code,name = get_hist_predict_data(stock_code,again)
             data = {"recent_data": recent_data, "predict_data": predict_data,"stock_code": code,"stock_name": name}
             # data['indexs'] = get_stock_index(code)
             return JsonResponse({"data": json.dumps(data)}) 
@@ -38,7 +39,7 @@ def pred(request):
 #      
 #
 ######################################################
-def get_hist_predict_data(stock_code):
+def get_hist_predict_data(stock_code,again):
     try:
         company = get_object_or_404(Company, stock_code=stock_code)
     except Http404:
@@ -53,7 +54,7 @@ def get_hist_predict_data(stock_code):
     if company.historydata_set.count() <= 0:
         history_data = models.HistoryData()
         history_data.company = company
-        history_data.set_data(predic.get_hist_data(stock_code=stock_code,recent_day=20))
+        history_data.set_data(predic.get_hist_data(stock_code=stock_code,recent_day=22))
         history_data.save()
         recent_data = history_data.get_data()
     else:
@@ -63,8 +64,8 @@ def get_hist_predict_data(stock_code):
             end_date = single.get_data()[-1][0]
             end_date = dt.strptime(end_date,"%Y-%m-%d")
            
-            if  (now.date() > end_date.date()):        # 更新历史数据
-                single.set_data(predic.get_hist_data(stock_code=stock_code,recent_day=20))
+            if  (now.date() > end_date.date()):  # 更新历史数据
+                single.set_data(predic.get_hist_data(stock_code=stock_code,recent_day=22))
                 single.save()
 
             recent_data = single.get_data()
@@ -73,7 +74,7 @@ def get_hist_predict_data(stock_code):
     if company.predictdata_set.count() <= 0:
         predict_data = models.PredictData()
         predict_data.company = company
-        predict_data.set_data(predic.prediction(stock_code,pre_len=10))
+        predict_data.set_data(predic.prediction(stock_code,pre_len=5))
         predict_data.save()
         predict_data = predict_data.get_data()
     else:
@@ -81,8 +82,8 @@ def get_hist_predict_data(stock_code):
         for single in all_data:
             now = dt.now()
             start_date = dt.strptime(single.start_date,"%Y-%m-%d")
-            if (now.date() > start_date.date()):  # 更新预测数据
-                single.set_data(predic.prediction(stock_code, pre_len=10))
+            if (now.date() > start_date.date() or again == 'on'):  # 更新预测数据
+                single.set_data(predic.prediction(stock_code, pre_len=5))
                 single.save()
 
             predict_data = single.get_data()
