@@ -82,6 +82,6 @@ def query(request):
 
 
     for data in data_list:
-        turnover('000010','SZ',data)
+        turnover('600898','SH',data)
 
     return HttpResponse('执行完毕！')
