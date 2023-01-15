@@ -12,7 +12,7 @@ def readfile(mfn):
     :param mfn: 文件路经与文件名
     :return: 返回列表数据类型
     '''
-    fp=open(mfn,'r')
+    fp=open(mfn,'r',encoding='gbk')
     wls = fp.readlines()     #readlines把文本文件按行分割，并产生一个以每一行文本为一个元素的列表
     fp.close()
     return wls
@@ -75,6 +75,6 @@ def query(request):
 
 
     for data in data_list:
-        turnover('603636','SH',data)
+        turnover('600169','SH',data)
 
     return HttpResponse('执行完毕！')
