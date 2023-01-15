@@ -3,6 +3,9 @@ from .data_processor import DataBuild
 import os
 from tkinter import EXCEPTION
 from django.shortcuts import get_object_or_404
+import platform
+
+sysstr = platform.system()
 
 def g_single_data(path,code,flag,name): 
     jsonlist = []
@@ -106,9 +109,13 @@ def g_single_data(path,code,flag,name):
                 pass
 
     headers = ['Date','Code','Name','Open','Close','High','Low','Volume']
-    filename = path + '/' + code+'.csv'
-    DataBuild(filename,headers,jsonlist)
-        
+    if(sysstr =="Windows"):
+        filename = path + '\\' + code+'.csv'
+        DataBuild(filename,headers,jsonlist)
+    else:
+        filename = path + '/' + code+'.csv'
+        DataBuild(filename,headers,jsonlist)
+         
 def gdata(path,stock_code='0'):
     if stock_code=='0':
         queryset = StockList.objects.all().order_by('symbol')

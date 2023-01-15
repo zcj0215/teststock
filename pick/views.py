@@ -5,6 +5,9 @@ import os
 from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
+import platform
+
+sysstr = platform.system()
 
 def readfile(mfn):
     '''
@@ -61,10 +64,14 @@ def home(request):
 
 def query(request):
     path =  os.path.dirname(__file__)
-    filename = path+"\\Table.txt"
     fl = [];
-    fl = readfile(filename)
-
+    if(sysstr =="Windows"):
+        filename = path+"\\Table.txt"
+        fl = readfile(filename)
+    else:
+        filename = path+"/Table.txt"
+        fl = readfile(filename)
+    
     data_temp = []
     data_list = []
     for item in fl:
@@ -75,6 +82,6 @@ def query(request):
 
 
     for data in data_list:
-        turnover('002305','SZ',data)
+        turnover('000836','SZ',data)
 
     return HttpResponse('执行完毕！')
