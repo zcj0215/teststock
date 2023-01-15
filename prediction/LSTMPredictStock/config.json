@@ -14,7 +14,7 @@
 	},
 	"training": {
 		"epochs": 1,
-		"batch_size": 8
+		"batch_size":8
 	},
 	"model": {
 		"loss": "mse",
