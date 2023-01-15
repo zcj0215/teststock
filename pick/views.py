@@ -61,7 +61,7 @@ def home(request):
 
 def query(request):
     path =  os.path.dirname(__file__)
-    filename = path+"/Table.txt"
+    filename = path+"\\Table.txt"
     fl = [];
     fl = readfile(filename)
 
@@ -75,6 +75,6 @@ def query(request):
 
 
     for data in data_list:
-        turnover('603197','SH',data)
+        turnover('002305','SZ',data)
 
     return HttpResponse('执行完毕！')
