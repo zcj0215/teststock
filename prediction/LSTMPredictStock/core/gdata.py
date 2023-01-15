@@ -24,6 +24,7 @@ def g_single_data(path,code,flag,name):
                     dict["High"] = str(row.high)
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
+                    dict["Turnover"] = str(row.turnover)
                     
                     jsonlist.append(dict) 
                
@@ -43,6 +44,7 @@ def g_single_data(path,code,flag,name):
                     dict["High"] = str(row.high)
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
+                    dict["Turnover"] = str(row.turnover)
                         
                     jsonlist.append(dict) 
               
@@ -63,6 +65,7 @@ def g_single_data(path,code,flag,name):
                     dict["High"] = str(row.high)
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
+                    dict["Turnover"] = str(row.turnover)
                     
                     jsonlist.append(dict) 
               
@@ -83,6 +86,7 @@ def g_single_data(path,code,flag,name):
                     dict["High"] = str(row.high)
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
+                    dict["Turnover"] = str(row.turnover)
                     
                     jsonlist.append(dict) 
                     
@@ -102,13 +106,14 @@ def g_single_data(path,code,flag,name):
                     dict["High"] = str(row.high)
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
+                    dict["Turnover"] = str(row.turnover)
                     
                     jsonlist.append(dict) 
                     
             except EXCEPTION:
                 pass
 
-    headers = ['Date','Code','Name','Open','Close','High','Low','Volume']
+    headers = ['Date','Code','Name','Open','Close','High','Low','Volume','Turnover']
     if(sysstr =="Windows"):
         filename = path + '\\' + code+'.csv'
         DataBuild(filename,headers,jsonlist)
