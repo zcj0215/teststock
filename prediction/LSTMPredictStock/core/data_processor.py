@@ -89,7 +89,7 @@ class DataLoader():
 		for window in window_data:
 			normalised_window = []
 			for col_i in range(window.shape[1]):
-				print(window[:, col_i])
+				# print(window[:, col_i])
 				normalised_col = [	
 					((float(p) / float(window[0, col_i])) - 1) for p in window[:, col_i]
 				]
