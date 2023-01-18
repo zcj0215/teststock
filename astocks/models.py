@@ -40,10 +40,11 @@ class Stocksz(models.Model):
     volume = models.DecimalField(max_digits=12, decimal_places=2)
     amount = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     turnover = models.DecimalField(max_digits=10, decimal_places=2,null=True)
-    price_change = models.DecimalField(max_digits=7, decimal_places=2)
-    p_change = models.DecimalField(max_digits=7, decimal_places=2)
+    price_change = models.DecimalField(max_digits=7, decimal_places=2)      # 涨跌额
+    p_change = models.DecimalField(max_digits=7, decimal_places=2)          # 涨跌幅
     date = models.DateField(max_length=10,db_index=True)
-    
+    volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+
     def __str__(self):
         return self.name
     
@@ -60,6 +61,7 @@ class Stockszc(models.Model):
     price_change = models.DecimalField(max_digits=7, decimal_places=2)
     p_change = models.DecimalField(max_digits=7, decimal_places=2)
     date = models.DateField(max_length=10,db_index=True)
+    volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
@@ -77,6 +79,7 @@ class Stocksh(models.Model):
     price_change = models.DecimalField(max_digits=7, decimal_places=2)
     p_change = models.DecimalField(max_digits=7, decimal_places=2)
     date = models.DateField(max_length=10,db_index=True)
+    volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
@@ -94,6 +97,7 @@ class Stockshk(models.Model):
     price_change = models.DecimalField(max_digits=7, decimal_places=2)
     p_change = models.DecimalField(max_digits=7, decimal_places=2)
     date = models.DateField(max_length=10,db_index=True)
+    volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
@@ -111,6 +115,7 @@ class Stockbj(models.Model):
     price_change = models.DecimalField(max_digits=7, decimal_places=2)
     p_change = models.DecimalField(max_digits=7, decimal_places=2)
     date = models.DateField(max_length=10,db_index=True)
+    volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
