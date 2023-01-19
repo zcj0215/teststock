@@ -241,7 +241,7 @@ def query(request):
 
 
     for data in data_list:
-        turnover('000040','SZ',data[1], data[0])
+        turnover('002721','SZ',data[1], data[0])
 
     return HttpResponse('执行完毕！')
 
