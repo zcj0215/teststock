@@ -52,7 +52,7 @@ class Stockszc(models.Model):
     code = models.CharField(max_length=10, db_index=True)                        
     open = models.DecimalField(max_digits=7, decimal_places=2)
     high = models.DecimalField(max_digits=7, decimal_places=2)
-    low = models.DecimalField(max_digits=7, decimal_places=2)
+    close = models.DecimalField(max_digits=7, decimal_places=2)
     pre_close = models.DecimalField(max_digits=7, decimal_places=2, null=True)
     low = models.DecimalField(max_digits=7, decimal_places=2)
     volume = models.DecimalField(max_digits=12, decimal_places=2)

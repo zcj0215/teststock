@@ -311,6 +311,9 @@ def dayadd(request):
                     data_temp[10] = data_temp[11]
                     data_temp[11] = data_temp[12].lstrip().rstrip()
 
+                if data_temp[8] == '—':
+                    data_temp[8] = '0.01'
+
                 data_list.append([data_temp[0],data_temp[1],data_temp[2],data_temp[3],data_temp[4],data_temp[5],data_temp[6],data_temp[7],
                           data_temp[8],data_temp[9],data_temp[10],data_temp[11]])
 
@@ -326,7 +329,7 @@ def dayadd(request):
                 data[6] = round(float(data[6][0:-1]),2)
             elif '亿' in data[6]:
                 data[6] = round(float(data[6][0:-1])*10000,2)
-         
-        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2023-01-18')
+        print(data)
+        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2023-01-19')
 
     return HttpResponse('执行完毕！')
