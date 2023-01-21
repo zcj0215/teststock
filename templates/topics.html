@@ -47,6 +47,11 @@
           <td>{{ topic.replies }}</td>
           <td>{{ topic.views }}</td>
           <td class="align-middle">{{ topic.last_updated|naturaltime }}</td>
+          {% if topic.starter == user %}
+            <td class="align-middle" >
+              <a href="{% url 'boards:edit_topic' board.pk topic.pk %}" class="btn btn-outline-primary" role="button">编辑</a>
+            </td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>

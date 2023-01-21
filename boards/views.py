@@ -90,6 +90,30 @@ def reply_topic(request, pk, topic_pk):
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
 
 @method_decorator(login_required, name='dispatch')    
+class TopicUpdateView(UpdateView):
+    model = Topic
+    form_class = NewTopicForm
+    template_name = 'edit_topic.html'
+    pk_url_kwarg = 'topic_pk'
+    context_object_name = 'topic'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(starter=self.request.user)
+
+    def form_valid(self, form):
+        topic = form.save(commit=False)
+        topic.last_updated = timezone.now()
+        topic.save()
+        post = Post.objects.create(
+            message=form.cleaned_data.get('message'),
+            topic=topic,
+            created_by=self.request.user
+        )
+        return redirect('boards:board_topics', pk=topic.board.pk) 
+
+
+@method_decorator(login_required, name='dispatch')    
 class PostUpdateView(UpdateView):
     model = Post
     form_class = PostForm
