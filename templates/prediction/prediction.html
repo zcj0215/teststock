@@ -18,44 +18,71 @@
             $('#myform').submit(function(){
                 var code = $("#id_code").val();
                 var again = 'off';
+                var good = 'off';
                 
                 if ($('input[name="again"]:checked').val()){
                     again = 'on';
                 }
-               
-                $.ajax({
-                    type:"POST",
-                    data: {code:code,again:again},
-                    url: "{% url 'prediction:pred' %}",
-                    cache: false,
-                    dataType: "json",
-                    beforeSend: function(){
-                        //$('#myModel').modal({backdrop:static}); //设置模态框之外点击无效
-                        $('#myModel').modal('show');      // 弹出模态框
-                    },
-                    success: function (res) {
-                        $('#myModel').modal('hide');       // 隐藏模态框
-                        if (res.data){
-                            stock_data = JSON.parse(res.data); 
-                            recent_data = stock_data.recent_data;
-                            predict_data = stock_data.predict_data;
-                            stock_code = stock_data.stock_code;
-                            stock_name = stock_data.stock_name;
-                        }
-                       
-                        if(recent_data != null && predict_data != null && stock_code != null && stock_name != null){
-                           draw_chart();
-                        }
+                if ($('input[name="good"]:checked').val()){
+                    good = 'on';
+                }
 
-                        if(indexs != null){
-                            draw_radar();
-                        }
+                if( again == 'on' && good == 'on' ){
+                    $('#bothModel').modal({backdrop: 'static', keyboard: false});
+                    $('#bothModel').modal('show');
+                }else{
+                    $.ajax({
+                        type:"POST",
+                        data: {code:code,again:again,good:good},
+                        url: "{% url 'prediction:pred' %}",
+                        cache: false,
+                        dataType: "json",
+                        beforeSend: function(){
+                            if( good == 'on' ){
+                                $('#preModel').modal({backdrop: 'static', keyboard: false}); //设置模态框之外点击无效
+                                $('#preModel').modal('show');      // 弹出模态框
+                            }else{
+                                $('#trainModel').modal({backdrop: 'static', keyboard: false}); //设置模态框之外点击无效
+                                $('#trainModel').modal('show');      // 弹出模态框
+                            }
+                        },
+                        success: function (res) {
+                            if( good == 'on' ){
+                                $('#preModel').modal('hide');  
+                                if (res.data){
+                                    stock_data = JSON.parse(res.data); 
+                                    recent_data = stock_data.recent_data;
+                                    predict_data = stock_data.predict_data;
+                                    stock_code = stock_data.stock_code;
+                                    stock_name = stock_data.stock_name;
+                                }else{
+                                    $('#nogoodModel').modal({backdrop: 'static', keyboard: false});
+                                    $('#nogoodModel').modal('show');
+                                }
+                            }else{     
+                                $('#trainModel').modal('hide');       // 隐藏模态框
+                                if (res.data){
+                                    stock_data = JSON.parse(res.data); 
+                                    recent_data = stock_data.recent_data;
+                                    predict_data = stock_data.predict_data;
+                                    stock_code = stock_data.stock_code;
+                                    stock_name = stock_data.stock_name;
+                                }
+                            }
+                            
+                            if(recent_data != null && predict_data != null && stock_code != null && stock_name != null){
+                                draw_chart();
+                            }
 
-                    },
-                    error: function (msg) {
-                        alert(JSON.stringify(msg));
-                    }
-                });
+                            if(indexs != null){
+                                draw_radar();
+                            }
+                        },
+                        error: function (msg) {
+                            alert(JSON.stringify(msg));
+                        }
+                    });
+                }          
                 return false;    
             });
         });
@@ -78,11 +105,17 @@
         <form align="left"  id="myform">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-success" >查询</button> 
+            <button type="submit" class="btn btn-success" >执行</button> 
             <div class="checkbox" style="float : left; margin-right: 20px">
                 <label>
                   <input type="checkbox" name="again">
                     再学习训练一次
+                </label>
+            </div>
+            <div class="checkbox" style="float : left; margin-right: 20px; margin-top: 10px;">
+                <label>
+                  <input type="checkbox" name="good">
+                    使用训练好的模型预测
                 </label>
             </div>
         </form>
@@ -95,18 +128,70 @@
         <div id="radar" style="width:50%;height:600px;"></div>
     </div>
 </center>
-<div class="modal fade" id="myModel" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+<div class="modal fade" id="trainModel">
     <div class="modal-dialog">
-        <div class="modal-content" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
+        <div class="modal-content message_align" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
             <div class="modal-header" style="text-align:left;font-size:small;height:8px;margin-bottom:10px">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-15px"><span
                     aria-hidden="true">×</span></button>
-                <p class="modal-title" style="margin-top:-10px;color:dodgerblue">人工智能深度机器学习</p>
+                <h5 class="modal-title" style="margin-top:-10px;color:dodgerblue">人工智能深度机器学习</h5>
             </div>
             <div class="modal-body" style="text-align: center;font-size:16px;height: 18px;color:chocolate">
                 <p style="margin-top:-15px">正在训练数据中，请耐心等待......</p>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-success">训练结束将关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="preModel">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
+            <div class="modal-header" style="text-align:left;font-size:small;height:8px;margin-bottom:10px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-15px"><span
+                    aria-hidden="true">×</span></button>
+                <p class="modal-title" style="margin-top:-10px;color:dodgerblue">人工智能预测</p>
+            </div>
+            <div class="modal-body" style="text-align: center;font-size:16px;height: 18px;color:chocolate">
+                <p style="margin-top:-15px">正在获取模型预测中，请耐心等待......</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">预测结束将关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="bothModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
+            <div class="modal-header" style="text-align:left;font-size:small;height:8px;margin-bottom:10px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-15px"><span
+                        aria-hidden="true">×</span></button>
+                <h5 class="modal-title" style="margin-top:-10px;color:dodgerblue">只能选一个！</h5>
+            </div>
+            <div class="modal-body" style="text-align: center;font-size:16px;height: 18px;color:chocolate">
+                <p style="margin-top:-15px">"再学习训练一次" 与 "使用训练好的模型预测" 只能选一个</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="nogoodModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
+            <div class="modal-header" style="text-align:left;font-size:small;height:8px;margin-bottom:10px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-15px"><span
+                        aria-hidden="true">×</span></button>
+                <h5 class="modal-title" style="margin-top:-10px;color:dodgerblue">没有训练好的模型！</h5>
+            </div>
+            <div class="modal-body" style="text-align: center;font-size:16px;height: 18px;color:chocolate">
+                <p style="margin-top:-15px">暂时没有学习训练好的模型，请继续训练......</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">确定</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

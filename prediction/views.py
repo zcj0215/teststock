@@ -23,8 +23,14 @@ def pred(request):
         if form.is_valid():
             stock_code = request.POST['code']
             again = request.POST['again']
-            predic.train_model(stock_code)
-            recent_data, predict_data,code,name = get_hist_predict_data(stock_code,again)
+            good = request.POST['good']
+            if good != 'on':
+                predic.train_model(stock_code)
+            else:
+               if not predic.isGood(stock_code):
+                  return JsonResponse({"data":False }) 
+           
+            recent_data, predict_data,code,name = get_hist_predict_data(stock_code,again,good)
             data = {"recent_data": recent_data, "predict_data": predict_data,"stock_code": code,"stock_name": name}
             # data['indexs'] = get_stock_index(code)
             return JsonResponse({"data": json.dumps(data)}) 
@@ -39,7 +45,7 @@ def pred(request):
 #      
 #
 ######################################################
-def get_hist_predict_data(stock_code,again):
+def get_hist_predict_data(stock_code,again,good):
     try:
         company = get_object_or_404(Company, stock_code=stock_code)
     except Http404:
@@ -82,8 +88,8 @@ def get_hist_predict_data(stock_code,again):
         for single in all_data:
             now = dt.now()
             start_date = dt.strptime(single.start_date,"%Y-%m-%d")
-            if (now.date() > start_date.date() or again == 'on'):  # 更新预测数据
-                single.set_data(predic.prediction(stock_code, pre_len=5))
+            if (now.date() > start_date.date() or again == 'on' or good == 'on'):  # 更新预测数据
+                single.set_data(predic.prediction(stock_code, good, pre_len=5))
                 single.save()
 
             predict_data = single.get_data()

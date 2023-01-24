@@ -43,7 +43,11 @@ def get_data_path():  # data目录的绝对路径
     root_dir = get_parent_dir()
     return os.path.join(root_dir, "data")    
 
-
+def isGood(stock_code):
+    if os.path.exists(os.path.join(get_parent_dir(),os.path.join('good_models', stock_code + ".h5"))):
+        return True
+    else:
+        return False
 
 # 只用于训练模型，但同时可根据参数进行模型的评估
 def train_model(stock_code, predict=False):  # 训练指定股票代码的模型
@@ -117,7 +121,7 @@ def train_model(stock_code, predict=False):  # 训练指定股票代码的模型
 
 
 # 对指定公司的股票进行预测
-def prediction(stock_code, real=True, pre_len=30, plot=False):
+def prediction(stock_code, good, pre_len=30, real=True, plot=False):
     '''
     使用保存的模型，对输入数据进行预测
     '''
@@ -128,8 +132,10 @@ def prediction(stock_code, real=True, pre_len=30, plot=False):
         configs['data']['train_test_split'],
         configs['data']['columns']
     )
-
+    
     file_path = os.path.join(get_parent_dir(),os.path.join("saved_models",stock_code + ".h5"))
+    if good == 'on':
+        file_path = os.path.join(get_parent_dir(),os.path.join("good_models",stock_code + ".h5"))
     model = Model()
     keras.backend.clear_session()
     model.load_model(file_path)  # 根据配置文件新建模型
