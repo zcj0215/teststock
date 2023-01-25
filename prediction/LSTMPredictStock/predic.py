@@ -135,6 +135,7 @@ def prediction(stock_code, good, pre_len=30, real=True, plot=False):
     
     file_path = os.path.join(get_parent_dir(),os.path.join("saved_models",stock_code + ".h5"))
     if good == 'on':
+        gdata(get_data_path(),stock_code)
         file_path = os.path.join(get_parent_dir(),os.path.join("good_models",stock_code + ".h5"))
     model = Model()
     keras.backend.clear_session()
