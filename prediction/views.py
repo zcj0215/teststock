@@ -80,7 +80,7 @@ def get_hist_predict_data(stock_code,again,good):
     if company.predictdata_set.count() <= 0:
         predict_data = models.PredictData()
         predict_data.company = company
-        predict_data.set_data(predic.prediction(stock_code,pre_len=5))
+        predict_data.set_data(predic.prediction(stock_code, good, pre_len=5))
         predict_data.save()
         predict_data = predict_data.get_data()
     else:
