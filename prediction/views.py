@@ -70,8 +70,8 @@ def get_hist_predict_data(stock_code,again,good):
             end_date = single.get_data()[-1][0]
             end_date = dt.strptime(end_date,"%Y-%m-%d")
            
-            if  (now.date() > end_date.date()):  # 更新历史数据
-                single.set_data(predic.get_hist_data(stock_code=stock_code,recent_day=22))
+            if  (now.date() > end_date.date() or good == 'on'):  # 更新历史数据
+                single.set_data(predic.get_hist_data(stock_code, good, recent_day=22))
                 single.save()
 
             recent_data = single.get_data()

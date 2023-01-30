@@ -135,7 +135,6 @@ def prediction(stock_code, good, pre_len=30, real=True, plot=False):
     
     file_path = os.path.join(get_parent_dir(),os.path.join("saved_models",stock_code + ".h5"))
     if good == 'on':
-        gdata(get_data_path(),stock_code)
         file_path = os.path.join(get_parent_dir(),os.path.join("good_models",stock_code + ".h5"))
     model = Model()
     keras.backend.clear_session()
@@ -205,7 +204,9 @@ def format_predictions(predictions):    # 给预测数据添加对应日期
     return date_predict
 
 # 二维数组：[[data,value],[...]]
-def get_hist_data(stock_code, recent_day=30):  # 获取某股票，指定天数的历史close数据,包含日期
+def get_hist_data(stock_code, good, recent_day=30):  # 获取某股票，指定天数的历史close数据,包含日期
+    if good == 'on':
+        gdata(get_data_path(),stock_code)
     root_dir = get_parent_dir()
     file_path = os.path.join(root_dir, "data/" + stock_code + ".csv")
     cols = ['Date', 'Close']
