@@ -60,7 +60,7 @@ def get_hist_predict_data(stock_code,again,good):
     if company.historydata_set.count() <= 0:
         history_data = models.HistoryData()
         history_data.company = company
-        history_data.set_data(predic.get_hist_data(stock_code=stock_code,recent_day=22))
+        history_data.set_data(predic.get_hist_data(stock_code, good, recent_day=22))
         history_data.save()
         recent_data = history_data.get_data()
     else:
