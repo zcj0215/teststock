@@ -6,6 +6,7 @@ from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
 import platform
+from django.db.models import Q
 
 sysstr = platform.system()
 
@@ -20,6 +21,28 @@ def readfile(mfn):
     fp.close()
     return wls
 
+def writefile(mfn,words):
+    '''
+    以“只写”⽅式打开⽂件,如有旧文件则替换
+    :param mfn: 文件路经与文件名
+    :param words: 字符串序列
+    :return: 无返回值
+    '''
+    fp = open(mfn, 'w',encoding ='gbk')
+    fp.writelines(words+'\n')
+    fp.close()
+
+def appendfile(mfn,str):
+    '''
+    以“只写”⽅式打开⽂件,文件指针指向文件尾，便于添加操作
+    :param mfn: 文件路经与文件名
+    :param str: 字符串序列
+    :return: 无返回值
+    '''
+    fp = open(mfn, 'a',encoding ='gbk')
+    fp.writelines(str+'\n')
+    fp.close()
+    
 def turnover(code,flag,dd,dt):
     if flag == 'SZ':
         if code[:2] == '30':  
@@ -218,6 +241,124 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 volume_ratio = round(float(volume_ratio),2)
             )
 
+def everydayout(dt):
+    path =  os.path.dirname(__file__)   
+    if(sysstr =="Windows"):
+        filename = path+"\\Table.txt"
+    else:
+        filename = path+"/Table.txt"
+
+
+    head = '代码      开盘       最新       最高       最低       总量       金额      换手%    量比     涨幅%     涨跌      昨收'
+    print(head)
+    writefile(filename, head)
+    
+    stocks = Stocksz.objects.all().filter(date=dt)
+    for row in  stocks:
+        dict = {}
+        dict["code"] = str(row.code)
+        dict["open"] = str(row.open)
+        dict["close"] = str(row.close)
+        dict["high"] = str(row.high)
+        dict["low"] = str(row.low)
+        dict["vol"] = str(row.volume)
+        dict["amount"] = str(row.amount)
+        dict["turnover"] = str(row.turnover)
+        dict["volume_ratio"] = str(row.volume_ratio)
+        dict["p_chg"] = str(row.p_change)
+        dict["price_change"] = str(row.price_change)
+        dict["pre_close"] = str(row.pre_close)
+                  
+        item_list = [dict["code"],dict["open"],dict["close"], dict["high"],dict["low"],dict["vol"],dict["amount"],dict["turnover"],dict["volume_ratio"], dict["p_chg"],dict["price_change"],dict["pre_close"]]
+        item_str = '    '.join(item_list)
+        print(item_str)
+        appendfile(filename, item_str)
+
+    stocks = Stockszc.objects.all().filter(date=dt)
+    for row in  stocks:
+        dict = {}
+        dict["code"] = str(row.code)
+        dict["open"] = str(row.open)
+        dict["close"] = str(row.close)
+        dict["high"] = str(row.high)
+        dict["low"] = str(row.low)
+        dict["vol"] = str(row.volume)
+        dict["amount"] = str(row.amount)
+        dict["turnover"] = str(row.turnover)
+        dict["volume_ratio"] = str(row.volume_ratio)
+        dict["p_chg"] = str(row.p_change)
+        dict["price_change"] = str(row.price_change)
+        dict["pre_close"] = str(row.pre_close)
+                  
+        item_list = [dict["code"],dict["open"],dict["close"], dict["high"],dict["low"],dict["vol"],dict["amount"],dict["turnover"],dict["volume_ratio"], dict["p_chg"],dict["price_change"],dict["pre_close"]]
+        item_str = '    '.join(item_list)
+        print(item_str)
+        appendfile(filename, item_str)
+
+    stocks = Stocksh.objects.all().filter(date=dt)
+    for row in  stocks:
+        dict = {}
+        dict["code"] = str(row.code)
+        dict["open"] = str(row.open)
+        dict["close"] = str(row.close)
+        dict["high"] = str(row.high)
+        dict["low"] = str(row.low)
+        dict["vol"] = str(row.volume)
+        dict["amount"] = str(row.amount)
+        dict["turnover"] = str(row.turnover)
+        dict["volume_ratio"] = str(row.volume_ratio)
+        dict["p_chg"] = str(row.p_change)
+        dict["price_change"] = str(row.price_change)
+        dict["pre_close"] = str(row.pre_close)
+                  
+        item_list = [dict["code"],dict["open"],dict["close"], dict["high"],dict["low"],dict["vol"],dict["amount"],dict["turnover"],dict["volume_ratio"], dict["p_chg"],dict["price_change"],dict["pre_close"]]
+        item_str = '    '.join(item_list)
+        print(item_str)
+        appendfile(filename, item_str) 
+
+    stocks = Stockshk.objects.all().filter(date=dt)
+    for row in  stocks:
+        dict = {}
+        dict["code"] = str(row.code)
+        dict["open"] = str(row.open)
+        dict["close"] = str(row.close)
+        dict["high"] = str(row.high)
+        dict["low"] = str(row.low)
+        dict["vol"] = str(row.volume)
+        dict["amount"] = str(row.amount)
+        dict["turnover"] = str(row.turnover)
+        dict["volume_ratio"] = str(row.volume_ratio)
+        dict["p_chg"] = str(row.p_change)
+        dict["price_change"] = str(row.price_change)
+        dict["pre_close"] = str(row.pre_close)
+                  
+        item_list = [dict["code"],dict["open"],dict["close"], dict["high"],dict["low"],dict["vol"],dict["amount"],dict["turnover"],dict["volume_ratio"], dict["p_chg"],dict["price_change"],dict["pre_close"]]
+        item_str = '    '.join(item_list)
+        print(item_str)
+        appendfile(filename, item_str)  
+
+    stocks = Stockbj.objects.all().filter(date=dt)
+    for row in  stocks:
+        dict = {}
+        dict["code"] = str(row.code)
+        dict["open"] = str(row.open)
+        dict["close"] = str(row.close)
+        dict["high"] = str(row.high)
+        dict["low"] = str(row.low)
+        dict["vol"] = str(row.volume)
+        dict["amount"] = str(row.amount)
+        dict["turnover"] = str(row.turnover)
+        dict["volume_ratio"] = str(row.volume_ratio)
+        dict["p_chg"] = str(row.p_change)
+        dict["price_change"] = str(row.price_change)
+        dict["pre_close"] = str(row.pre_close)
+                  
+        item_list = [dict["code"],dict["open"],dict["close"], dict["high"],dict["low"],dict["vol"],dict["amount"],dict["turnover"],dict["volume_ratio"], dict["p_chg"],dict["price_change"],dict["pre_close"]]
+        item_str = '    '.join(item_list)
+        print(item_str)
+        appendfile(filename, item_str)          
+
+
 def home(request):
     return HttpResponse('选股！')            
 
@@ -329,7 +470,13 @@ def dayadd(request):
                 data[6] = round(float(data[6][0:-1]),2)
             elif '亿' in data[6]:
                 data[6] = round(float(data[6][0:-1])*10000,2)
+        
         print(data)
-        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2023-02-08')
+        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2023-02-06')
 
     return HttpResponse('执行完毕！')
+
+def dayout(request):
+    everydayout('2023-02-06')
+    return HttpResponse('执行完毕！')
+
