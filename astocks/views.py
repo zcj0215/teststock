@@ -16,6 +16,20 @@ ts.set_token('357f92fd3836f2d018d20b9b840897abb3e5c9a62e17895b413e05fe')
 # 49da118be4e9b270b7ed565edf8fa70ba43f1d02fa33965d1fab3c38
 pro = ts.pro_api()
 
+def oldquery(request):
+    data = ts.get_hist_data('000001', start='2023-02-14', end='2023-02-14')
+    column_list = []
+    for row in data:
+        column_list.append(row)
+     
+    jsonlist = []
+    for index in range(data[column_list[0]].size):
+        dict = {}
+        for row in data:
+            dict[row] = data[row][index]
+        jsonlist.append(dict)
+    return HttpResponse(json.dumps(jsonlist))  
+
 def query(request):
     data = pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
     column_list = []
@@ -187,113 +201,120 @@ def single(request,code='000001',):
 
 def enter(beginindex,endindex,start,end):
     for index in range(int(beginindex),int(endindex)):
-         stock = get_object_or_404(StockList, pk=index+1)
-         code = stock.ts_code[:6]
-         flag = stock.ts_code[7:]
-         #start = time.strftime("%Y%m%d", time.localtime())
-         #end = time.strftime("%Y%m%d", time.localtime())
-          
-         data = pro.daily(ts_code=stock.ts_code, start_date=start, end_date=end)
+        try:
+            stock = get_object_or_404(StockList, pk=index+1)
          
-         column_list = []
+            code = stock.ts_code[:6]
+            flag = stock.ts_code[7:]
+            #start = time.strftime("%Y%m%d", time.localtime())
+            #end = time.strftime("%Y%m%d", time.localtime())
+          
+            data = pro.daily(ts_code=stock.ts_code, start_date=start, end_date=end)
+         
+            column_list = []
     
-         for row in data:
-            column_list.append(row)
+            for row in data:
+                column_list.append(row)
             
-         jsonlist = []
-         for index in range(data[column_list[0]].size):
-             dict = {}
-             for row in data:
-                dict[row] = data[row][index]
+            jsonlist = []
+            for index in range(data[column_list[0]].size):
+                    dict = {}
+                    for row in data:
+                        dict[row] = data[row][index]
             
-             mydate = dict['trade_date'][:4]+'-'+dict['trade_date'][4:6]+'-'+dict['trade_date'][6:]
-             if flag == 'SZ':
-               if code[:2] == '30':  
-                 try:
-                    stock = get_object_or_404(Stockszc, code=code,date=mydate)
-                 except Http404:
-                    stock = Stockszc.objects.create(
-                       code = code,
-                       open = dict['open'],
-                       high = dict['high'],
-                       close = dict['close'],
-                       pre_close = dict['pre_close'],
-                       low = dict['low'],
-                       volume = dict['vol'],
-                       amount = dict['amount']*1000/10000,
-                       price_change = dict['change'],
-                       p_change = dict['pct_chg'],
-                       date = mydate
-                    )
-               else:
-                 try:
-                    stock = get_object_or_404(Stocksz, code=code,date=mydate)
-                 except Http404:
-                    stock = Stocksz.objects.create(
-                       code = code,
-                       open = dict['open'],
-                       high = dict['high'],
-                       close = dict['close'],
-                       pre_close = dict['pre_close'],
-                       low = dict['low'],
-                       volume = dict['vol'],
-                       amount = dict['amount']*1000/10000,
-                       price_change = dict['change'],
-                       p_change = dict['pct_chg'],
-                       date = mydate
-                    )
-             elif flag == 'SH':
-               if code[:2] == '68':  
-                 try:
-                    stock = get_object_or_404(Stockshk, code=code,date=mydate)
-                 except Http404:
-                   stock = Stockshk.objects.create(
-                      code = code,
-                      open = dict['open'],
-                      high = dict['high'],
-                      close = dict['close'],
-                      pre_close = dict['pre_close'],
-                      low = dict['low'],
-                      volume = dict['vol'],
-                      amount = dict['amount']*1000/10000,
-                      price_change = dict['change'],
-                      p_change = dict['pct_chg'],
-                      date = mydate
-                   ) 
-               else:     
-                 try:
-                    stock = get_object_or_404(Stocksh, code=code,date=mydate)
-                 except Http404:
-                    stock = Stocksh.objects.create(
-                       code = code,
-                       open = dict['open'],
-                       high = dict['high'],
-                       close = dict['close'],
-                       pre_close = dict['pre_close'],
-                       low = dict['low'],
-                       volume = dict['vol'],
-                       amount = dict['amount']*1000/10000,
-                       price_change = dict['change'],
-                       p_change = dict['pct_chg'],
-                       date = mydate
-                    )
-             elif flag == 'BJ':
-               try:
-                 stock = get_object_or_404(Stockbj, code=code,date=mydate)
-               except Http404:
-                 stock = Stockbj.objects.create(
-                   code = code,
-                   open = dict['open'],
-                   high = dict['high'],
-                   close = dict['close'],
-                   pre_close = dict['pre_close'],
-                   low = dict['low'],
-                   volume = dict['vol'],
-                   amount = dict['amount']*1000/10000,
-                   price_change = dict['change'],
-                   p_change = dict['pct_chg'],
-                   date = mydate
-                 )
+                    mydate = dict['trade_date'][:4]+'-'+dict['trade_date'][4:6]+'-'+dict['trade_date'][6:]
+
+                    if flag == 'SZ':
+                            if code[:2] == '30':  
+                                try:
+                                    stock = get_object_or_404(Stockszc, code=code,date=mydate)
+                                except Http404:
+                                    stock = Stockszc.objects.create(
+                                        code = code,
+                                        open = dict['open'],
+                                        high = dict['high'],
+                                        close = dict['close'],
+                                        pre_close = dict['pre_close'],
+                                        low = dict['low'],
+                                        volume = dict['vol'],
+                                        amount = dict['amount']*1000/10000,
+                                        price_change = dict['change'],
+                                        p_change = dict['pct_chg'],
+                                        date = mydate
+                                    )
+                            else:
+                                try:
+                                    stock = get_object_or_404(Stocksz, code=code,date=mydate)
+                                except Http404:
+                                    stock = Stocksz.objects.create(
+                                        code = code,
+                                        open = dict['open'],
+                                        high = dict['high'],
+                                        close = dict['close'],
+                                        pre_close = dict['pre_close'],
+                                        low = dict['low'],
+                                        volume = dict['vol'],
+                                        amount = dict['amount']*1000/10000,
+                                        price_change = dict['change'],
+                                        p_change = dict['pct_chg'],
+                                        date = mydate
+                                    )
+                    elif flag == 'SH':
+                            if code[:2] == '68':  
+                                try:
+                                    stock = get_object_or_404(Stockshk, code=code,date=mydate)
+                                except Http404:
+                                    stock = Stockshk.objects.create(
+                                        code = code,
+                                        open = dict['open'],
+                                        high = dict['high'],
+                                        close = dict['close'],
+                                        pre_close = dict['pre_close'],
+                                        low = dict['low'],
+                                        volume = dict['vol'],
+                                        amount = dict['amount']*1000/10000,
+                                        price_change = dict['change'],
+                                        p_change = dict['pct_chg'],
+                                        date = mydate
+                                    ) 
+                            else:     
+                                try:
+                                    stock = get_object_or_404(Stocksh, code=code,date=mydate)
+                                except Http404:
+                                    stock = Stocksh.objects.create(
+                                        code = code,
+                                        open = dict['open'],
+                                        high = dict['high'],
+                                        close = dict['close'],
+                                        pre_close = dict['pre_close'],
+                                        low = dict['low'],
+                                        volume = dict['vol'],
+                                        amount = dict['amount']*1000/10000,
+                                        price_change = dict['change'],
+                                        p_change = dict['pct_chg'],
+                                        date = mydate
+                                    )
+                    elif flag == 'BJ':
+                            try:
+                                stock = get_object_or_404(Stockbj, code=code,date=mydate)
+                            except Http404:
+                                stock = Stockbj.objects.create(
+                                    code = code,
+                                    open = dict['open'],
+                                    high = dict['high'],
+                                    close = dict['close'],
+                                    pre_close = dict['pre_close'],
+                                    low = dict['low'],
+                                    volume = dict['vol'],
+                                    amount = dict['amount']*1000/10000,
+                                    price_change = dict['change'],
+                                    p_change = dict['pct_chg'],
+                                    date = mydate
+                                )
+            
+        except Http404:
+            pass
+
     return 'OK'
  
 def selectStock(page, limit):
@@ -354,62 +375,68 @@ def turnover(beginindex,endindex,trade_date1,trade_date2):
 
     for index in range(int(beginindex),int(endindex)):
     # for index in range(4618, 4635):
-         stock = get_object_or_404(StockList, pk=index+1)
-         code = stock.ts_code[:6]
-         flag = stock.ts_code[7:]
-         # trade_date1 = stock.list_date
+        try:
+            stock = get_object_or_404(StockList, pk=index+1)
+            code = stock.ts_code[:6]
+            flag = stock.ts_code[7:]
+            # trade_date1 = stock.list_date
          
-         data = ts.get_hist_data(code, start=trade_date1, end=trade_date2)
+            data = ts.get_hist_data(code, start=trade_date1, end=trade_date2)
          
-         column_list = []
+            column_list = []
     
-         for row in data:
-            column_list.append(row)
+            for row in data:
+               column_list.append(row)
             
-         jsonlist = []
-         for index in range(data[column_list[0]].size):
-             dict = {}
-             for row in data:
-                dict[row] = data[row][index]
+            jsonlist = []
+            for index in range(data[column_list[0]].size):
+                dict = {}
+                for row in data:
+                   dict[row] = data[row][index]
             
-             mydate = data.index[index]
-             if flag == 'SZ':
-               if code[:2] == '30':  
-                 try:
-                    stock = get_object_or_404(Stockszc, code=code,date=mydate)
+                mydate = data.index[index]
+                if flag == 'SZ':
+                  if code[:2] == '30':  
+                    try:
+                       stock = get_object_or_404(Stockszc, code=code,date=mydate)
+                       stock.turnover = dict['turnover']
+                       stock.save()
+                    except Http404:
+                       pass
+                  else:
+                    try:
+                       stock = get_object_or_404(Stocksz, code=code,date=mydate)
+                       stock.turnover = dict['turnover']
+                       stock.save()
+                    except Http404:
+                       pass
+                elif flag == 'SH':
+                  if code[:2] == '68':  
+                    try:
+                       stock = get_object_or_404(Stockshk, code=code,date=mydate)
+                       stock.turnover = dict['turnover']
+                       stock.save()
+                    except Http404:
+                       pass
+                  else:     
+                    try:
+                       stock = get_object_or_404(Stocksh, code=code,date=mydate)
+                       stock.turnover = dict['turnover']
+                       stock.save()
+                    except Http404:
+                       pass
+                elif flag == 'BJ':
+                  try:
+                    stock = get_object_or_404(Stockbj, code=code,date=mydate)
                     stock.turnover = dict['turnover']
                     stock.save()
-                 except Http404:
+                  except Http404:
                     pass
-               else:
-                 try:
-                    stock = get_object_or_404(Stocksz, code=code,date=mydate)
-                    stock.turnover = dict['turnover']
-                    stock.save()
-                 except Http404:
-                    pass
-             elif flag == 'SH':
-               if code[:2] == '68':  
-                 try:
-                    stock = get_object_or_404(Stockshk, code=code,date=mydate)
-                    stock.turnover = dict['turnover']
-                    stock.save()
-                 except Http404:
-                   pass
-               else:     
-                 try:
-                    stock = get_object_or_404(Stocksh, code=code,date=mydate)
-                    stock.turnover = dict['turnover']
-                    stock.save()
-                 except Http404:
-                   pass
-             elif flag == 'BJ':
-               try:
-                 stock = get_object_or_404(Stockbj, code=code,date=mydate)
-                 stock.turnover = dict['turnover']
-                 stock.save()
-               except Http404:
-                 pass
+        except Http404:
+            pass
+        except TypeError:
+            pass
+
     return 'OK'
   
 def handledd(request):
