@@ -436,6 +436,8 @@ def turnover(beginindex,endindex,trade_date1,trade_date2):
             pass
         except TypeError:
             pass
+        except KeyError:
+            pass
 
     return 'OK'
   
