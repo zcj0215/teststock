@@ -105,14 +105,14 @@
         <form align="left"  id="myform">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-success" >执行</button> 
-            <div class="checkbox" style="float : left; margin-right: 20px">
+            <div><button type="submit" class="btn btn-success" >执行</button> 
+            <div class="checkbox" style="float : left; margin-right: 50px">
                 <label>
                   <input type="checkbox" name="again">
                     再学习训练一次
                 </label>
-            </div>
-            <div class="checkbox" style="float : left; margin-right: 20px; margin-top: 10px;">
+            </div></div>
+            <div class="checkbox" style="margin-top: 10px;">
                 <label>
                   <input type="checkbox" name="good">
                     使用训练好的模型预测
