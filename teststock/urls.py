@@ -34,6 +34,7 @@ urlpatterns = [
     re_path(r'^api/oldquery/$',astocks_views.oldquery),
     re_path(r'^person/$', accounts_views.new_person,name='new_person'),
     re_path(r'^newpick/$', accounts_views.new_pick,name='new_pick'),
+    re_path(r'^newlimitup/$', accounts_views.new_limitup,name='new_limitup'),
     re_path(r'^handledd/$', astocks_views.handledd,name='handledd'),
     re_path(r'^handleto/$', astocks_views.handleto,name='handleto'),
     path('admin/', admin.site.urls),

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'astocks:limitup' %}">涨停</a></li>
+  <li class="breadcrumb-item active">涨停日期</li>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>涨停日期</th>
+        <th>股票名称</th>
+        <th>涨停理由</th>
+        <th>题材</th>
+        <th>警惕缺点</th>
+        <th>次日表现</th>
+        <th>10日涨停数量</th>
+        <th>总结</th>
+        <th>录入人</th>
+        {% if user.is_authenticated and user.is_superuser %}
+           <th colspan="2">操作</th>
+        {% endif %} 
+      </tr>
+    </thead>
+    <tbody>
+      {% for choose in limitups %}
+        <tr>
+          <td>
+            {{ choose.pick_date | date:'Y-m-d'  }}
+          </td>
+          <td class="align-middle">
+            {{ choose.code }}
+            <small class="text-muted d-block">{{ choose.name }}</small>
+          </td>
+          <td class="align-middle">
+            {{ choose.reasons }}
+          </td>
+          
+          <td class="align-middle">
+            {% with boards=choose.boards %}
+              {% if boards %}
+                <small>
+                  {% for board in boards.all %}
+                    {{ board.name }},
+                  {% endfor %}
+                </small>
+              {% else %}
+                <small class="text-muted">
+                  <em></em>
+                </small>
+              {% endif %}
+            {% endwith %}
+          </td>  
+          <td class="align-middle">
+            {{ choose.short }}
+          </td>
+          <td class="align-middle">
+            {{ choose.ndperformance }}
+          </td>
+          <td class="align-middle">
+            {% if choose.tenday_limits %}
+              {{ choose.tenday_limits }}
+            {% else %}  
+                  <em></em>
+            {% endif %}
+          </td>
+          <td class="align-middle">
+            <small>
+            {{ choose.summary }}
+            </small>
+          </td>
+          <td class="align-middle">
+            {{ choose.person }}
+          </td>
+          {% if user.is_authenticated and user.is_superuser %}
+            <td class="align-middle" >
+              <a href="{% url 'astocks:edit_limitup_by_date' choose.pk 'date' %}" class="btn btn-outline-primary" role="button">编辑</a>
+            </td>
+            <td class="align-middle" >
+              <a href="{% url 'astocks:delete_limitup_by_date' choose.pk 'date' %}" class="btn btn-outline-danger" role="button">删除</a>
+            </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

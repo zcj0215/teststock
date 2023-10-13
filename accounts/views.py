@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from boards.models import Board
 from .forms import SignUpForm, SignInForm, PersonsForm
-from astocks.forms import StockChooseForm
+from astocks.forms import StockChooseForm, StockLimitupForm
 from django.contrib.auth import login as auth_login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms.forms import NON_FIELD_ERRORS
@@ -94,3 +94,22 @@ def new_pick(request):
     else:
         form = StockChooseForm()
     return render(request, 'pickstock.html', {'form': form})
+
+@login_required
+def new_limitup(request):
+    if request.method == 'POST':
+        form = StockLimitupForm(request.POST)
+        if form.is_valid():
+            pick = form.save(commit=False)
+            pick.save()
+            formboards = request.POST.getlist('boards')
+            for bid in formboards:
+                board = get_object_or_404(Board, pk=bid) 
+                if board:
+                    pick.boards.add(board)         
+            
+            pick.save()
+            return redirect('astocks:limitup')
+    else:
+        form = StockLimitupForm()
+    return render(request, 'limitupstock.html', {'form': form})

@@ -33,6 +33,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'astocks:home' %}">选股信息</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'astocks:limitup' %}">涨停观察</a>
+              </li>
             </ul>
             {% if user.is_authenticated %}
               <ul class="navbar-nav ml-auto">
@@ -46,6 +49,7 @@
                       <a class="dropdown-item" href="{% url 'handleto' %}">股票日线换手率</a>
                       <a class="dropdown-item" href="{% url 'new_person' %}">新建选股人</a>
                       <a class="dropdown-item" href="{% url 'new_pick' %}">新建选股</a>
+                      <a class="dropdown-item" href="{% url 'new_limitup' %}">新建涨停</a>
                     {% else %}
                        <a class="dropdown-item" href="#">我的帐户</a>
                        <a class="dropdown-item" href="#">更改密码</a>
