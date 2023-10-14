@@ -18,6 +18,21 @@ class StockLimitup(models.Model):
     
     def __str__(self):
         return self.name
+    
+class LimitupType(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    description = models.CharField(max_length=100) 
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        json_LimitupType = {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description
+        }
+        return json_LimitupType
 
 class StockChoose(models.Model):
     pick_date = models.DateField(max_length=10,db_index=True)
@@ -33,6 +48,21 @@ class StockChoose(models.Model):
     
     def __str__(self):
         return self.name
+    
+class ChooseType(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    description = models.CharField(max_length=100) 
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        json_ChooseType = {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description
+        }
+        return json_ChooseType
     
 class StockList(models.Model):
     ts_code = models.CharField(max_length=50, unique=True)
@@ -151,5 +181,21 @@ class Stockme(models.Model):
     
     def __str__(self):
         return self.name
-          
     
+class Stocksector(models.Model):
+    code = models.CharField(max_length=11, db_index=True)                        
+    open = models.DecimalField(max_digits=11, decimal_places=2)
+    high = models.DecimalField(max_digits=11, decimal_places=2)
+    close = models.DecimalField(max_digits=11, decimal_places=2)
+    pre_close = models.DecimalField(max_digits=11, decimal_places=2, null=True)
+    low = models.DecimalField(max_digits=11, decimal_places=2)
+    volume = models.DecimalField(max_digits=18, decimal_places=2)
+    turnover = models.DecimalField(max_digits=10, decimal_places=2,null=True)  
+    volume_ratio=models.DecimalField(max_digits=10, decimal_places=2,null=True) 
+    limitup_number=models.DecimalField(max_digits=5, decimal_places=0,null=True) 
+    growth=models.DecimalField(max_digits=10, decimal_places=2,null=True)  
+    growth_pre=models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    growth_3=models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    growth_20=models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    growth_60=models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    Continuerise_days=models.DecimalField(max_digits=5, decimal_places=0,null=True) 

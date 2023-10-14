@@ -15,6 +15,8 @@ class BoardListView(ListView):
     model = Board
     context_object_name = 'boards'
     template_name = 'home.html'
+    paginate_by = 20
+
 
 
 class TopicListView(ListView):

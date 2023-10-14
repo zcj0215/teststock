@@ -9,11 +9,26 @@ from django.utils.html import mark_safe
 from django.utils.text import Truncator 
 from markdown import markdown
 
+class BoardType(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    description = models.CharField(max_length=100) 
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        json_BoardType = {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description
+        }
+        return json_BoardType
 
 class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
-    
+    type = models.ForeignKey(BoardType, related_name='boards',on_delete=models.CASCADE)
+
     def __str__(self):
         return self.name
 
