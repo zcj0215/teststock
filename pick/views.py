@@ -484,10 +484,10 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\概念板块.xls"
+        filename = path+"\\风格板块.xls"
         
     else:
-        filename = path+"/概念板块.xls"
+        filename = path+"/风格板块.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
  
@@ -496,7 +496,7 @@ def blockadd(request):
 
         try:
             board = get_object_or_404(Board,name=item)
-            board.type= get_object_or_404(BoardType,id=3)
+            board.type= get_object_or_404(BoardType,id=4)
             board.save()
         except Http404:
             pass
