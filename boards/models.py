@@ -27,7 +27,7 @@ class BoardType(models.Model):
 class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
-   
+    type = models.ForeignKey(BoardType, related_name='boards',on_delete=models.CASCADE,null=True)
 
     def __str__(self):
         return self.name
