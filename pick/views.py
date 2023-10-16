@@ -496,7 +496,7 @@ def blockadd(request):
 
         try:
             board = get_object_or_404(Board,name=item)
-            board.type= get_object_or_404(BoardType,id=4)
+            board.type= get_object_or_404(BoardType,id=5)
             board.save()
         except Http404:
             pass
