@@ -9,6 +9,7 @@
     <thead class="thead-inverse">
       <tr>
         <th>板块</th>
+        <th>类别</th>
         <th>帖子</th>
         <th>主题</th>
         <th>最后发表</th>
@@ -20,6 +21,9 @@
           <td>
             <a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a>
             <small class="text-muted d-block">{{ board.description }}</small>
+          </td>
+          <td class="align-middle">
+            {{ board.type.name }}
           </td>
           <td class="align-middle">
             {{ board.get_posts_count }}
