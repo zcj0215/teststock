@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 import os
 from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj
-from boards.models import Board
+from boards.models import Board,BoardType
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
 import platform
@@ -484,10 +484,10 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\板块指数.xls"
+        filename = path+"\\行业板块.xls"
         
     else:
-        filename = path+"/板块指数.xls"
+        filename = path+"/行业板块.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
  
@@ -496,10 +496,11 @@ def blockadd(request):
 
         try:
             board = get_object_or_404(Board,name=item)
+            board.type= get_object_or_404(BoardType,id=2)
+            board.save()
         except Http404:
-            board = Board.objects.create(
-                name = item 
-            )
+            pass
+             
 
     return HttpResponse('执行完毕！')
 
