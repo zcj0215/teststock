@@ -484,10 +484,10 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\数字货币.xls"
+        filename = path+"\\大数据.xls"
         
     else:
-        filename = path+"/数字货币.xls"
+        filename = path+"/大数据.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -506,7 +506,7 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='数字货币')  
+        board = get_object_or_404(Board,name='大数据')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
