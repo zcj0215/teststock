@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 import os
-from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj
+from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks
 from boards.models import Board,BoardType
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
@@ -475,7 +475,7 @@ def dayadd(request):
                 data[6] = round(float(data[6][0:-1])*10000,2)
         
         print(data)
-        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2023-10-13')
+        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2023-10-17')
 
     return HttpResponse('执行完毕！')
 
@@ -484,23 +484,43 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\地区板块.xls"
+        filename = path+"\\数字货币.xls"
         
     else:
-        filename = path+"/地区板块.xls"
+        filename = path+"/数字货币.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
- 
-    for item in df.名称:
-        print(item)
+    
 
+    for row in df.iloc[:,0:2].itertuples():
+        my = str(row.代码)
+        if len(my) == 1:
+            my = '00000'+ my
+        elif len(my) == 2:
+            my = '0000'+ my
+        elif len(my) == 3:    
+            my = '000'+ my
+        elif len(my) == 4:    
+            my = '00'+ my
+        elif len(my) == 5:    
+            my = '0'+ my    
+        print(my)
+        print(row.名称)
+        board = get_object_or_404(Board,name='数字货币')  
         try:
-            board = get_object_or_404(Board,name=item)
-            board.type= get_object_or_404(BoardType,id=5)
-            board.save()
+            stocks = get_object_or_404(Stocks,code=my)
+            
+            if board not in  stocks.boards:
+                stocks.boards.add(board)
+                stocks.save()
+            
         except Http404:
-            pass
-             
+            stocks = Stocks.objects.create(
+                code = my,
+                name = row.名称
+            )
+            stocks.boards.add(board)
+            stocks.save()       
 
     return HttpResponse('执行完毕！')
 
