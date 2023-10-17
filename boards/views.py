@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
 
 from .forms import NewTopicForm, PostForm
-from .models import Board, Topic, Post
+from .models import Board, Topic, Post, BoardType
 
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
@@ -17,8 +17,21 @@ class BoardListView(ListView):
     template_name = 'home.html'
     paginate_by = 20
 
+class ByTypeBoardListView(ListView):
+    model = Board
+    context_object_name = 'boards'
+    template_name = 'homebytype.html'
+    paginate_by = 20
+   
+    def get_context_data(self, **kwargs):
+        kwargs['type'] = self.type
+        return super().get_context_data(**kwargs)    
 
-
+    def get_queryset(self):
+        self.type = get_object_or_404(BoardType, pk=self.kwargs.get('pk'))
+        queryset = self.type.boards.order_by('pk')
+        return queryset
+    
 class TopicListView(ListView):
     model = Topic
     context_object_name = 'topics'

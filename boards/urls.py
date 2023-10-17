@@ -3,7 +3,8 @@ from django.urls import re_path
 from . import views
 
 urlpatterns = [ 
-    re_path(r'^$', views.BoardListView.as_view(), name='home'),       
+    re_path(r'^$', views.BoardListView.as_view(), name='home'),  
+    re_path(r'^bytype/(?P<pk>\d+)/$', views.ByTypeBoardListView.as_view(), name='type_boards'), 
     re_path(r'^(?P<pk>\d+)/$', views.TopicListView.as_view(), name='board_topics'),
     re_path(r'^(?P<pk>\d+)/new/$', views.new_topic, name='new_topic'),
     re_path(r'^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.PostListView.as_view(), name='topic_posts'),
