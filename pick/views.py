@@ -510,10 +510,10 @@ def blockadd(request):
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if board not in  stocks.boards:
+            if  not stocks.boards.filter(name='大数据'):
                 stocks.boards.add(board)
                 stocks.save()
-            
+                    
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
