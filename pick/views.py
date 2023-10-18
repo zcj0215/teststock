@@ -484,10 +484,10 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\粮食概念.xls"
+        filename = path+"\\种业.xls"
         
     else:
-        filename = path+"/粮食概念.xls"
+        filename = path+"/种业.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -506,11 +506,11 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='粮食概念')  
+        board = get_object_or_404(Board,name='种业')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='粮食概念'):
+            if  not stocks.boards.filter(name='种业'):
                 stocks.boards.add(board)
                 stocks.save()
                     
