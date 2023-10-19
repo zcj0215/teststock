@@ -1,5 +1,5 @@
 from django import forms
-from .models import StockChoose, StockLimitup
+from .models import StockChoose, StockLimitup,ChooseType,LimitupType
 from accounts.models import Persons
 from boards.models import Board
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +34,11 @@ class StockChooseForm(forms.ModelForm):
         required=True,
         error_messages={'required':'这是必填栏。'},
         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    types = forms.ModelMultipleChoiceField(
+        label=_('选股类型'),
+        required=False,
+        queryset=ChooseType.objects.all(),
+        widget=forms.CheckboxSelectMultiple)
     reasons = forms.CharField(
         label=_('选股理由'),
         required=False,
@@ -68,7 +73,7 @@ class StockChooseForm(forms.ModelForm):
     
     class Meta:
         model = StockChoose
-        fields = ['pick_date', 'code', 'name', 'reasons', 'boards', 'short', 'ndperformance', 
+        fields = ['pick_date', 'code', 'name','types', 'reasons', 'boards', 'short', 'ndperformance', 
                   'tenday_limits', 'summary', 'person']
         
 class StockLimitupForm(forms.ModelForm):
@@ -84,6 +89,11 @@ class StockLimitupForm(forms.ModelForm):
         required=True,
         error_messages={'required':'这是必填栏。'},
         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    types = forms.ModelMultipleChoiceField(
+        label=_('涨停类型'),
+        required=False,
+        queryset=LimitupType.objects.all(),
+        widget=forms.CheckboxSelectMultiple)
     name = forms.CharField(
         label=_('股票名称'),
         required=True,
@@ -123,5 +133,5 @@ class StockLimitupForm(forms.ModelForm):
     
     class Meta:
         model = StockLimitup
-        fields = ['pick_date', 'code', 'name', 'reasons', 'boards', 'short', 'ndperformance', 
+        fields = ['pick_date', 'code', 'name', 'types','reasons', 'boards', 'short', 'ndperformance', 
                   'tenday_limits', 'summary', 'person']

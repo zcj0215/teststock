@@ -3,7 +3,7 @@ from astocks.forms import StockLimitupForm
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView
 from django.views import View
-from ..models import StockLimitup
+from ..models import StockLimitup,LimitupType
 from boards.models import Board
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
@@ -33,6 +33,14 @@ def byDateListView(request):
     limitups = StockLimitup.objects.all().filter(limitup_date=by)
     
     return render(request, 'pickstock/limitup_list_by_date.html', {'limitups': limitups })
+
+def byTypeListView(request):
+    by = request.GET.get('by') 
+    type = get_object_or_404(LimitupType, pk=by) 
+
+    limitups = StockLimitup.objects.filter(types__name__in = [type.name]).order_by('-pick_date')
+   
+    return render(request, 'pickstock/limitup_list_by_type.html', {'limitups': limitups })
         
 @method_decorator(login_required, name='dispatch')    
 class EditStockChooseView(UpdateView):
@@ -52,6 +60,12 @@ class EditStockChooseView(UpdateView):
         stocklimitup = form.save(commit=False)
         stocklimitup.boards.clear()
         stocklimitup.save()
+         
+        formtypes = self.request.POST.getlist('types')
+        for tid in formtypes:
+            type = get_object_or_404(LimitupType, pk=tid) 
+            if type:
+                stocklimitup.types.add(type) 
          
         formboards = self.request.POST.getlist('boards')
         for bid in formboards:

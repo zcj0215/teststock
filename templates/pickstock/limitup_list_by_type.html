@@ -2,34 +2,34 @@
 
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'astocks:home' %}">选股</a></li>
-  <li class="breadcrumb-item active">选股日期</li>
+  <li class="breadcrumb-item"><a href="{% url 'astocks:limitup' %}">涨停</a></li>
+  <li class="breadcrumb-item active">涨停类型</li>
 {% endblock %}
 
 {% block content %}
   <table class="table">
     <thead class="thead-inverse">
       <tr>
-        <th>选股日期</th>
+        <th>涨停日期</th>
         <th>股票名称</th>
-        <th>选股类型</th>
-        <th>选股理由</th>
-        <th>热点题材</th>
+        <th>涨停类型</th>
+        <th>涨停理由</th>
+        <th>题材</th>
         <th>警惕缺点</th>
         <th>次日表现</th>
         <th>10日涨停数量</th>
-        <th>经验总结</th>
-        <th>选股人</th>
+        <th>总结</th>
+        <th>录入人</th>
         {% if user.is_authenticated and user.is_superuser %}
            <th colspan="2">操作</th>
         {% endif %} 
       </tr>
     </thead>
     <tbody>
-      {% for choose in chooses %}
+      {% for choose in limitups %}
         <tr>
           <td>
-            {{ choose.pick_date | date:'Y-m-d'  }}
+            <a href="/astocks/limitup_date?by={{ choose.pick_date|date:'Y-m-d' }}">{{ choose.pick_date|date:'Y-m-d' }}</a> 
           </td>
           <td class="align-middle">
             {{ choose.code }}
@@ -40,7 +40,7 @@
               {% if types %}
                 <small>
                   {% for type in types.all %}
-                  <a href="/astocks/limitup_type?by={{ type.pk }}">{{ type.name }}</a> ,
+                      {{ type.name }} ,
                   {% endfor %}
                 </small>
               {% else %}
@@ -50,7 +50,6 @@
               {% endif %}
             {% endwith %}
           </td>  
-
           <td class="align-middle">
             {{ choose.reasons }}
           </td>
@@ -93,10 +92,10 @@
           </td>
           {% if user.is_authenticated and user.is_superuser %}
             <td class="align-middle" >
-              <a href="{% url 'astocks:edit_pick_by_date' choose.pk 'date' %}" class="btn btn-outline-primary" role="button">编辑</a>
+              <a href="{% url 'astocks:edit_limitup_by_type' choose.pk 'date' %}" class="btn btn-outline-primary" role="button">编辑</a>
             </td>
             <td class="align-middle" >
-              <a href="{% url 'astocks:delete_pick_by_date' choose.pk 'date' %}" class="btn btn-outline-danger" role="button">删除</a>
+              <a href="{% url 'astocks:delete_limitup_by_type' choose.pk 'date' %}" class="btn btn-outline-danger" role="button">删除</a>
             </td>
           {% endif %}
         </tr>

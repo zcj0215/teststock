@@ -12,6 +12,7 @@
       <tr>
         <th>涨停日期</th>
         <th>股票名称</th>
+        <th>涨停类型</th>
         <th>涨停理由</th>
         <th>题材</th>
         <th>警惕缺点</th>
@@ -34,6 +35,21 @@
             {{ choose.code }}
             <small class="text-muted d-block">{{ choose.name }}</small>
           </td>
+          <td class="align-middle">
+            {% with types=choose.types %}
+              {% if types %}
+                <small>
+                  {% for type in types.all %}
+                  <a href="/astocks/limitup_type?by={{ type.id }}">{{ type.name }}</a> ,
+                  {% endfor %}
+                </small>
+              {% else %}
+                <small class="text-muted">
+                  <em></em>
+                </small>
+              {% endif %}
+            {% endwith %}
+          </td>  
           <td class="align-middle">
             {{ choose.reasons }}
           </td>

@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from boards.models import Board
+from astocks.models import ChooseType
 from .forms import SignUpForm, SignInForm, PersonsForm
 from astocks.forms import StockChooseForm, StockLimitupForm
 from django.contrib.auth import login as auth_login, authenticate
@@ -83,6 +84,12 @@ def new_pick(request):
         if form.is_valid():
             pick = form.save(commit=False)
             pick.save()
+            formtypes = request.POST.getlist('types')
+            for tid in formtypes:
+                type = get_object_or_404(ChooseType, pk=tid) 
+                if type:
+                    pick.types.add(type)    
+           
             formboards = request.POST.getlist('boards')
             for bid in formboards:
                 board = get_object_or_404(Board, pk=bid) 

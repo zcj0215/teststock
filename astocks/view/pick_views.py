@@ -3,7 +3,7 @@ from astocks.forms import StockChooseForm
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView
 from django.views import View
-from ..models import StockChoose
+from ..models import StockChoose,ChooseType
 from boards.models import Board
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
@@ -33,6 +33,13 @@ def byDateListView(request):
     chooses = StockChoose.objects.all().filter(pick_date=by)
     
     return render(request, 'pickstock/pickstock_list_by_date.html', {'chooses': chooses })
+
+def byTypeListView(request):
+    by = request.GET.get('by') 
+    type = get_object_or_404(ChooseType, pk=by) 
+    chooses = StockChoose.objects.filter(types__name__in = [type.name]).order_by('-pick_date')
+   
+    return render(request, 'pickstock/pickstock_list_by_type.html', {'chooses': chooses })
         
 @method_decorator(login_required, name='dispatch')    
 class EditStockChooseView(UpdateView):
@@ -50,8 +57,15 @@ class EditStockChooseView(UpdateView):
     
     def form_valid(self, form):
         stockchoose = form.save(commit=False)
+        stockchoose.types.clear()
         stockchoose.boards.clear()
         stockchoose.save()
+        
+        formtypes = self.request.POST.getlist('types')
+        for tid in formtypes:
+            type = get_object_or_404(ChooseType, pk=tid) 
+            if type:
+                stockchoose.types.add(type) 
          
         formboards = self.request.POST.getlist('boards')
         for bid in formboards:

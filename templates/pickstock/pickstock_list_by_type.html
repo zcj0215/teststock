@@ -3,7 +3,7 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'astocks:home' %}">选股</a></li>
-  <li class="breadcrumb-item active">选股日期</li>
+  <li class="breadcrumb-item active">选股类型</li>
 {% endblock %}
 
 {% block content %}
@@ -29,7 +29,7 @@
       {% for choose in chooses %}
         <tr>
           <td>
-            {{ choose.pick_date | date:'Y-m-d'  }}
+            <a href="/astocks/choose_date?by={{ choose.pick_date|date:'Y-m-d' }}">{{ choose.pick_date|date:'Y-m-d' }}</a> 
           </td>
           <td class="align-middle">
             {{ choose.code }}
@@ -40,7 +40,7 @@
               {% if types %}
                 <small>
                   {% for type in types.all %}
-                  <a href="/astocks/limitup_type?by={{ type.pk }}">{{ type.name }}</a> ,
+                  {{ type.name }},
                   {% endfor %}
                 </small>
               {% else %}
