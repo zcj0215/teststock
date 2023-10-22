@@ -8,6 +8,7 @@
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
   <li class="breadcrumb-item active">{{ board.name }}</li>
+  <li class="ml-auto"><a href="{% url 'boards:board_stocks' board.pk %}">板块个股</a></li>
 {% endblock %}
 
 {% block content %}

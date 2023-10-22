@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+  {{ board.name }} - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
+  <li class="breadcrumb-item active">{{ board.name }}</li>
+ 
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>股票代码</th>
+        <th>股票名称</th>
+        <th>涉及板块</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for stock in stockses %} 
+        {% url 'boards:stock_detail' board.pk stock.pk as stock_url %}
+        <tr>
+          <td>
+            <p class="mb-0">
+              <a href="{{ stock_url }}">{{ stock.code }}</a>
+            </p>
+          </td>
+          <td>{{ stock.name }}</td>
+          <td class="align-middle">
+            {% with boards=stock.boards %}
+              {% if boards %}
+                <small>
+                  {% for b in boards.all %}
+                  <a href="{% url 'boards:board_topics' b.pk %}">{{ b.name }}</a> ,
+                  {% endfor %}
+                </small>
+              {% else %}
+                <small class="text-muted">
+                  <em></em>
+                </small>
+              {% endif %}
+            {% endwith %}
+        </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% include 'includes/pagination.html' %}
+{% endblock %}

@@ -524,6 +524,18 @@ def blockadd(request):
 
     return HttpResponse('执行完毕！')
 
+
+def blockdayadd(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\板块指数.xls"
+        
+    else:
+        filename = path+"/板块指数.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+
 def dayout(request):
     everydayout('2023-02-08')
     return HttpResponse('执行完毕！')
