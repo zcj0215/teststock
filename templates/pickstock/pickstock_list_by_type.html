@@ -3,7 +3,7 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'astocks:home' %}">选股</a></li>
-  <li class="breadcrumb-item active">选股类型</li>
+  <li class="breadcrumb-item active">选股类型 {{ choosetype.name }}</li>
 {% endblock %}
 
 {% block content %}
@@ -93,10 +93,10 @@
           </td>
           {% if user.is_authenticated and user.is_superuser %}
             <td class="align-middle" >
-              <a href="{% url 'astocks:edit_pick_by_date' choose.pk 'date' %}" class="btn btn-outline-primary" role="button">编辑</a>
+              <a href="{% url 'astocks:edit_pick_by_type' choose.pk choosetype.pk %}" class="btn btn-outline-primary" role="button">编辑</a>
             </td>
             <td class="align-middle" >
-              <a href="{% url 'astocks:delete_pick_by_date' choose.pk 'date' %}" class="btn btn-outline-danger" role="button">删除</a>
+              <a href="{% url 'astocks:delete_pick_by_type' choose.pk choosetype.pk %}" class="btn btn-outline-danger" role="button">删除</a>
             </td>
           {% endif %}
         </tr>

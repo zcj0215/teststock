@@ -35,13 +35,20 @@ def byDateListView(request):
     return render(request, 'pickstock/pickstock_list_by_date.html', {'chooses': chooses })
 
 def byTypeListView(request):
-    by = request.GET.get('by') 
-    type = get_object_or_404(ChooseType, pk=by) 
+    bytype = request.GET.get('bytype') 
+    type = get_object_or_404(ChooseType, pk=bytype) 
     chooses = StockChoose.objects.filter(types__name__in = [type.name]).order_by('-pick_date')
    
-    return render(request, 'pickstock/pickstock_list_by_type.html', {'chooses': chooses })
+    return render(request, 'pickstock/pickstock_list_by_type.html', {'chooses': chooses,'choosetype':type })
+
+def byBoardListView(request):
+    byboard = request.GET.get('byboard') 
+    board = get_object_or_404(Board, pk=byboard) 
+    chooses = StockChoose.objects.filter(boards__name__in = [board.name]).order_by('-pick_date')
+   
+    return render(request, 'pickstock/pickstock_list_by_board.html', {'chooses': chooses,'chooseboard':board})
         
-@method_decorator(login_required, name='dispatch')    
+@method_decorator(login_required, name='dispatch')
 class EditStockChooseView(UpdateView):
     model = StockChoose
     form_class = StockChooseForm
@@ -51,8 +58,16 @@ class EditStockChooseView(UpdateView):
     
     def get_context_data(self, **kwargs):
         by = self.kwargs.get('by')
+        bytype = self.kwargs.get('bytype')
+        byboard = self.kwargs.get('byboard')
         if by:
             self.request.session['by'] = by
+        if bytype:
+            self.request.session['bytype'] = bytype
+            
+        if byboard:
+            self.request.session['byboard'] = byboard
+            
         return super().get_context_data(**kwargs)
     
     def form_valid(self, form):
@@ -65,7 +80,7 @@ class EditStockChooseView(UpdateView):
         for tid in formtypes:
             type = get_object_or_404(ChooseType, pk=tid) 
             if type:
-                stockchoose.types.add(type) 
+                stockchoose.types.add(type)
          
         formboards = self.request.POST.getlist('boards')
         for bid in formboards:
@@ -81,6 +96,15 @@ class EditStockChooseView(UpdateView):
             del self.request.session['by']
             pick_date_str = str(stockchoose.pick_date)
             return redirect('/astocks/choose_date?by='+pick_date_str)
+        if 'bytype' in keys and self.request.session['bytype']:
+            bytype = self.request.session['bytype']
+            del self.request.session['bytype']
+            return redirect('/astocks/choose_type?bytype='+bytype)
+        if 'byboard' in keys and self.request.session['byboard']:
+            byboard = self.request.session['byboard']
+            del self.request.session['byboard']
+            return redirect('/astocks/choose_board?byboard='+byboard)
+        
         else:    
             return redirect('astocks:home')
         
@@ -98,8 +122,8 @@ class DeleteStockChooseView(View):
         id = request.POST.get("id") 
         pick = get_object_or_404(StockChoose, pk=id)
         pick.boards.clear()
+        pick.types.clear()
         pick.save()
-        pick_date_str = str(pick.pick_date)
         pick.delete()
         
         return redirect('astocks:home')        
@@ -120,6 +144,7 @@ class DeleteStockChooseByDateView(View):
         id = request.POST.get("id") 
         pick = get_object_or_404(StockChoose, pk=id)
         pick.boards.clear()
+        pick.types.clear()
         pick.save()
         pick_date_str = str(pick.pick_date)
         pick.delete()
@@ -130,4 +155,57 @@ class DeleteStockChooseByDateView(View):
             return redirect('/astocks/choose_date?by='+pick_date_str)
         else:    
             return redirect('astocks:home')
-         
+
+@method_decorator(login_required, name='dispatch')    
+class DeleteStockChooseByTypeView(View):
+    def get(self,request,id,bytype):
+        
+       pick = get_object_or_404(StockChoose, pk=id)
+       if pick:
+            if bytype:
+               request.session['bytype'] = bytype        
+            return render(request, 'pickstock/stockchoose_confirm_delete.html', {'obj': pick })
+       else:
+           return redirect('astocks:home')
+       
+    def post(self,request,id,bytype):
+        id = request.POST.get("id") 
+        pick = get_object_or_404(StockChoose, pk=id)
+        pick.boards.clear()
+        pick.types.clear()
+        pick.save()
+        pick.delete()
+        
+        keys = request.session.keys()
+        if 'bytype' in keys and request.session['bytype']:
+            del request.session['bytype']
+            return redirect('/astocks/choose_date?bytype='+bytype)
+        else:    
+            return redirect('astocks:home')
+        
+@method_decorator(login_required, name='dispatch')    
+class DeleteStockChooseByBoardView(View):
+    def get(self,request,id,byboard):
+        
+       pick = get_object_or_404(StockChoose, pk=id)
+       if pick:
+            if byboard:
+               request.session['byboard'] = byboard        
+            return render(request, 'pickstock/stockchoose_confirm_delete.html', {'obj': pick })
+       else:
+           return redirect('astocks:home')
+       
+    def post(self,request,id,byboard):
+        id = request.POST.get("id") 
+        pick = get_object_or_404(StockChoose, pk=id)
+        pick.boards.clear()
+        pick.types.clear()
+        pick.save()
+        pick.delete()
+        
+        keys = request.session.keys()
+        if 'byboard' in keys and request.session['byboard']:
+            del request.session['byboard']
+            return redirect('/astocks/choose_date?byboard='+byboard)
+        else:    
+            return redirect('astocks:home')

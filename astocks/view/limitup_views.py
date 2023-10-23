@@ -24,8 +24,8 @@ class StockChooseListView(ListView):
         return super().get_context_data(**kwargs)
     
     def get_queryset(self):
-        self.chooses = StockLimitup.objects.all()
-        queryset = self.chooses.order_by('-pick_date')
+        self.limitups = StockLimitup.objects.all()
+        queryset = self.limitups.order_by('-pick_date')
         return queryset
     
 def byDateListView(request):
@@ -37,7 +37,6 @@ def byDateListView(request):
 def byTypeListView(request):
     by = request.GET.get('by') 
     type = get_object_or_404(LimitupType, pk=by) 
-
     limitups = StockLimitup.objects.filter(types__name__in = [type.name]).order_by('-pick_date')
    
     return render(request, 'pickstock/limitup_list_by_type.html', {'limitups': limitups })
