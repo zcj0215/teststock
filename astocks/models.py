@@ -210,3 +210,4 @@ class Stocksector(models.Model):
     growth_60=models.DecimalField(max_digits=10, decimal_places=2,null=True)
     Continuerise_days=models.DecimalField(max_digits=5, decimal_places=0,null=True) 
     date = models.DateField(max_length=10,db_index=True,null=True)
+    name = models.CharField(max_length=50,db_index=True,null=True)
