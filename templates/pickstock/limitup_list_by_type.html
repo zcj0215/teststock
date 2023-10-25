@@ -3,7 +3,7 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'astocks:limitup' %}">涨停</a></li>
-  <li class="breadcrumb-item active">涨停类型</li>
+  <li class="breadcrumb-item active">涨停类型 {{ limituptype.name }}</li>
 {% endblock %}
 
 {% block content %}
@@ -59,7 +59,7 @@
               {% if boards %}
                 <small>
                   {% for board in boards.all %}
-                    {{ board.name }},
+                    <a href="/astocks/limitup_board?byboard={{ board.id }}">{{ board.name }}</a> ,
                   {% endfor %}
                 </small>
               {% else %}
@@ -92,10 +92,10 @@
           </td>
           {% if user.is_authenticated and user.is_superuser %}
             <td class="align-middle" >
-              <a href="{% url 'astocks:edit_limitup_by_date' choose.pk 'date' %}" class="btn btn-outline-primary" role="button">编辑</a>
+              <a href="{% url 'astocks:edit_limitup_by_type' choose.pk limituptype.pk %}" class="btn btn-outline-primary" role="button">编辑</a>
             </td>
             <td class="align-middle" >
-              <a href="{% url 'astocks:delete_limitup_by_date' choose.pk 'date' %}" class="btn btn-outline-danger" role="button">删除</a>
+              <a href="{% url 'astocks:delete_limitup_by_type' choose.pk limituptype.pk %}" class="btn btn-outline-danger" role="button">删除</a>
             </td>
           {% endif %}
         </tr>

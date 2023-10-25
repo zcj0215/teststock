@@ -3,7 +3,7 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'astocks:home' %}">选股</a></li>
-  <li class="breadcrumb-item active">选股日期</li>
+  <li class="breadcrumb-item active">选股日期 {{ by }}</li>
 {% endblock %}
 
 {% block content %}
@@ -40,7 +40,7 @@
               {% if types %}
                 <small>
                   {% for type in types.all %}
-                  <a href="/astocks/limitup_type?by={{ type.pk }}">{{ type.name }}</a> ,
+                  <a href="/astocks/limitup_type?bytype={{ type.pk }}">{{ type.name }}</a> ,
                   {% endfor %}
                 </small>
               {% else %}
@@ -60,7 +60,7 @@
               {% if boards %}
                 <small>
                   {% for board in boards.all %}
-                    {{ board.name }},
+                  <a href="/astocks/choose_board?byboard={{ board.id }}">{{ board.name }}</a> ,
                   {% endfor %}
                 </small>
               {% else %}

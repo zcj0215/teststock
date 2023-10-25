@@ -38,7 +38,7 @@
               {% if types %}
                 <small>
                   {% for type in types.all %}
-                  <a href="/astocks/limitup_type?by={{ type.id }}">{{ type.name }}</a> ,
+                    <a href="/astocks/limitup_type?bytype={{ type.id }}">{{ type.name }}</a> ,
                   {% endfor %}
                 </small>
               {% else %}
@@ -56,7 +56,7 @@
               {% if boards %}
                 <small>
                   {% for board in boards.all %}
-                    {{ board.name }},
+                    <a href="/astocks/limitup_board?byboard={{ board.id }}">{{ board.name }}</a> ,
                   {% endfor %}
                 </small>
               {% else %}

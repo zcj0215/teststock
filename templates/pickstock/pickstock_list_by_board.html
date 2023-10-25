@@ -40,7 +40,7 @@
               {% if types %}
                 <small>
                   {% for type in types.all %}
-                  {{ type.name }},
+                  <a href="/astocks/choose_type?bytype={{ type.id }}">{{ type.name }}</a> ,
                   {% endfor %}
                 </small>
               {% else %}

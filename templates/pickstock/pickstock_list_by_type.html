@@ -60,7 +60,7 @@
               {% if boards %}
                 <small>
                   {% for board in boards.all %}
-                    {{ board.name }},
+                  <a href="/astocks/choose_board?byboard={{ board.id }}">{{ board.name }}</a> ,
                   {% endfor %}
                 </small>
               {% else %}

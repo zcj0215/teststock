@@ -21,6 +21,11 @@ class StockChooseListView(ListView):
         keys = self.request.session.keys()
         if 'by' in keys and self.request.session['by']:
             del self.request.session['by']
+        if 'bytype' in keys and self.request.session['bytype']:
+            del self.request.session['bytype']
+        if 'byboard' in keys and self.request.session['byboard']:
+            del self.request.session['byboard']
+            
         return super().get_context_data(**kwargs)
     
     def get_queryset(self):
@@ -32,7 +37,7 @@ def byDateListView(request):
     by = request.GET.get('by') 
     chooses = StockChoose.objects.all().filter(pick_date=by)
     
-    return render(request, 'pickstock/pickstock_list_by_date.html', {'chooses': chooses })
+    return render(request, 'pickstock/pickstock_list_by_date.html', {'chooses': chooses, 'by':by })
 
 def byTypeListView(request):
     bytype = request.GET.get('bytype') 
@@ -179,7 +184,7 @@ class DeleteStockChooseByTypeView(View):
         keys = request.session.keys()
         if 'bytype' in keys and request.session['bytype']:
             del request.session['bytype']
-            return redirect('/astocks/choose_date?bytype='+bytype)
+            return redirect('/astocks/choose_type?bytype='+bytype)
         else:    
             return redirect('astocks:home')
         
@@ -206,6 +211,6 @@ class DeleteStockChooseByBoardView(View):
         keys = request.session.keys()
         if 'byboard' in keys and request.session['byboard']:
             del request.session['byboard']
-            return redirect('/astocks/choose_date?byboard='+byboard)
+            return redirect('/astocks/choose_board?byboard='+byboard)
         else:    
             return redirect('astocks:home')

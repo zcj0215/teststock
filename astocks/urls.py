@@ -20,6 +20,11 @@ urlpatterns = [
     re_path(r'^delete_limitup/(?P<id>\d+)/$', limitup_views.DeleteStockChooseView.as_view(), name='delete_limitup'), 
     re_path(r'^edit_limitup/(?P<id>\d+)/(?P<by>[a-z]+)/$', limitup_views.EditStockChooseView.as_view(), name='edit_limitup_by_date'), 
     re_path(r'^delete_limitup/(?P<id>\d+)/(?P<by>[a-z]+)/$', limitup_views.DeleteStockChooseByDateView.as_view(), name='delete_limitup_by_date'), 
+    re_path(r'^edit_limitup/(?P<id>\d+)/(?P<bytype>[a-z]+)/$', limitup_views.EditStockChooseView.as_view(), name='edit_limitup_by_type'), 
+    re_path(r'^delete_limitup/(?P<id>\d+)/(?P<bytype>[a-z]+)/$', limitup_views.DeleteStockChooseByTypeView.as_view(), name='delete_limitup_by_type'), 
+    re_path(r'^edit_limitup/(?P<id>\d+)/(?P<byboard>[a-z]+)/$', limitup_views.EditStockChooseView.as_view(), name='edit_limitup_by_board'), 
+    re_path(r'^delete_limitup/(?P<id>\d+)/(?P<byboard>[a-z]+)/$', limitup_views.DeleteStockChooseByBoardView.as_view(), name='delete_limitup_by_board'), 
     re_path(r'^limitup_date/$', limitup_views.byDateListView,name='limitup_date'),
-    re_path(r'^limitup_type/$', limitup_views.byTypeListView,name='limitup_type'),    
+    re_path(r'^limitup_type/$', limitup_views.byTypeListView,name='limitup_type'),
+    re_path(r'^limitup_board/$', limitup_views.byBoardListView,name='limitup_board'),
 ]

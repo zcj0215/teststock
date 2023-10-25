@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}删除确认 - {{ block.super }}{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'astocks:limitup' %}">选股</a></li>
+  <li class="breadcrumb-item active">删除确认</li>
+{% endblock %}
+
+{% block content %}
+<form method="post">{% csrf_token %}
+    <p> 您确定! 您要删除 " {{ obj.name }} " ?</p>
+    <input type="hidden" name='id' value="{{ obj.id }}">
+    <button type="submit" class="btn btn-success">确认</button>
+    {% if 'by' in request.session.keys %}
+       <a href="/astocks/limitup_date?by={{ obj.pick_date|date:'Y-m-d'}}" class="btn btn-outline-secondary" role="button">取消</a>
+ 
+    {% elif 'bytype' in request.session.keys  %}
+      <a href="/astocks/limitup_type?bytype={{ request.session.bytype }}" class="btn btn-outline-secondary" role="button">取消</a>
+    {% elif 'byboard' in request.session.keys  %}
+      <a href="/astocks/limitup_board?byboard={{ request.session.byboard }}" class="btn btn-outline-secondary" role="button">取消</a>
+    {% else %}
+      <a href="{% url 'astocks:limitup' %}" class="btn btn-outline-secondary" role="button">取消</a>
+    {% endif %}
+</form>
+{% endblock %}

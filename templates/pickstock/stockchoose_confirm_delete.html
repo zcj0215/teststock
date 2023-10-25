@@ -15,6 +15,11 @@
     <button type="submit" class="btn btn-success">确认</button>
     {% if 'by' in request.session.keys %}
        <a href="/astocks/choose_date?by={{ obj.pick_date|date:'Y-m-d'}}" class="btn btn-outline-secondary" role="button">取消</a>
+ 
+    {% elif 'bytype' in request.session.keys  %}
+      <a href="/astocks/choose_type?bytype={{ request.session.bytype }}" class="btn btn-outline-secondary" role="button">取消</a>
+    {% elif 'byboard' in request.session.keys  %}
+      <a href="/astocks/choose_type?byboard={{ request.session.byboard }}" class="btn btn-outline-secondary" role="button">取消</a>
     {% else %}
        <a href="{% url 'astocks:home' %}" class="btn btn-outline-secondary" role="button">取消</a>
     {% endif %}
