@@ -582,6 +582,13 @@ def blockdayadd(request):
     
     for row in df.itertuples():
         print(row.名称)
+        
+        open=0
+        try:
+            open=round(float(row.今开),2)
+        except:
+            continue
+        
         turnover=0.01
         try:
             turnover=round(float(row.换手),2)
