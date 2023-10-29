@@ -10,9 +10,9 @@
       <tr>
         <th>板块</th>
         <th>类别</th>
-        <th>帖子</th>
-        <th>主题</th>
-        <th>最后发表</th>
+        <th>涨跌幅</th>
+        <th>涨停个数</th>
+        <th>连涨天数</th>
       </tr>
     </thead>
     <tbody>
@@ -26,25 +26,21 @@
             {{ board.type.name }}
           </td>
           <td class="align-middle">
-            {{ board.get_posts_count }}
+            {% if board.get_growth>0 %}
+               <span style="color:red">{{ board.get_growth }}</span>
+            {% else %}
+               <span style="color:green">{{ board.get_growth }}</span>
+            {% endif %}
           </td>
           <td class="align-middle">
-            {{ board.topics.count }}
+            <span style="color:red">{{ board.get_Limitups }}</span>
           </td>
           <td class="align-middle">
-            {% with post=board.get_last_post %}
-              {% if post %}
-                <small>
-                  <a href="{% url 'boards:topic_posts' board.pk post.topic.pk %}">
-                    由 {{ post.created_by.username }} 在 {{ post.created_at }}发表
-                  </a>
-                </small>
-              {% else %}
-                <small class="text-muted">
-                  <em>还没有帖子。</em>
-                </small>
-              {% endif %}
-            {% endwith %}
+            {% if get_Continuerise_days>0 %}
+               <span style="color:red">{{ board.get_Continuerise_days }}</span>
+            {% else %}
+               <span style="color:green">{{ board.get_Continuerise_days }}</span>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}

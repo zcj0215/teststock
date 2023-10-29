@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 from django.utils.html import mark_safe
 from django.utils.text import Truncator 
 from markdown import markdown
+from astocks.models import Stocksector
+from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 class BoardType(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -38,6 +41,24 @@ class Board(models.Model):
     def get_last_post(self):
         return Post.objects.filter(topic__board=self).order_by('-created_at').first()
     
+    def get_growth(self):
+        try:
+           return get_object_or_404(Stocksector, name=self.name).growth
+        except Http404:
+           return 0
+    
+    def get_Limitups(self):
+        try:
+           return get_object_or_404(Stocksector, name=self.name).limitup_number
+        except Http404:
+           return 0
+       
+    def get_Continuerise_days(self):
+        try:
+           return get_object_or_404(Stocksector, name=self.name).Continuerise_days
+        except Http404:
+           return 0
+ 
     def to_json(self):
         json_board = {
             'id': self.id,
