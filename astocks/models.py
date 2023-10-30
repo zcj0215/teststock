@@ -70,6 +70,7 @@ class Stocks(models.Model):
     code = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
     boards = models.ManyToManyField(Board, related_name="stockses")
+    growth=models.DecimalField(max_digits=10, decimal_places=2,null=True)
 
     def __str__(self):
         return self.name

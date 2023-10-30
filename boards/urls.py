@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [ 
     re_path(r'^$', views.BoardListView.as_view(), name='home'),  
-    re_path(r'^bytype/(?P<pk>\d+)/$', views.ByTypeBoardListView.as_view(), name='type_boards'), 
+    re_path(r'^(?P<pk>\d+)/types/(?P<type_pk>\d+)/$', views.ByTypeBoardListView.as_view(), name='type_boards'), 
     re_path(r'^(?P<pk>\d+)/$', views.TopicListView.as_view(), name='board_topics'),
     re_path(r'^(?P<pk>\d+)/stocks/$', views.StockListView.as_view(), name='board_stocks'),
     re_path(r'^(?P<pk>\d+)/new/$', views.new_topic, name='new_topic'),

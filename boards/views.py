@@ -7,7 +7,7 @@ from django.db.models import Count
 
 from .forms import NewTopicForm, PostForm
 from .models import Board, Topic, Post, BoardType
-from astocks.models import Stocks,StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj
+from astocks.models import Stocks,StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocksector
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 import time
@@ -20,7 +20,7 @@ class BoardListView(ListView):
     paginate_by = 20
 
 class ByTypeBoardListView(ListView):
-    model = Board
+    model = Stocksector
     context_object_name = 'boards'
     template_name = 'homebytype.html'
     paginate_by = 20
@@ -30,9 +30,15 @@ class ByTypeBoardListView(ListView):
         return super().get_context_data(**kwargs)    
 
     def get_queryset(self):
-        self.type = get_object_or_404(BoardType, pk=self.kwargs.get('pk'))
-        queryset = self.type.boards.order_by('pk')
+        self.type = get_object_or_404(BoardType, pk=self.kwargs.get('type_pk'))
+        bds = Board.objects.filter(type = self.type)
+        date =  Stocksector.objects.last().date
+        names = []
+        for board in bds:
+            names.append(board.name)
+        queryset = Stocksector.objects.filter(name__in = names,date=date).order_by('-growth')
         return queryset
+    
     
 class TopicListView(ListView):
     model = Topic

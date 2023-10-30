@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item active"><a href="{% url 'boards:home' %}">板块</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
+  <li class="breadcrumb-item active">{{ type.name }}</li>
 {% endblock %}
 
 {% block content %}
@@ -9,7 +10,6 @@
     <thead class="thead-inverse">
       <tr>
         <th>板块</th>
-        <th>类别</th>
         <th>涨跌幅</th>
         <th>涨停个数</th>
         <th>连涨天数</th>
@@ -19,27 +19,23 @@
       {% for board in boards %}
         <tr>
           <td>
-            <a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a>
-            <small class="text-muted d-block">{{ board.description }}</small>
+            <a href="{% url 'boards:board_stocks' board.pk %}">{{ board.name }}</a>
           </td>
           <td class="align-middle">
-            {{ board.type.name }}
-          </td>
-          <td class="align-middle">
-            {% if board.get_growth>0 %}
-               <span style="color:red">{{ board.get_growth }}</span>
+            {% if board.growth > 0 %}
+               <span style="color:red">{{ board.growth }}</span>
             {% else %}
-               <span style="color:green">{{ board.get_growth }}</span>
+               <span style="color:green">{{ board.growth }}</span>
             {% endif %}
           </td>
           <td class="align-middle">
-            <span style="color:red">{{ board.get_Limitups }}</span>
+            <span style="color:red">{{ board.limitup_number }}</span>
           </td>
           <td class="align-middle">
-            {% if get_Continuerise_days>0 %}
-               <span style="color:red">{{ board.get_Continuerise_days }}</span>
+            {% if board.Continuerise_days > 0 %}
+               <span style="color:red">{{ board.Continuerise_days }}</span>
             {% else %}
-               <span style="color:green">{{ board.get_Continuerise_days }}</span>
+               <span style="color:green">{{ board.Continuerise_days }}</span>
             {% endif %}
           </td>
         </tr>

@@ -23,7 +23,11 @@
             <small class="text-muted d-block">{{ board.description }}</small>
           </td>
           <td class="align-middle">
-            <a href="{% url 'boards:type_boards' board.type.pk %}">{{ board.type.name }}</a>
+            {% if board.type.name == '普通' %}
+               {{ board.type.name }}
+            {% else %}
+               <a href="{% url 'boards:type_boards' board.pk  board.type.pk %}">{{ board.type.name }}</a>
+            {% endif %}
           </td>
           <td class="align-middle">
             {{ board.get_posts_count }}
