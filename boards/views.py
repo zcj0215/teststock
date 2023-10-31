@@ -59,16 +59,36 @@ class StockListView(ListView):
     model = Stocks
     context_object_name = 'stockses'
     template_name = 'stocks.html'
-    paginate_by = 20
+    paginate_by = 5
     
 
     def get_context_data(self, **kwargs):
-        kwargs['board'] = get_object_or_404(Board, pk=self.kwargs.get('pk'))
+        kwargs['board'] = self.board
+        kwargs['data'] = self.data
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
-        board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
-        queryset = Stocks.objects.filter(boards__name__in = [board.name]).order_by('code')
+        self.board = get_object_or_404(Board, name=self.kwargs.get('name'))
+        jsonlist = []
+        try:
+            data = Stocksector.objects.all().filter(name=self.board.name).order_by('-date')
+            for row in data:
+                  dict = {}
+                  dict["name"] = self.board.name
+                  dict["code"] = str(row.code)
+                  dict["open"] = str(row.open)
+                  dict["close"] = str(row.close)
+                  dict["low"] = str(row.low)
+                  dict["high"] = str(row.high)
+                  dict["vol"] = str(row.volume)
+                  dict["trade_date"] = str(row.date)  
+                  jsonlist.append(dict) 
+               
+        except EXCEPTION:
+              pass
+        
+        self.data = json.dumps(jsonlist)
+        queryset = Stocks.objects.filter(boards__name__in = [self.board.name]).order_by('-growth')
         return queryset
 
 class PostListView(ListView):

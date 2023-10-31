@@ -1,14 +1,18 @@
+from tkinter import EXCEPTION
 from django.shortcuts import render,get_object_or_404,redirect
 from astocks.forms import StockChooseForm
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView
 from django.views import View
-from ..models import StockChoose,ChooseType
+from ..models import StockChoose,ChooseType,Stocks,StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj
 from boards.models import Board
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.utils import timezone
+import time
+import json
 
 
 class StockChooseListView(ListView):
@@ -214,3 +218,146 @@ class DeleteStockChooseByBoardView(View):
             return redirect('/astocks/choose_board?byboard='+byboard)
         else:    
             return redirect('astocks:home')
+        
+def choose_detail(request, name):
+    stock = get_object_or_404(Stocks, name=name)
+    boards = stock.boards
+    stock = get_object_or_404(StockList, symbol=stock.code)
+   
+    start = request.GET.get("start")
+    end =  request.GET.get("end")
+    if start == None or end == None:
+        start = stock.list_date[:4]+'-'+stock.list_date[4:6]+'-'+stock.list_date[6:]
+        end = time.strftime("%Y-%m-%d", time.localtime())
+        
+    code = stock.ts_code[:6]
+    flag = stock.ts_code[7:]
+    name = stock.name
+    jsonlist = []
+    
+    if flag == 'SZ':
+        if code[:2] == '30':  
+          try:
+              data = Stockszc.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+              
+              for row in data:
+                  dict = {}
+                  dict["name"] = name
+                  dict["code"] = str(row.code)
+                  dict["open"] = str(row.open)
+                  dict["close"] = str(row.close)
+                  dict["low"] = str(row.low)
+                  dict["high"] = str(row.high)
+                  dict["vol"] = str(row.volume)
+                  dict["change"] = str(row.price_change)
+                  dict["pct_chg"] = str(row.p_change)
+                  dict["amount"] = str(row.amount)
+                  dict["pre_close"] = str(row.pre_close)
+                  dict["turnover"] = str(row.turnover)
+                  dict["trade_date"] = str(row.date)
+                    
+                  jsonlist.append(dict) 
+               
+          except EXCEPTION:
+              pass
+        else:
+          try:
+              data = Stocksz.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+              
+              for row in data:
+                  dict = {}
+                  dict["name"] = name
+                  dict["code"] = str(row.code)
+                  dict["open"] = str(row.open)
+                  dict["close"] = str(row.close)
+                  dict["low"] = str(row.low)
+                  dict["high"] = str(row.high)
+                  dict["vol"] = str(row.volume)
+                  dict["change"] = str(row.price_change)
+                  dict["pct_chg"] = str(row.p_change)
+                  dict["amount"] = str(row.amount)
+                  dict["pre_close"] = str(row.pre_close)
+                  dict["turnover"] = str(row.turnover)
+                  dict["trade_date"] = str(row.date)
+                    
+                  jsonlist.append(dict) 
+              
+          except EXCEPTION:
+              pass
+    elif flag == 'SH':
+        if code[:2] == '68':  
+          try:
+              data = Stockshk.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+              
+              for row in data:
+                  dict = {}
+                  dict["name"] = name
+                  dict["code"] = str(row.code)
+                  dict["open"] = str(row.open)
+                  dict["close"] = str(row.close)
+                  dict["low"] = str(row.low)
+                  dict["high"] = str(row.high)
+                  dict["vol"] = str(row.volume)
+                  dict["change"] = str(row.price_change)
+                  dict["pct_chg"] = str(row.p_change)
+                  dict["amount"] = str(row.amount)
+                  dict["pre_close"] = str(row.pre_close)
+                  dict["turnover"] = str(row.turnover)
+                  dict["trade_date"] = str(row.date)
+                    
+                  jsonlist.append(dict) 
+              
+                     
+          except EXCEPTION:
+              pass
+        else:     
+          try:
+              data = Stocksh.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+              
+              for row in data:
+                  dict = {}
+                  dict["name"] = name
+                  dict["code"] = str(row.code)
+                  dict["open"] = str(row.open)
+                  dict["close"] = str(row.close)
+                  dict["low"] = str(row.low)
+                  dict["high"] = str(row.high)
+                  dict["vol"] = str(row.volume)
+                  dict["change"] = str(row.price_change)
+                  dict["pct_chg"] = str(row.p_change)
+                  dict["amount"] = str(row.amount)
+                  dict["pre_close"] = str(row.pre_close)
+                  dict["turnover"] = str(row.turnover)
+                  dict["trade_date"] = str(row.date)
+                    
+                  jsonlist.append(dict) 
+                    
+          except EXCEPTION:
+              pass
+    elif flag == 'BJ':
+          try:
+              data = Stockbj.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+              
+              for row in data:
+                  dict = {}
+                  dict["name"] = name
+                  dict["code"] = str(row.code)
+                  dict["open"] = str(row.open)
+                  dict["close"] = str(row.close)
+                  dict["low"] = str(row.low)
+                  dict["high"] = str(row.high)
+                  dict["vol"] = str(row.volume)
+                  dict["change"] = str(row.price_change)
+                  dict["pct_chg"] = str(row.p_change)
+                  dict["amount"] = str(row.amount)
+                  dict["pre_close"] = str(row.pre_close)
+                  dict["turnover"] = str(row.turnover)
+                  dict["trade_date"] = str(row.date)
+                    
+                  jsonlist.append(dict) 
+                    
+          except EXCEPTION:
+              pass
+        
+    
+    return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist)})

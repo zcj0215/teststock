@@ -18,6 +18,7 @@
         <th>警惕缺点</th>
         <th>次日表现</th>
         <th>10日涨停数量</th>
+        <th>涨跌幅</th>
         <th>经验总结</th>
         <th>选股人</th>
         {% if user.is_authenticated and user.is_superuser %}
@@ -27,13 +28,14 @@
     </thead>
     <tbody>
       {% for choose in chooses %}
+        {% url 'astocks:choose_detail' choose.name as stock_url %}
         <tr>
           <td>
             {{ choose.pick_date | date:'Y-m-d'  }}
           </td>
           <td class="align-middle">
             {{ choose.code }}
-            <small class="text-muted d-block">{{ choose.name }}</small>
+            <small class="text-muted d-block"><a href="{{ stock_url }}">{{ choose.name }}</a></small>
           </td>
           <td class="align-middle">
             {% with types=choose.types %}
@@ -81,6 +83,13 @@
               {{ choose.tenday_limits }}
             {% else %}  
                   <em></em>
+            {% endif %}
+          </td>
+          <td class="align-middle">
+            {% if choose.growth > 0 %}
+               <span style="color:red">{{ choose.growth }}</span>
+            {% else %}
+               <span style="color:green">{{ choose.growth }}</span>
             {% endif %}
           </td>
           <td class="align-middle">

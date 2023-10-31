@@ -19,7 +19,7 @@
       {% for board in boards %}
         <tr>
           <td>
-            <a href="{% url 'boards:board_stocks' board.pk %}">{{ board.name }}</a>
+            <a href="{% url 'boards:board_stocks' board.name %}">{{ board.name }}</a>
           </td>
           <td class="align-middle">
             {% if board.growth > 0 %}

@@ -31,6 +31,7 @@ class StockLimitup(models.Model):
     summary = models.TextField(max_length=1000,null=True)
     person = models.ForeignKey(Persons, related_name='stocklimitups',on_delete=models.CASCADE)
     types = models.ManyToManyField(LimitupType, related_name="stocklimitups")
+    growth=models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
@@ -62,7 +63,8 @@ class StockChoose(models.Model):
     summary = models.TextField(max_length=1000,null=True)
     person = models.ForeignKey(Persons, related_name='stockchooses',on_delete=models.CASCADE)
     types = models.ManyToManyField(ChooseType, related_name="stockchooses")
-
+    growth=models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    
     def __str__(self):
         return self.name
     

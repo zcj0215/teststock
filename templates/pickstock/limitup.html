@@ -16,6 +16,7 @@
         <th>警惕缺点</th>
         <th>次日表现</th>
         <th>10日涨停数量</th>
+        <th>涨跌幅</th>
         <th>总结</th>
         <th>录入人</th>
         {% if user.is_authenticated and user.is_superuser %}
@@ -25,13 +26,14 @@
     </thead>
     <tbody>
       {% for choose in limitups %}
+        {% url 'astocks:limitup_detail' choose.name as stock_url %}
         <tr>
           <td>
             <a href="/astocks/limitup_date?by={{ choose.pick_date|date:'Y-m-d' }}">{{ choose.pick_date|date:'Y-m-d' }}</a> 
           </td>
           <td class="align-middle">
             {{ choose.code }}
-            <small class="text-muted d-block">{{ choose.name }}</small>
+            <small class="text-muted d-block"><a href="{{ stock_url }}">{{ choose.name }}</a></small>
           </td> 
           <td class="align-middle">
             {% with types=choose.types %}
@@ -77,6 +79,13 @@
               {{ choose.tenday_limits }}
             {% else %}  
                   <em></em>
+            {% endif %}
+          </td>
+          <td class="align-middle">
+            {% if choose.growth > 0 %}
+               <span style="color:red">{{ choose.growth }}</span>
+            {% else %}
+               <span style="color:green">{{ choose.growth }}</span>
             {% endif %}
           </td>
           <td class="align-middle">
