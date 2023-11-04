@@ -9,7 +9,7 @@
   <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
   <li class="breadcrumb-item">
     {% for board in boards.all %}
-    <a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a>, 
+    <a href="{% url 'boards:board_stocks' board.name %}">{{ board.name }}</a>, 
     {% endfor %}
  </li> 
  <li class="breadcrumb-item active">{{ stock.name }} {{ stock.ts_code }}</li>
