@@ -1,4 +1,5 @@
 from tkinter import EXCEPTION
+from django.http import Http404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -147,9 +148,11 @@ def reply_topic(request, pk, topic_pk):
         form = PostForm()
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
 
-def stock_detail(request, pk, stock_pk):
-    stock = get_object_or_404(Stocks, pk=stock_pk)
+def stock_detail(request, board_name, stock_name):
+    stock = get_object_or_404(Stocks, name=stock_name)
     boards = stock.boards
+    if board_name == stock.name:
+        board_name = stock.blockname
     stock = get_object_or_404(StockList, symbol=stock.code)
    
     start = request.GET.get("start")
@@ -162,7 +165,25 @@ def stock_detail(request, pk, stock_pk):
     flag = stock.ts_code[7:]
     name = stock.name
     jsonlist = []
-    
+    blocklist = []
+   
+        
+    try:
+        data = Stocksector.objects.all().filter(name=board_name).order_by('-date')
+        for row in data:
+            dict = {}
+            dict["name"] = board_name 
+            dict["code"] = str(row.code)
+            dict["open"] = str(row.open)
+            dict["close"] = str(row.close)
+            dict["low"] = str(row.low)
+            dict["high"] = str(row.high)
+            dict["vol"] = str(row.volume)
+            dict["trade_date"] = str(row.date)  
+            blocklist.append(dict)         
+    except EXCEPTION:
+        pass
+     
     if flag == 'SZ':
         if code[:2] == '30':  
           try:
@@ -287,8 +308,7 @@ def stock_detail(request, pk, stock_pk):
           except EXCEPTION:
               pass
         
-    
-    return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist)})
+    return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist)})
 
 
 @method_decorator(login_required, name='dispatch')    

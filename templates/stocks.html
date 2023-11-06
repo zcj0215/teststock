@@ -23,7 +23,7 @@
     </thead>
     <tbody>
       {% for stock in stockses %} 
-        {% url 'boards:stock_detail' board.pk stock.pk as stock_url %}
+        {% url 'boards:stock_detail' board.name stock.name as stock_url %}
         <tr>
           <td>
             <p class="mb-0">

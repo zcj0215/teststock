@@ -10,7 +10,7 @@ urlpatterns = [
     re_path(r'^(?P<pk>\d+)/new/$', views.new_topic, name='new_topic'),
     re_path(r'^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.PostListView.as_view(), name='topic_posts'),
     re_path(r'^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic, name='reply_topic'),
-    re_path(r'^(?P<pk>\d+)/stocks/(?P<stock_pk>\d+)/$', views.stock_detail, name='stock_detail'),
+    re_path(r'^(?P<board_name>.+)/stocks/(?P<stock_name>.+)/$', views.stock_detail, name='stock_detail'),
     re_path(r'^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/edit/$',
         views.TopicUpdateView.as_view(), name='edit_topic'),  
     re_path(r'^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',

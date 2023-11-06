@@ -28,7 +28,7 @@
     </thead>
     <tbody>
       {% for choose in chooses %}
-        {% url 'astocks:choose_detail' choose.name as stock_url %}
+        {% url 'boards:stock_detail' choose.name choose.name as stock_url %}
         <tr>
           <td>
             <a href="/astocks/choose_date?by={{ choose.pick_date|date:'Y-m-d' }}">{{ choose.pick_date|date:'Y-m-d' }}</a> 
