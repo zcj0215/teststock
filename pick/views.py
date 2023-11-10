@@ -90,7 +90,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
     
     try:
         stock = get_object_or_404(Stocks, code=code)
-        stock.growth = round(float(price_change),2)
+        stock.growth = round(float(p_change),2)
         stock.save()
     except Http404:
         pass
@@ -99,7 +99,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
         stocks = StockChoose.objects.filter(code=code)
         if stocks:
             for stock in stocks:
-                stock.growth = round(float(price_change),2)
+                stock.growth = round(float(p_change),2)
                 stock.save()
     except Http404:
         pass
@@ -108,7 +108,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
         stocks = StockLimitup.objects.filter(code=code)
         if stocks:
             for stock in stocks:
-                stock.growth = round(float(price_change),2)
+                stock.growth = round(float(p_change),2)
                 stock.save()
     except Http404:
         pass

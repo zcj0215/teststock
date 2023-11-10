@@ -8,10 +8,19 @@
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
   <li class="breadcrumb-item active">{{ board.name }}</li>
- 
+  <li class="ml-auto">
+    <span>
+        <form align="left"  id="myform">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success" >执行</button>
+        </form>
+    </span>
+  </li>
 {% endblock %}
 
 {% block content %}
+
   <table class="table">
     <thead class="thead-inverse">
       <tr>

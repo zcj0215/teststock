@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
 
-from .forms import NewTopicForm, PostForm
+from .forms import NewTopicForm, PostForm, CodeForm
 from .models import Board, Topic, Post, BoardType
 from astocks.models import Stocks,StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocksector
 from django.views.generic import UpdateView, ListView
@@ -66,10 +66,12 @@ class StockListView(ListView):
     def get_context_data(self, **kwargs):
         kwargs['board'] = self.board
         kwargs['data'] = self.data
+        kwargs['form'] = self.form
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
         self.board = get_object_or_404(Board, name=self.kwargs.get('name'))
+        self.form = CodeForm()
         jsonlist = []
         try:
             data = Stocksector.objects.all().filter(name=self.board.name).order_by('-date')

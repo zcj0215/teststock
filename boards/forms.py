@@ -29,3 +29,12 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['message', ]
+        
+class CodeForm(forms.Form):
+    code = forms.CharField(
+        required=True,
+        error_messages={'required':'这是必填栏。'},
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': '填写股票代码...'}))
+    
+    class Meta:
+        fields = ('code', )
