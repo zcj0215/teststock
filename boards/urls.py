@@ -1,5 +1,5 @@
 
-from django.urls import re_path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [ 
@@ -15,5 +15,5 @@ urlpatterns = [
         views.TopicUpdateView.as_view(), name='edit_topic'),  
     re_path(r'^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
         views.PostUpdateView.as_view(), name='edit_post'),  
-     
+    path('query', views.query, name='query'),   
 ]

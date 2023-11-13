@@ -1,5 +1,5 @@
 from tkinter import EXCEPTION
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -312,6 +312,17 @@ def stock_detail(request, board_name, stock_name):
         
     return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist)})
 
+def query(request):
+    if request.method == 'POST':
+        stock_code = request.POST['code']
+        blockname = request.POST['blockname']
+        try:
+            stock = get_object_or_404(Stocks, code=stock_code, boards__name__in = [blockname])
+            data = {"result":"success","stockname":stock.name}
+            return JsonResponse({"data": json.dumps(data)})
+        except Http404:
+            data = {"result":"fail"}
+            return JsonResponse({"data": json.dumps(data)})  
 
 @method_decorator(login_required, name='dispatch')    
 class TopicUpdateView(UpdateView):
