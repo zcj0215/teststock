@@ -46,6 +46,9 @@ def query(request):
         print(dict)
         try:
            stock = get_object_or_404(StockList, symbol=dict['symbol'])
+           stock.area=dict['area']
+           stock.industry=dict['industry']
+           stock.save()
         except Http404:
             stock = StockList.objects.create(
                 ts_code = dict['ts_code'],
