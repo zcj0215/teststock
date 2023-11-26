@@ -43,7 +43,7 @@ def query(request):
         for row in data:
             dict[row] = data[row][index]
         jsonlist.append(dict)
-        print
+        print(dict)
         try:
            stock = get_object_or_404(StockList, symbol=dict['symbol'])
         except Http404:
