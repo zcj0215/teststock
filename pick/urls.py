@@ -10,4 +10,5 @@ urlpatterns = [
     path('blockadd/', pick_views.blockadd,name='blockadd'), 
     path('blockdayadd/', pick_views.blockdayadd,name='blockdayadd'), 
     path('dayout/', pick_views.dayout,name='dayout'), 
+    path('inflow/', pick_views.inflow,name='inflow'),
 ]

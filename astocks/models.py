@@ -103,6 +103,7 @@ class Stocksz(models.Model):
     p_change = models.DecimalField(max_digits=7, decimal_places=2)          # 涨跌幅
     date = models.DateField(max_length=10,db_index=True)
     volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
 
     def __str__(self):
         return self.name
@@ -121,6 +122,7 @@ class Stockszc(models.Model):
     p_change = models.DecimalField(max_digits=7, decimal_places=2)
     date = models.DateField(max_length=10,db_index=True)
     volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
@@ -139,6 +141,7 @@ class Stocksh(models.Model):
     p_change = models.DecimalField(max_digits=7, decimal_places=2)
     date = models.DateField(max_length=10,db_index=True)
     volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
@@ -157,6 +160,7 @@ class Stockshk(models.Model):
     p_change = models.DecimalField(max_digits=7, decimal_places=2)
     date = models.DateField(max_length=10,db_index=True)
     volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
@@ -175,6 +179,7 @@ class Stockbj(models.Model):
     p_change = models.DecimalField(max_digits=7, decimal_places=2)
     date = models.DateField(max_length=10,db_index=True)
     volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name

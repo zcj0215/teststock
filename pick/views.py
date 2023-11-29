@@ -269,6 +269,45 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 date = dt,
                 volume_ratio = round(float(volume_ratio),2)
             )
+            
+def everyday_inflow(code,inflow,dt):
+    
+    if code[:2] == '30':  
+        try:
+            stock = get_object_or_404(Stockszc, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '00':
+        try:
+            stock = get_object_or_404(Stocksz, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '68':
+        try:
+            stock = get_object_or_404(Stockshk, code=code,date=dt)   
+            stock.capital_inflow = inflow
+            stock.save()   
+        except Http404:
+            pass
+    elif code[:2] == '60':    
+        try:
+            stock = get_object_or_404(Stocksh, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()
+        except Http404:
+            pass
+    else:
+        try:
+            stock = get_object_or_404(Stockbj, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()
+        except Http404:
+            pass
+    
 
 def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_close,limitup_number,growth,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,dt):
     try:
@@ -554,9 +593,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\水务.xls"       
+        filename = path+"\\高压快充.xls"       
     else:
-        filename = path+"/水务.xls"
+        filename = path+"/高压快充.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -575,23 +614,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='水务')  
+        board = get_object_or_404(Board,name='高压快充')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='水务'):
+            if  not stocks.boards.filter(name='高压快充'):
                 stocks.boards.add(board)
-                stocks.blockname = '水务'
+                stocks.blockname = '高压快充'
                 stocks.save()
-            elif stocks.boards.filter(name='水务'):
-                stocks.blockname = '水务'
+            elif stocks.boards.filter(name='高压快充'):
+                stocks.blockname = '高压快充'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = '水务'
+                blockname = '高压快充'
             )
             stocks.boards.add(board)
             stocks.save()      
@@ -672,3 +711,35 @@ def blockdayadd(request):
 def dayout(request):
     everydayout('2023-02-08')
     return HttpResponse('执行完毕！')
+
+
+def inflow(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\Table.xls"       
+    else:
+        filename = path+"/Table.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.itertuples():
+        print(row.代码)
+        code = str(row.代码)
+        print(row.名称)
+        inf = str(row.主力净流入)
+    
+        if '万' in inf:
+            inf = round(float(inf[0:-1]),2)
+        elif '亿' in inf:
+            inf = round(float(inf[0:-1])*10000,2)
+        else:
+            try:
+               inf = round(float(inf[0:-1])*0.001,2)
+            except: 
+               inf = 0
+            
+        everyday_inflow(code, inf, '2023-11-28')
+    
+    return HttpResponse('执行完毕！')
+
+
