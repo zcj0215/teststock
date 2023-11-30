@@ -593,9 +593,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\无人机.xls"       
+        filename = path+"\\光通信.xls"       
     else:
-        filename = path+"/无人机.xls"
+        filename = path+"/光通信.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -614,23 +614,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='无人机')  
+        board = get_object_or_404(Board,name='光通信')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='无人机'):
+            if  not stocks.boards.filter(name='光通信'):
                 stocks.boards.add(board)
-                stocks.blockname = '无人机'
+                stocks.blockname = '光通信'
                 stocks.save()
-            elif stocks.boards.filter(name='无人机'):
-                stocks.blockname = '无人机'
+            elif stocks.boards.filter(name='光通信'):
+                stocks.blockname = '光通信'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = '无人机'
+                blockname = '光通信'
             )
             stocks.boards.add(board)
             stocks.save()      
@@ -723,8 +723,19 @@ def inflow(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     for row in df.itertuples():
-        print(row.代码)
         code = str(row.代码)
+        if len(code) == 1:
+            code = '00000'+ code
+        elif len(code) == 2:
+            code = '0000'+ code
+        elif len(code) == 3:    
+            code = '000'+ code
+        elif len(code) == 4:    
+            code = '00'+ code
+        elif len(code) == 5:    
+            code = '0'+ code    
+            
+        print(code)
         print(row.名称)
         inf = str(row.主力净流入)
     
