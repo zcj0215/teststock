@@ -206,7 +206,7 @@ def stock_detail(request, board_name, stock_name):
                   dict["pre_close"] = str(row.pre_close)
                   dict["turnover"] = str(row.turnover)
                   dict["trade_date"] = str(row.date)
-                    
+                  dict["capital_inflow"] = str(row.capital_inflow)
                   jsonlist.append(dict) 
                
           except EXCEPTION:
@@ -230,7 +230,7 @@ def stock_detail(request, board_name, stock_name):
                   dict["pre_close"] = str(row.pre_close)
                   dict["turnover"] = str(row.turnover)
                   dict["trade_date"] = str(row.date)
-                    
+                  dict["capital_inflow"] = str(row.capital_inflow)  
                   jsonlist.append(dict) 
               
           except EXCEPTION:
@@ -255,7 +255,7 @@ def stock_detail(request, board_name, stock_name):
                   dict["pre_close"] = str(row.pre_close)
                   dict["turnover"] = str(row.turnover)
                   dict["trade_date"] = str(row.date)
-                    
+                  dict["capital_inflow"] = str(row.capital_inflow)  
                   jsonlist.append(dict) 
               
                      
@@ -280,7 +280,7 @@ def stock_detail(request, board_name, stock_name):
                   dict["pre_close"] = str(row.pre_close)
                   dict["turnover"] = str(row.turnover)
                   dict["trade_date"] = str(row.date)
-                    
+                  dict["capital_inflow"] = str(row.capital_inflow)  
                   jsonlist.append(dict) 
                     
           except EXCEPTION:
@@ -304,7 +304,7 @@ def stock_detail(request, board_name, stock_name):
                   dict["pre_close"] = str(row.pre_close)
                   dict["turnover"] = str(row.turnover)
                   dict["trade_date"] = str(row.date)
-                    
+                  dict["capital_inflow"] = str(row.capital_inflow)  
                   jsonlist.append(dict) 
                     
           except EXCEPTION:
