@@ -53,7 +53,7 @@
             var date = []
         
             for (var i = 0; i < rawData.length; i++) {
-                open_close_low_high.push([rawData[i].open, rawData[i].close, rawData[i].low, rawData[i].high,rawData[i].vol,rawData[i].trade_date])
+                open_close_low_high.push([rawData[i].open, rawData[i].close, rawData[i].low, rawData[i].high,rawData[i].vol,rawData[i].trade_date,rawData[i].capital_inflow])
                 volumes.push(rawData[i].vol)
                 date.push(rawData[i].trade_date)
             }
@@ -80,7 +80,7 @@
 		        for (var j = 0; j < dayCount; j++) {
 			        sum += +data[i - j][4];
 		        }
-		        result.push((sum / dayCount).toFixed(3));
+		        result.push((sum / dayCount).toFixed(2));
 	        }
 
 	        return result;
@@ -98,7 +98,7 @@
 		        for (var j = 0; j < dayCount; j++) {
 			        sum += +data[i - j][1];
 		        }
-		        result.push(sum / dayCount);
+		        result.push(parseFloat((sum / dayCount).toFixed(2)));
 	        }
 	
 	        return result;
@@ -112,7 +112,7 @@
                 var todayEMA = (2 / (dayCount + 1) * data[i][1]) +
                             ((dayCount - 1) / (dayCount + 1) * ema[i - 1]);
         
-                ema.push(todayEMA.toFixed(3));
+                ema.push(todayEMA.toFixed(2));
             }
         
             return ema;
@@ -150,6 +150,23 @@
                     value:  open_close[i][4],
                     itemStyle: {
                         color: open_close[i][0] >= open_close[i][1] ? downColor : upColor
+                    }
+                })
+            }
+        
+            return result
+        }
+
+        function inflowColor(open_close) {
+            const upColor = '#ec0000';
+            const downColor = '#00da3c';
+        
+            var result = []
+            for (var i = 0; i < open_close.length; i++) {
+                result.push({
+                    value:  open_close[i][6],
+                    itemStyle: {
+                        color: open_close[i][6] >= 0 ? upColor : downColor
                     }
                 })
             }
@@ -393,6 +410,13 @@
                         width: 1
                     },
                     data: calculateVOL(60,data0.open_close_low_high)
+                },
+                {
+                    name: '主力流入量',
+                    type: 'bar',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    data: inflowColor(data0.open_close_low_high),
                 }
             ]
         };
