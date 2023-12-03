@@ -43,8 +43,16 @@
         var downBorderColor = '#008F28';
         var data = {{ data|safe }}
         var bdata = {{ bdata|safe }}
+        var code = {{ stock.symbol|safe }}
+        var data0
 
-        var data0 = splitData(data.reverse());
+        if(data.length==0){
+            data0 = JSON.parse(localStorage.getItem(code)); 
+        }else{
+            data0 = splitData(data.reverse());
+            localStorage.setItem(code, JSON.stringify(data0));
+        }
+       
         var data1 = splitData(bdata.reverse());
 
         function splitData(rawData) {
@@ -256,8 +264,7 @@
                     right: '8%',
                     top: '73%',
                     height: '16%'
-                }
-                
+                } 
             ],
             xAxis: [
                 {

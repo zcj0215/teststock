@@ -168,8 +168,7 @@ def stock_detail(request, board_name, stock_name):
     name = stock.name
     jsonlist = []
     blocklist = []
-   
-        
+    
     try:
         data = Stocksector.objects.all().filter(name=board_name).order_by('-date')
         for row in data:
@@ -185,107 +184,112 @@ def stock_detail(request, board_name, stock_name):
             blocklist.append(dict)         
     except EXCEPTION:
         pass
-     
-    if flag == 'SZ':
-        if code[:2] == '30':  
-          try:
-              data = Stockszc.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+    
+    key = code + time.strftime("%Y-%m-%d", time.localtime())
+    if request.session.get(key):
+        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist)})
+    else:
+        request.session[key] = key
+        if flag == 'SZ':
+            if code[:2] == '30':  
+              try:
+                  data = Stockszc.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
               
-              for row in data:
-                  dict = {}
-                  dict["name"] = name
-                  dict["code"] = str(row.code)
-                  dict["open"] = str(row.open)
-                  dict["close"] = str(row.close)
-                  dict["low"] = str(row.low)
-                  dict["high"] = str(row.high)
-                  dict["vol"] = str(row.volume)
-                  dict["change"] = str(row.price_change)
-                  dict["pct_chg"] = str(row.p_change)
-                  dict["amount"] = str(row.amount)
-                  dict["pre_close"] = str(row.pre_close)
-                  dict["turnover"] = str(row.turnover)
-                  dict["trade_date"] = str(row.date)
-                  dict["capital_inflow"] = str(row.capital_inflow)
-                  jsonlist.append(dict) 
+                  for row in data:
+                      dict = {}
+                      dict["name"] = name
+                      dict["code"] = str(row.code)
+                      dict["open"] = str(row.open)
+                      dict["close"] = str(row.close)
+                      dict["low"] = str(row.low)
+                      dict["high"] = str(row.high)
+                      dict["vol"] = str(row.volume)
+                      dict["change"] = str(row.price_change)
+                      dict["pct_chg"] = str(row.p_change)
+                      dict["amount"] = str(row.amount)
+                      dict["pre_close"] = str(row.pre_close)
+                      dict["turnover"] = str(row.turnover)
+                      dict["trade_date"] = str(row.date)
+                      dict["capital_inflow"] = str(row.capital_inflow)
+                      jsonlist.append(dict) 
                
-          except EXCEPTION:
-              pass
-        else:
-          try:
-              data = Stocksz.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+              except EXCEPTION:
+                  pass
+            else:
+              try:
+                  data = Stocksz.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
               
-              for row in data:
-                  dict = {}
-                  dict["name"] = name
-                  dict["code"] = str(row.code)
-                  dict["open"] = str(row.open)
-                  dict["close"] = str(row.close)
-                  dict["low"] = str(row.low)
-                  dict["high"] = str(row.high)
-                  dict["vol"] = str(row.volume)
-                  dict["change"] = str(row.price_change)
-                  dict["pct_chg"] = str(row.p_change)
-                  dict["amount"] = str(row.amount)
-                  dict["pre_close"] = str(row.pre_close)
-                  dict["turnover"] = str(row.turnover)
-                  dict["trade_date"] = str(row.date)
-                  dict["capital_inflow"] = str(row.capital_inflow)  
-                  jsonlist.append(dict) 
+                  for row in data:
+                      dict = {}
+                      dict["name"] = name
+                      dict["code"] = str(row.code)
+                      dict["open"] = str(row.open)
+                      dict["close"] = str(row.close)
+                      dict["low"] = str(row.low)
+                      dict["high"] = str(row.high)
+                      dict["vol"] = str(row.volume)
+                      dict["change"] = str(row.price_change)
+                      dict["pct_chg"] = str(row.p_change)
+                      dict["amount"] = str(row.amount)
+                      dict["pre_close"] = str(row.pre_close)
+                      dict["turnover"] = str(row.turnover)
+                      dict["trade_date"] = str(row.date)
+                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      jsonlist.append(dict) 
               
-          except EXCEPTION:
-              pass
-    elif flag == 'SH':
-        if code[:2] == '68':  
-          try:
-              data = Stockshk.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+              except EXCEPTION:
+                  pass
+        elif flag == 'SH':
+            if code[:2] == '68':  
+              try:
+                  data = Stockshk.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
               
-              for row in data:
-                  dict = {}
-                  dict["name"] = name
-                  dict["code"] = str(row.code)
-                  dict["open"] = str(row.open)
-                  dict["close"] = str(row.close)
-                  dict["low"] = str(row.low)
-                  dict["high"] = str(row.high)
-                  dict["vol"] = str(row.volume)
-                  dict["change"] = str(row.price_change)
-                  dict["pct_chg"] = str(row.p_change)
-                  dict["amount"] = str(row.amount)
-                  dict["pre_close"] = str(row.pre_close)
-                  dict["turnover"] = str(row.turnover)
-                  dict["trade_date"] = str(row.date)
-                  dict["capital_inflow"] = str(row.capital_inflow)  
-                  jsonlist.append(dict) 
+                  for row in data:
+                      dict = {}
+                      dict["name"] = name
+                      dict["code"] = str(row.code)
+                      dict["open"] = str(row.open)
+                      dict["close"] = str(row.close)
+                      dict["low"] = str(row.low)
+                      dict["high"] = str(row.high)
+                      dict["vol"] = str(row.volume)
+                      dict["change"] = str(row.price_change)
+                      dict["pct_chg"] = str(row.p_change)
+                      dict["amount"] = str(row.amount)
+                      dict["pre_close"] = str(row.pre_close)
+                      dict["turnover"] = str(row.turnover)
+                      dict["trade_date"] = str(row.date)
+                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      jsonlist.append(dict) 
               
                      
-          except EXCEPTION:
-              pass
-        else:     
-          try:
-              data = Stocksh.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
+              except EXCEPTION:
+                  pass
+            else:     
+              try:
+                  data = Stocksh.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
               
-              for row in data:
-                  dict = {}
-                  dict["name"] = name
-                  dict["code"] = str(row.code)
-                  dict["open"] = str(row.open)
-                  dict["close"] = str(row.close)
-                  dict["low"] = str(row.low)
-                  dict["high"] = str(row.high)
-                  dict["vol"] = str(row.volume)
-                  dict["change"] = str(row.price_change)
-                  dict["pct_chg"] = str(row.p_change)
-                  dict["amount"] = str(row.amount)
-                  dict["pre_close"] = str(row.pre_close)
-                  dict["turnover"] = str(row.turnover)
-                  dict["trade_date"] = str(row.date)
-                  dict["capital_inflow"] = str(row.capital_inflow)  
-                  jsonlist.append(dict) 
+                  for row in data:
+                      dict = {}
+                      dict["name"] = name
+                      dict["code"] = str(row.code)
+                      dict["open"] = str(row.open)
+                      dict["close"] = str(row.close)
+                      dict["low"] = str(row.low)
+                      dict["high"] = str(row.high)
+                      dict["vol"] = str(row.volume)
+                      dict["change"] = str(row.price_change)
+                      dict["pct_chg"] = str(row.p_change)
+                      dict["amount"] = str(row.amount)
+                      dict["pre_close"] = str(row.pre_close)
+                      dict["turnover"] = str(row.turnover)
+                      dict["trade_date"] = str(row.date)
+                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      jsonlist.append(dict) 
                     
-          except EXCEPTION:
-              pass
-    elif flag == 'BJ':
+              except EXCEPTION:
+                  pass
+        elif flag == 'BJ':
           try:
               data = Stockbj.objects.all().filter(date__range=[start,end],code=code).order_by('-date')
               
@@ -310,7 +314,7 @@ def stock_detail(request, board_name, stock_name):
           except EXCEPTION:
               pass
         
-    return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist)})
+        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist)})
 
 def query(request):
     if request.method == 'POST':
