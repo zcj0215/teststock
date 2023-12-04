@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
-
+{% load humanize %}
+{% load static %}
 {% block breadcrumb %}
   <li class="breadcrumb-item active">板块</li>
+  <li class="ml-auto">
+    <span>
+        <form align="left"  id="myblock">
+            {% csrf_token %}
+            <input id="block" name="block" type="text" placeholder="板块名称" 
+              autofocus required size="12"> 
+            <button type="submit" class="btn btn-success" >查询</button>
+        </form>
+    </span>
+  </li>
 {% endblock %}
 
 {% block content %}
@@ -55,4 +66,74 @@
     </tbody>
   </table>
   {% include 'includes/pagination.html' %}
+  <div class="modal fade" id="notfindModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
+            <div class="modal-header" style="text-align:left;font-size:small;height:3px;margin-bottom:1px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-30px"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body" style="text-align: center;font-size:16px;height: 18px;color:chocolate">
+                <p style="margin-top:-15px">没有找到查询的板块</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal fade" id="preModel">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
+            <div class="modal-header" style="text-align:left;font-size:small;height:3px;margin-bottom:1px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-30px"><span
+                    aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body" style="text-align: center;font-size:16px;height: 18px;color:chocolate">
+                <p style="margin-top:-15px">正在查询中，请耐心等待......</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">查询结束将关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+{% endblock %}
+{% block javascript %}
+<script>
+$(document).ready(function(){
+  $.ajaxSetup({
+      data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+  });
+
+  $('#myblock').submit(function(){
+      var blockname = $("#block").val();
+      $.ajax({
+              type:"POST",
+              data: {blockname:blockname},
+              url: "{% url 'boards:blockquery' %}",
+              cache: false,
+              dataType: "json",
+              success: function (res) {
+                  if (res.data){
+                      var data = JSON.parse(res.data); 
+                      if (data.result=="success"){
+                          location = "/boards/"+blockname+"/stocks/";
+                      }else{
+                          $('#notfindModel').modal('show');
+                          setTimeout(function(){
+                             $('#notfindModel').modal('hide');  
+                          }, 3000); //ms为单位
+                      }
+                  }
+              },
+              error: function (msg) {
+                  alert(JSON.stringify(msg));
+              }
+      });
+              
+      return false;    
+  });
+});
+</script> 
 {% endblock %}

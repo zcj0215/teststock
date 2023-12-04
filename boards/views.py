@@ -327,6 +327,16 @@ def query(request):
         except Http404:
             data = {"result":"fail"}
             return JsonResponse({"data": json.dumps(data)})  
+def blockquery(request):
+    if request.method == 'POST':
+        blockname = request.POST['blockname']
+        try:
+            board = get_object_or_404(Board, name=blockname)
+            data = {"result":"success"}
+            return JsonResponse({"data": json.dumps(data)})
+        except Http404:
+            data = {"result":"fail"}
+            return JsonResponse({"data": json.dumps(data)})  
 
 @method_decorator(login_required, name='dispatch')    
 class TopicUpdateView(UpdateView):
