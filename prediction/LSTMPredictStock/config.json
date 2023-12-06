@@ -7,7 +7,8 @@
 			"High",
 			"Low",
 			"Volume",
-			"Turnover"
+			"Turnover",
+			"Pchange"
 		],
 		"sequence_length": 40,
 		"train_test_split": 0.85,
@@ -26,7 +27,7 @@
 				"type": "lstm",
 				"neurons": 100,
 				"input_timesteps": 39,
-				"input_dim": 6,
+				"input_dim": 7,
 				"return_seq": true
 			},
 			{

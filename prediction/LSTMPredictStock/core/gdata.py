@@ -25,6 +25,7 @@ def g_single_data(path,code,flag,name):
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
                     dict["Turnover"] = str(row.turnover)
+                    dict["Pchange"] = str(row.p_change)
                     
                     jsonlist.append(dict) 
                
@@ -45,6 +46,7 @@ def g_single_data(path,code,flag,name):
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
                     dict["Turnover"] = str(row.turnover)
+                    dict["Pchange"] = str(row.p_change)
                         
                     jsonlist.append(dict) 
               
@@ -66,6 +68,7 @@ def g_single_data(path,code,flag,name):
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
                     dict["Turnover"] = str(row.turnover)
+                    dict["Pchange"] = str(row.p_change)
                     
                     jsonlist.append(dict) 
               
@@ -87,6 +90,7 @@ def g_single_data(path,code,flag,name):
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
                     dict["Turnover"] = str(row.turnover)
+                    dict["Pchange"] = str(row.p_change)
                     
                     jsonlist.append(dict) 
                     
@@ -107,13 +111,14 @@ def g_single_data(path,code,flag,name):
                     dict["Low"] = str(row.low)
                     dict["Volume"] = str(row.volume)
                     dict["Turnover"] = str(row.turnover)
+                    dict["Pchange"] = str(row.p_change)
                     
                     jsonlist.append(dict) 
                     
             except EXCEPTION:
                 pass
 
-    headers = ['Date','Code','Name','Open','Close','High','Low','Volume','Turnover']
+    headers = ['Date','Code','Name','Open','Close','High','Low','Volume','Turnover','Pchange']
     if(sysstr =="Windows"):
         filename = path + '\\' + code+'.csv'
         DataBuild(filename,headers,jsonlist)
