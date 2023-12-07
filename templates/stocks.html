@@ -90,6 +90,22 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+  <div class="modal fade" id="notfindModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
+            <div class="modal-header" style="text-align:left;font-size:small;height:3px;margin-bottom:1px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-30px"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body" style="text-align: center;font-size:16px;height: 18px;color:chocolate">
+                <p style="margin-top:-15px">该板块没有找到查询的个股!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
   <div class="modal fade" id="preModel">
     <div class="modal-dialog">
         <div class="modal-content" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
@@ -495,6 +511,9 @@
                 if( code.length != 6 ){
                     $('#lengthModel').modal({backdrop: 'static', keyboard: false});
                     $('#lengthModel').modal('show');
+                    setTimeout(function(){
+                        $('#lengthModel').modal('hide');  
+                    }, 3000); //ms为单位
                 }else{
                     $.ajax({
                         type:"POST",
@@ -505,16 +524,21 @@
                         beforeSend: function(){
                             $('#preModel').modal({backdrop: 'static', keyboard: false}); //设置模态框之外点击无效
                             $('#preModel').modal('show');      // 弹出模态框
+                            setTimeout(function(){
+                                $('#preModel').modal('hide');  
+                            }, 3000); //ms为单位
                         },
                         success: function (res) {
-                            $('#preModel').modal('hide');  
                             if (res.data){
                                 var data = JSON.parse(res.data); 
                                 if (data.result=="success"){
                                     var stockname = data.stockname;
                                     location = "/boards/"+blockname+"/stocks/"+stockname+"/";
                                 }else{
-                                  alert(blockname+"没有查询到"+code+"个股");
+                                    $('#notfindModel').modal('show');
+                                    setTimeout(function(){
+                                        $('#notfindModel').modal('hide');  
+                                    }, 3000); //ms为单位
                                 }
                             }
                         },
