@@ -8,7 +8,8 @@
 			"Low",
 			"Volume",
 			"Turnover",
-			"Pchange"
+			"Pchange",
+			"Money"
 		],
 		"sequence_length": 40,
 		"train_test_split": 0.85,
@@ -27,7 +28,7 @@
 				"type": "lstm",
 				"neurons": 100,
 				"input_timesteps": 39,
-				"input_dim": 7,
+				"input_dim": 8,
 				"return_seq": true
 			},
 			{

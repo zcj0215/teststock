@@ -17,6 +17,15 @@
 
             $('#myform').submit(function(){
                 var code = $("#id_code").val();
+                const radioButtons = document.getElementsByName('option');
+                let value;
+                for (let i = 0; i < radioButtons.length; i++) {
+                    if (radioButtons[i].checked) {
+                        value = radioButtons[i].value;
+                        break;
+                    }
+                }
+                alert(value)
                 var again = 'off';
                 var good = 'off';
                 
@@ -99,25 +108,30 @@
 <div class="content">
     <img alt="" height="180" src="{% static 'prediction/img/mediadem_polls_LauraLalonde.gif' %}" width="500"/>
     <div class="form-group col-sm-6 col-sm-offset-1">
-        <h2 align="center">
-            获取您的预测！
-        </h2>
+        <h4 style="color:red">股票选项预测</h4>
         <form align="left"  id="myform">
             {% csrf_token %}
+            <div id="id_option" class="inline">
+                <label for="id_option_1">
+                    <input type="radio" name="option" id="id_option_1" value="1" class="inline" required> 短期趋势预测
+                </label>
+                <label for="id_option_2" style= "margin-left: 20px">
+                    <input type="radio" name="option" id="id_option_2" value="2" class="inline" required> 次日最高价与最低价预测
+                </label>
+            </div>
             {{ form.as_p }}
             <div><button type="submit" class="btn btn-success" >执行</button> 
-            <div class="checkbox" style="float : left; margin-right: 50px">
+            <div class="checkbox" style="float : right; margin-right: 50px">
                 <label>
                   <input type="checkbox" name="again">
                     再学习训练一次
                 </label>
-            </div></div>
-            <div class="checkbox" style="margin-top: 10px;">
-                <label>
-                  <input type="checkbox" name="good">
-                    使用训练好的模型预测
-                </label>
+                <label style="margin-left: 20px">
+                    <input type="checkbox" name="good">
+                      使用训练好的模型预测
+                  </label>
             </div>
+            
         </form>
     </div> 
 </div>

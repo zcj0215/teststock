@@ -12,11 +12,16 @@ import os
 from datetime import datetime as dt
 # from apscheduler.scheduler import Scheduler
 import pandas as pd
+from django.http import Http404, HttpResponse
 
 # --------------- MAIN WEB PAGES -----------------------------
 def redirect_root(request):
     return redirect('/prediction/pred')
 
+def pypred(request):
+    predic.pytrain_model("605111")
+    return HttpResponse('执行完毕！')
+    
 def pred(request):
     if request.method == 'POST':
         form = CodeForm(request.POST)

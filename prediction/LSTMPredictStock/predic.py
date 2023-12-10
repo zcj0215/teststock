@@ -10,6 +10,7 @@ from datetime import datetime,timedelta
 from .core.data_processor import DataLoader
 from .core.model import Model
 from .core.gdata import gdata
+from .core.pygdata import pygdata
 from ..models import Company
 
 def plot_results(predicted_data, true_data):   # predicted_data与true_data：同长度一维数组
@@ -48,6 +49,9 @@ def isGood(stock_code):
         return True
     else:
         return False
+
+def pytrain_model(stock_code, predict=False):
+    pygdata(get_data_path(),stock_code)
 
 # 只用于训练模型，但同时可根据参数进行模型的评估
 def train_model(stock_code, predict=False):  # 训练指定股票代码的模型

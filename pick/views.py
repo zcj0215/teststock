@@ -6,6 +6,7 @@ from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stoc
 from boards.models import Board,BoardType
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
+from .forms import CodeForm
 import platform
 from django.db.models import Q
 
@@ -593,9 +594,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\华为算力.xls"       
+        filename = path+"\\北京板块.xls"       
     else:
-        filename = path+"/华为算力.xls"
+        filename = path+"/北京板块.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -614,23 +615,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='华为算力')  
+        board = get_object_or_404(Board,name='北京板块')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='华为算力'):
+            if  not stocks.boards.filter(name='北京板块'):
                 stocks.boards.add(board)
-                stocks.blockname = '华为算力'
+                stocks.blockname = '北京板块'
                 stocks.save()
-            elif stocks.boards.filter(name='华为算力'):
-                stocks.blockname = '华为算力'
+            elif stocks.boards.filter(name='北京板块'):
+                stocks.blockname = '北京板块'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = '华为算力'
+                blockname = '北京板块'
             )
             stocks.boards.add(board)
             stocks.save()     
@@ -754,3 +755,39 @@ def inflow(request):
     return HttpResponse('执行完毕！')
 
 
+def inflow_single(request):
+    if request.method == 'POST':
+        form = CodeForm(request.POST)
+        if form.is_valid():
+            code = request.POST['code']
+        
+            path =  os.path.dirname(__file__)
+            filename = "" 
+            if(sysstr =="Windows"):
+                filename = path+"\\"+code+".xls"       
+            else:
+                filename = path+"/"+code+".xls"
+        
+            df = pd.read_excel(filename, sheet_name='Sheet1', header=0)
+            for row in df.itertuples():            
+                print(code)
+                print(row.日期.strftime("%Y-%m-%d"))
+                inf = str(row.主力净流入)
+                print(inf)
+                if '万' in inf:
+                    inf = round(float(inf[0:-1]),2)
+                elif '亿' in inf:
+                    inf = round(float(inf[0:-1])*10000,2)
+                else:
+                    try:
+                        inf = round(float(inf[0:-1])*0.001,2)
+                    except: 
+                        inf = 0
+                everyday_inflow(code, inf, row.日期.strftime("%Y-%m-%d"))
+          
+            return HttpResponse('执行完毕！')
+    else:
+        form = CodeForm()
+        
+        return render(request, 'inflow.html', {'form': form})
+    
