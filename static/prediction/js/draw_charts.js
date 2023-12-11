@@ -104,6 +104,88 @@ function draw_chart(){
     myChart.setOption(option);
 }
 
+function barColor(data) {
+    const upColor = '#ec0000';
+    const downColor = '#00da3c';
+
+    var result = []
+    for (var i = 0; i < data.length; i++) {
+        result.push({
+            value:  data[i],
+            itemStyle: {
+                normal: {label : {show: true}},
+                color: i === 0 ? ['#0000FF'] : ['#FF0000']
+            }
+        })
+    }
+
+    return result
+}
+
+
+function draw_lowhigh(){
+    //初始化echarts实例
+    var myChart = echarts.init(document.getElementById("hist_futu"));
+
+    let low = parseFloat(info[0]).toFixed(2)
+    let high = parseFloat(info[1]).toFixed(2)
+    
+
+    // 指定图表的配置项和数据
+     var option = {
+        title: {
+                text: "次日"+stock_name +"("+stock_code+")" + "最低价:"+low+", 最高价:"+ high,
+                textStyle:{
+                  fontSize:15,
+                },
+                left: 50,
+            },
+        tooltip : {
+                    trigger: 'item'
+                },
+        legend: {
+                x : 'center',
+                data:['最低价','最高价']
+            },
+        //工具框，可以选择
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            axisLabel: {
+                rotate: 30,
+            },
+            type: 'category',
+            //boundaryGap: false,
+            data: ['low','high'] // x轴名称
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel : {
+                formatter: '{value} 元'
+            },
+        },
+        series: [
+            {
+            type: 'bar',        
+            data: barColor([low,high]),    
+            label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+            },
+           
+        ]
+    };
+
+    
+    myChart.setOption(option);
+}
+
 
 //绘制雷达图
 function draw_radar(){

@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from astocks.models import StockList
 from .models import Company
 from . import models
-from .LSTMPredictStock import predic
+from .LSTMPredictStock import predic,pypredic
 from .add_companies_to_db import add_company
 from .forms import CodeForm
 import json
@@ -26,20 +26,29 @@ def pred(request):
     if request.method == 'POST':
         form = CodeForm(request.POST)
         if form.is_valid():
-            stock_code = request.POST['code']
-            again = request.POST['again']
-            good = request.POST['good']
-            if good != 'on':
-                predic.train_model(stock_code)
-            else:
-               if not predic.isGood(stock_code):
-                  return JsonResponse({"data":False }) 
+            opt  = request.POST['opt']
+            if opt == '1':
+                stock_code = request.POST['code']
+                again = request.POST['again']
+                good = request.POST['good']
+                if good != 'on':
+                    predic.train_model(stock_code)
+                else:
+                    if not predic.isGood(stock_code):
+                        return JsonResponse({"data":False }) 
            
-            recent_data, predict_data,code,name = get_hist_predict_data(stock_code,again,good)
-            data = {"recent_data": recent_data, "predict_data": predict_data,"stock_code": code,"stock_name": name}
-            # data['indexs'] = get_stock_index(code)
-            return JsonResponse({"data": json.dumps(data)}) 
-            # return render(request, "prediction/home.html", {"data": json.dumps(data),'form': form}) 
+                recent_data, predict_data,code,name = get_hist_predict_data(stock_code,again,good)
+                data = {"recent_data": recent_data, "predict_data": predict_data,"stock_code": code,"stock_name": name}
+                # data['indexs'] = get_stock_index(code)
+                return JsonResponse({"data": json.dumps(data)}) 
+                # return render(request, "prediction/home.html", {"data": json.dumps(data),'form': form}) 
+            else:
+                stock_code = request.POST['code']
+                stock = get_object_or_404(StockList, symbol=stock_code)
+                info = pypredic.main(stock_code)
+                
+                data = {"info": info,"stock_code": stock_code,"stock_name": stock.name}
+                return JsonResponse({"data": json.dumps(data)})  
     else:
         form = CodeForm()
      

@@ -1,0 +1,82 @@
+2023-12-11 12:46:53,190 - INFO - 
+Config:
+'add_train': False
+'batch_size': 64
+'continue_flag': ''
+'cur_time': '2023_12_11_12_46_44'
+'debug_mode': False
+'debug_num': 500
+'do_continue_train': False
+'do_figure_save': False
+'do_log_print_to_screen': True
+'do_log_save_to_file': True
+'do_predict': True
+'do_train': True
+'do_train_visualized': False
+'dropout_rate': 0.2
+'epoch': 20
+'feature_columns': [2, 3, 4, 5, 6, 7, 8]
+'figure_save_path': './figure/'
+'hidden_size': 128
+'input_size': 7
+'label_columns': [4, 5]
+'label_in_feature_index': [2, 3]
+'learning_rate': 0.001
+'log_save_path': './log/2023_12_11_12_46_44_pytorch/'
+'lstm_layers': 2
+'model_postfix': {'pytorch': '.pth'
+'keras': '.h5'
+'tensorflow': '.ckpt'}
+'model_save_path': 'D:\\zcj\\myweb\\teststock\\prediction\\LSTMPredictStock\\saved_models/'
+'output_size': 2
+'patience': 5
+'predict_day': 1
+'random_seed': 42
+'shuffle_train_data': True
+'time_step': 20
+'train_data_path': 'D:\\zcj\\myweb\\teststock\\prediction\\LSTMPredictStock\\data/py'
+'train_data_rate': 0.95
+'use_cuda': False
+'used_frame': 'pytorch'
+'valid_data_rate': 0.15
+2023-12-11 12:46:53,673 - INFO - Epoch 0/20
+2023-12-11 12:46:53,983 - INFO - The train loss is 0.639490. The valid loss is 0.239416.
+2023-12-11 12:46:54,003 - INFO - Epoch 1/20
+2023-12-11 12:46:54,244 - INFO - The train loss is 0.207688. The valid loss is 0.163241.
+2023-12-11 12:46:54,249 - INFO - Epoch 2/20
+2023-12-11 12:46:54,491 - INFO - The train loss is 0.140376. The valid loss is 0.117974.
+2023-12-11 12:46:54,496 - INFO - Epoch 3/20
+2023-12-11 12:46:54,736 - INFO - The train loss is 0.092851. The valid loss is 0.082124.
+2023-12-11 12:46:54,741 - INFO - Epoch 4/20
+2023-12-11 12:46:54,981 - INFO - The train loss is 0.068895. The valid loss is 0.065045.
+2023-12-11 12:46:54,987 - INFO - Epoch 5/20
+2023-12-11 12:46:55,248 - INFO - The train loss is 0.055788. The valid loss is 0.053839.
+2023-12-11 12:46:55,253 - INFO - Epoch 6/20
+2023-12-11 12:46:55,513 - INFO - The train loss is 0.046293. The valid loss is 0.045420.
+2023-12-11 12:46:55,519 - INFO - Epoch 7/20
+2023-12-11 12:46:55,777 - INFO - The train loss is 0.039750. The valid loss is 0.039157.
+2023-12-11 12:46:55,782 - INFO - Epoch 8/20
+2023-12-11 12:46:56,040 - INFO - The train loss is 0.035308. The valid loss is 0.034514.
+2023-12-11 12:46:56,045 - INFO - Epoch 9/20
+2023-12-11 12:46:56,297 - INFO - The train loss is 0.031509. The valid loss is 0.030688.
+2023-12-11 12:46:56,303 - INFO - Epoch 10/20
+2023-12-11 12:46:56,562 - INFO - The train loss is 0.028427. The valid loss is 0.027446.
+2023-12-11 12:46:56,568 - INFO - Epoch 11/20
+2023-12-11 12:46:56,828 - INFO - The train loss is 0.025764. The valid loss is 0.024731.
+2023-12-11 12:46:56,833 - INFO - Epoch 12/20
+2023-12-11 12:46:57,089 - INFO - The train loss is 0.023571. The valid loss is 0.022412.
+2023-12-11 12:46:57,094 - INFO - Epoch 13/20
+2023-12-11 12:46:57,348 - INFO - The train loss is 0.021588. The valid loss is 0.020227.
+2023-12-11 12:46:57,353 - INFO - Epoch 14/20
+2023-12-11 12:46:57,610 - INFO - The train loss is 0.019907. The valid loss is 0.018355.
+2023-12-11 12:46:57,615 - INFO - Epoch 15/20
+2023-12-11 12:46:57,870 - INFO - The train loss is 0.018145. The valid loss is 0.016731.
+2023-12-11 12:46:57,875 - INFO - Epoch 16/20
+2023-12-11 12:46:58,123 - INFO - The train loss is 0.016798. The valid loss is 0.015328.
+2023-12-11 12:46:58,127 - INFO - Epoch 17/20
+2023-12-11 12:46:58,367 - INFO - The train loss is 0.015780. The valid loss is 0.014076.
+2023-12-11 12:46:58,372 - INFO - Epoch 18/20
+2023-12-11 12:46:58,611 - INFO - The train loss is 0.014748. The valid loss is 0.013063.
+2023-12-11 12:46:58,615 - INFO - Epoch 19/20
+2023-12-11 12:46:58,855 - INFO - The train loss is 0.013694. The valid loss is 0.012116.
+2023-12-11 12:46:58,870 - INFO - The mean squared error of stock ['low', 'high'] is [0.01658461 0.01698184]

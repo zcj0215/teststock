@@ -1,0 +1,100 @@
+2023-12-11 11:38:45,339 - INFO - 
+Config:
+'add_train': False
+'batch_size': 64
+'continue_flag': ''
+'cur_time': '2023_12_11_11_38_37'
+'debug_mode': False
+'debug_num': 500
+'do_continue_train': False
+'do_figure_save': False
+'do_log_print_to_screen': True
+'do_log_save_to_file': True
+'do_predict': True
+'do_train': True
+'do_train_visualized': False
+'dropout_rate': 0.2
+'epoch': 20
+'feature_columns': [2, 3, 4, 5, 6, 7, 8]
+'figure_save_path': './figure/'
+'hidden_size': 128
+'input_size': 7
+'label_columns': [4, 5]
+'label_in_feature_index': [2, 3]
+'learning_rate': 0.001
+'log_save_path': './log/2023_12_11_11_38_37_pytorch/'
+'lstm_layers': 2
+'model_postfix': {'pytorch': '.pth'
+'keras': '.h5'
+'tensorflow': '.ckpt'}
+'model_save_path': 'D:\\zcj\\myweb\\teststock\\prediction\\LSTMPredictStock\\saved_models/'
+'output_size': 2
+'patience': 5
+'predict_day': 1
+'random_seed': 42
+'shuffle_train_data': True
+'time_step': 20
+'train_data_path': 'D:\\zcj\\myweb\\teststock\\prediction\\LSTMPredictStock\\data/py'
+'train_data_rate': 0.95
+'use_cuda': False
+'used_frame': 'pytorch'
+'valid_data_rate': 0.15
+2023-12-11 11:38:45,803 - INFO - Epoch 0/20
+2023-12-11 11:38:46,091 - INFO - The train loss is 0.663653. The valid loss is 0.239506.
+2023-12-11 11:38:46,110 - INFO - Epoch 1/20
+2023-12-11 11:38:46,350 - INFO - The train loss is 0.205668. The valid loss is 0.154978.
+2023-12-11 11:38:46,355 - INFO - Epoch 2/20
+2023-12-11 11:38:46,604 - INFO - The train loss is 0.136558. The valid loss is 0.115029.
+2023-12-11 11:38:46,609 - INFO - Epoch 3/20
+2023-12-11 11:38:46,846 - INFO - The train loss is 0.091903. The valid loss is 0.083129.
+2023-12-11 11:38:46,851 - INFO - Epoch 4/20
+2023-12-11 11:38:47,114 - INFO - The train loss is 0.068534. The valid loss is 0.065250.
+2023-12-11 11:38:47,119 - INFO - Epoch 5/20
+2023-12-11 11:38:47,371 - INFO - The train loss is 0.054055. The valid loss is 0.053245.
+2023-12-11 11:38:47,375 - INFO - Epoch 6/20
+2023-12-11 11:38:47,636 - INFO - The train loss is 0.045567. The valid loss is 0.045439.
+2023-12-11 11:38:47,641 - INFO - Epoch 7/20
+2023-12-11 11:38:47,893 - INFO - The train loss is 0.039490. The valid loss is 0.039357.
+2023-12-11 11:38:47,899 - INFO - Epoch 8/20
+2023-12-11 11:38:48,152 - INFO - The train loss is 0.034968. The valid loss is 0.034754.
+2023-12-11 11:38:48,158 - INFO - Epoch 9/20
+2023-12-11 11:38:48,412 - INFO - The train loss is 0.031022. The valid loss is 0.030845.
+2023-12-11 11:38:48,417 - INFO - Epoch 10/20
+2023-12-11 11:38:48,675 - INFO - The train loss is 0.028190. The valid loss is 0.027571.
+2023-12-11 11:38:48,680 - INFO - Epoch 11/20
+2023-12-11 11:38:48,936 - INFO - The train loss is 0.025520. The valid loss is 0.024717.
+2023-12-11 11:38:48,941 - INFO - Epoch 12/20
+2023-12-11 11:38:49,198 - INFO - The train loss is 0.023143. The valid loss is 0.022157.
+2023-12-11 11:38:49,203 - INFO - Epoch 13/20
+2023-12-11 11:38:49,460 - INFO - The train loss is 0.021190. The valid loss is 0.019924.
+2023-12-11 11:38:49,466 - INFO - Epoch 14/20
+2023-12-11 11:38:49,726 - INFO - The train loss is 0.019336. The valid loss is 0.017990.
+2023-12-11 11:38:49,731 - INFO - Epoch 15/20
+2023-12-11 11:38:49,978 - INFO - The train loss is 0.017546. The valid loss is 0.016240.
+2023-12-11 11:38:49,983 - INFO - Epoch 16/20
+2023-12-11 11:38:50,227 - INFO - The train loss is 0.016230. The valid loss is 0.014737.
+2023-12-11 11:38:50,231 - INFO - Epoch 17/20
+2023-12-11 11:38:50,467 - INFO - The train loss is 0.014814. The valid loss is 0.013432.
+2023-12-11 11:38:50,472 - INFO - Epoch 18/20
+2023-12-11 11:38:50,711 - INFO - The train loss is 0.013797. The valid loss is 0.012344.
+2023-12-11 11:38:50,716 - INFO - Epoch 19/20
+2023-12-11 11:38:50,960 - INFO - The train loss is 0.012959. The valid loss is 0.011426.
+2023-12-11 11:38:50,976 - INFO - The mean squared error of stock ['low', 'high'] is [0.01329097 0.01499729]
+2023-12-11 11:38:50,977 - ERROR - Internal Server Error: /prediction/pred
+Traceback (most recent call last):
+  File "D:\zcj\myweb\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\zcj\myweb\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\zcj\myweb\teststock\prediction\views.py", line 51, in pred
+    return JsonResponse({"data": json.dumps(data)})
+  File "D:\zcj\Python\Python310\lib\json\__init__.py", line 231, in dumps
+    return _default_encoder.encode(obj)
+  File "D:\zcj\Python\Python310\lib\json\encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "D:\zcj\Python\Python310\lib\json\encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "D:\zcj\Python\Python310\lib\json\encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type range is not JSON serializable
+2023-12-11 11:41:12,151 - INFO - D:\zcj\myweb\teststock\prediction\views.py changed, reloading.
