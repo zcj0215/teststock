@@ -47,12 +47,13 @@ def appendfile(mfn,str):
     fp.writelines(str+'\n')
     fp.close()
     
-def turnover(code,flag,dd,dt):
+def turnover(code,flag,dd,amount,dt):
     if flag == 'SZ':
         if code[:2] == '30':  
             try:
                 stock = get_object_or_404(Stockszc, code=code,date=dt)
                 stock.turnover = float(dd)
+                stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -60,6 +61,7 @@ def turnover(code,flag,dd,dt):
             try:
                 stock = get_object_or_404(Stocksz, code=code,date=dt)
                 stock.turnover = float(dd)
+                stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -68,6 +70,7 @@ def turnover(code,flag,dd,dt):
             try:
                 stock = get_object_or_404(Stockshk, code=code,date=dt)
                 stock.turnover = float(dd)
+                stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -75,6 +78,7 @@ def turnover(code,flag,dd,dt):
             try:
                 stock = get_object_or_404(Stocksh, code=code,date=dt)
                 stock.turnover = float(dd)
+                stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -82,6 +86,7 @@ def turnover(code,flag,dd,dt):
             try:
                 stock = get_object_or_404(Stockbj, code=code,date=dt)
                 stock.turnover = float(dd)
+                stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -790,4 +795,31 @@ def inflow_single(request):
         form = CodeForm()
         
         return render(request, 'inflow.html', {'form': form})
+    
+    
+    
+def stock_single(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\Table.xls"       
+    else:
+        filename = path+"/Table.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.itertuples():
+        dt = str(row.时间[0:10])
+        print(dt)
+        amount = round((row.金额)/10000,2)
+        
+        turnover('300612','SZ',row.换手, amount, dt)
+        
+        
+    
+    return HttpResponse('执行完毕！')
+    
+    
+    
+    
+    
     
