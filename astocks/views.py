@@ -232,6 +232,15 @@ def enter(beginindex,endindex,start,end):
                             if code[:2] == '30':  
                                 try:
                                     stock = get_object_or_404(Stockszc, code=code,date=mydate)
+                                    stock.open = dict['open']
+                                    stock.high = dict['high']
+                                    stock.close = dict['close']
+                                    stock.low = dict['low']
+                                    stock.volume = dict['vol']
+                                    stock.amount = dict['amount']*1000/10000
+                                    stock.price_change = dict['change']
+                                    stock.p_change = dict['pct_chg']
+                                    stock.save()
                                 except Http404:
                                     stock = Stockszc.objects.create(
                                         code = code,
@@ -249,6 +258,15 @@ def enter(beginindex,endindex,start,end):
                             else:
                                 try:
                                     stock = get_object_or_404(Stocksz, code=code,date=mydate)
+                                    stock.open = dict['open']
+                                    stock.high = dict['high']
+                                    stock.close = dict['close']
+                                    stock.low = dict['low']
+                                    stock.volume = dict['vol']
+                                    stock.amount = dict['amount']*1000/10000
+                                    stock.price_change = dict['change']
+                                    stock.p_change = dict['pct_chg']
+                                    stock.save()
                                 except Http404:
                                     stock = Stocksz.objects.create(
                                         code = code,
@@ -267,6 +285,15 @@ def enter(beginindex,endindex,start,end):
                             if code[:2] == '68':  
                                 try:
                                     stock = get_object_or_404(Stockshk, code=code,date=mydate)
+                                    stock.open = dict['open']
+                                    stock.high = dict['high']
+                                    stock.close = dict['close']
+                                    stock.low = dict['low']
+                                    stock.volume = dict['vol']
+                                    stock.amount = dict['amount']*1000/10000
+                                    stock.price_change = dict['change']
+                                    stock.p_change = dict['pct_chg']
+                                    stock.save()
                                 except Http404:
                                     stock = Stockshk.objects.create(
                                         code = code,
@@ -284,6 +311,15 @@ def enter(beginindex,endindex,start,end):
                             else:     
                                 try:
                                     stock = get_object_or_404(Stocksh, code=code,date=mydate)
+                                    stock.open = dict['open']
+                                    stock.high = dict['high']
+                                    stock.close = dict['close']
+                                    stock.low = dict['low']
+                                    stock.volume = dict['vol']
+                                    stock.amount = dict['amount']*1000/10000
+                                    stock.price_change = dict['change']
+                                    stock.p_change = dict['pct_chg']
+                                    stock.save()
                                 except Http404:
                                     stock = Stocksh.objects.create(
                                         code = code,
@@ -301,6 +337,15 @@ def enter(beginindex,endindex,start,end):
                     elif flag == 'BJ':
                             try:
                                 stock = get_object_or_404(Stockbj, code=code,date=mydate)
+                                stock.open = dict['open']
+                                stock.high = dict['high']
+                                stock.close = dict['close']
+                                stock.low = dict['low']
+                                stock.volume = dict['vol']
+                                stock.amount = dict['amount']*1000/10000
+                                stock.price_change = dict['change']
+                                stock.p_change = dict['pct_chg']
+                                stock.save()
                             except Http404:
                                 stock = Stockbj.objects.create(
                                     code = code,
