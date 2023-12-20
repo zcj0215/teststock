@@ -229,7 +229,7 @@ def draw(config: Config, origin_data: Data, logger, predict_norm_data: np.ndarra
 
         plt.show()
 
-def main(code):
+def main(code,good,again):
     pygdata(get_data_path(),code)
     config = Config()
     logger = load_logger(config)
@@ -237,7 +237,7 @@ def main(code):
         np.random.seed(config.random_seed)  # 设置随机种子，保证可复现
         data_gainer = Data(config,code)
 
-        if config.do_train:
+        if config.do_train and good != 'on':
             train_X, valid_X, train_Y, valid_Y = data_gainer.get_train_and_valid_data()
             train(config, logger, [train_X, train_Y, valid_X, valid_Y],code)
 

@@ -45,7 +45,9 @@ def pred(request):
             else:
                 stock_code = request.POST['code']
                 stock = get_object_or_404(StockList, symbol=stock_code)
-                info = pypredic.main(stock_code)
+                again = request.POST['again']
+                good = request.POST['good']
+                info = pypredic.main(stock_code,good,again)
                 
                 data = {"info": info,"stock_code": stock_code,"stock_name": stock.name}
                 return JsonResponse({"data": json.dumps(data)})  
