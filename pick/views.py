@@ -810,7 +810,7 @@ def stock_single(request):
         print(dt)
         amount = round((row.金额)/10000,2)
         
-        turnover('600071','SH',row.换手, amount, dt)
+        turnover('002354','SZ',row.换手, amount, dt)
         
         
     
