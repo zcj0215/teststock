@@ -44,8 +44,8 @@ def get_data_path():  # data目录的绝对路径
     root_dir = get_parent_dir()
     return os.path.join(root_dir, "data")    
 
-def isGood(stock_code):
-    if os.path.exists(os.path.join(get_parent_dir(),os.path.join('good_models', stock_code + ".h5"))):
+def isGood(stock_code):  # 按当时的good_models,现直接用saved_models
+    if os.path.exists(os.path.join(get_parent_dir(),os.path.join('saved_models', stock_code + ".h5"))):
         return True
     else:
         return False
@@ -139,7 +139,7 @@ def prediction(stock_code, good, pre_len=30, real=True, plot=False):
     
     file_path = os.path.join(get_parent_dir(),os.path.join("saved_models",stock_code + ".h5"))
     if good == 'on':
-        file_path = os.path.join(get_parent_dir(),os.path.join("good_models",stock_code + ".h5"))
+        file_path = os.path.join(get_parent_dir(),os.path.join("saved_models",stock_code + ".h5"))  # 按当时的good_models,现直接用saved_models
     model = Model()
     keras.backend.clear_session()
     model.load_model(file_path)  # 根据配置文件新建模型

@@ -1,0 +1,104 @@
+2023-12-23 02:46:10,008 - INFO - 
+Config:
+'add_train': False
+'batch_size': 64
+'continue_flag': ''
+'cur_time': '2023_12_23_02_45_24'
+'debug_mode': False
+'debug_num': 500
+'do_continue_train': False
+'do_figure_save': False
+'do_log_print_to_screen': True
+'do_log_save_to_file': True
+'do_predict': True
+'do_train': True
+'do_train_visualized': False
+'dropout_rate': 0.2
+'epoch': 20
+'feature_columns': [2, 3, 4, 5, 6, 7, 8]
+'figure_save_path': './figure/'
+'hidden_size': 128
+'input_size': 7
+'label_columns': [4, 5]
+'label_in_feature_index': [2, 3]
+'learning_rate': 0.001
+'log_save_path': './log/2023_12_23_02_45_24_pytorch/'
+'lstm_layers': 2
+'model_postfix': {'pytorch': '.pth'
+'keras': '.h5'
+'tensorflow': '.ckpt'}
+'model_save_path': 'D:\\zcj\\myweb\\teststock\\prediction\\LSTMPredictStock\\saved_models/'
+'output_size': 2
+'patience': 5
+'predict_day': 1
+'random_seed': 42
+'shuffle_train_data': True
+'time_step': 20
+'train_data_path': 'D:\\zcj\\myweb\\teststock\\prediction\\LSTMPredictStock\\data/py'
+'train_data_rate': 0.95
+'use_cuda': False
+'used_frame': 'pytorch'
+'valid_data_rate': 0.15
+2023-12-23 02:46:12,115 - INFO - Epoch 0/20
+2023-12-23 02:46:15,733 - INFO - The train loss is 0.291809. The valid loss is 0.068632.
+2023-12-23 02:46:15,837 - INFO - Epoch 1/20
+2023-12-23 02:46:17,094 - INFO - The train loss is 0.047063. The valid loss is 0.030448.
+2023-12-23 02:46:17,098 - INFO - Epoch 2/20
+2023-12-23 02:46:18,320 - INFO - The train loss is 0.025572. The valid loss is 0.017517.
+2023-12-23 02:46:18,324 - INFO - Epoch 3/20
+2023-12-23 02:46:19,539 - INFO - The train loss is 0.016205. The valid loss is 0.011245.
+2023-12-23 02:46:19,544 - INFO - Epoch 4/20
+2023-12-23 02:46:20,765 - INFO - The train loss is 0.011825. The valid loss is 0.008692.
+2023-12-23 02:46:20,771 - INFO - Epoch 5/20
+2023-12-23 02:46:21,981 - INFO - The train loss is 0.009977. The valid loss is 0.007681.
+2023-12-23 02:46:21,985 - INFO - Epoch 6/20
+2023-12-23 02:46:23,202 - INFO - The train loss is 0.009104. The valid loss is 0.007371.
+2023-12-23 02:46:23,207 - INFO - Epoch 7/20
+2023-12-23 02:46:24,457 - INFO - The train loss is 0.008564. The valid loss is 0.006997.
+2023-12-23 02:46:24,462 - INFO - Epoch 8/20
+2023-12-23 02:46:25,723 - INFO - The train loss is 0.008150. The valid loss is 0.006818.
+2023-12-23 02:46:25,728 - INFO - Epoch 9/20
+2023-12-23 02:46:27,000 - INFO - The train loss is 0.007902. The valid loss is 0.006753.
+2023-12-23 02:46:27,004 - INFO - Epoch 10/20
+2023-12-23 02:46:28,212 - INFO - The train loss is 0.007686. The valid loss is 0.006641.
+2023-12-23 02:46:28,217 - INFO - Epoch 11/20
+2023-12-23 02:46:29,443 - INFO - The train loss is 0.007573. The valid loss is 0.006657.
+2023-12-23 02:46:29,444 - INFO - Epoch 12/20
+2023-12-23 02:46:30,670 - INFO - The train loss is 0.007419. The valid loss is 0.006575.
+2023-12-23 02:46:30,674 - INFO - Epoch 13/20
+2023-12-23 02:46:31,893 - INFO - The train loss is 0.007410. The valid loss is 0.006684.
+2023-12-23 02:46:31,894 - INFO - Epoch 14/20
+2023-12-23 02:46:33,107 - INFO - The train loss is 0.007254. The valid loss is 0.006549.
+2023-12-23 02:46:33,112 - INFO - Epoch 15/20
+2023-12-23 02:46:34,350 - INFO - The train loss is 0.007226. The valid loss is 0.006552.
+2023-12-23 02:46:34,351 - INFO - Epoch 16/20
+2023-12-23 02:46:35,564 - INFO - The train loss is 0.007162. The valid loss is 0.006395.
+2023-12-23 02:46:35,569 - INFO - Epoch 17/20
+2023-12-23 02:46:36,801 - INFO - The train loss is 0.007119. The valid loss is 0.006357.
+2023-12-23 02:46:36,807 - INFO - Epoch 18/20
+2023-12-23 02:46:38,037 - INFO - The train loss is 0.007064. The valid loss is 0.006390.
+2023-12-23 02:46:38,038 - INFO - Epoch 19/20
+2023-12-23 02:46:39,246 - INFO - The train loss is 0.007028. The valid loss is 0.006297.
+2023-12-23 02:46:39,611 - INFO - The mean squared error of stock ['low', 'high'] is [0.00092399 0.00202325]
+2023-12-23 02:48:02,048 - WARNING - Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches (in this case, 4680 batches). You may need to use the repeat() function when building your dataset.
+2023-12-23 02:48:46,271 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:48:46,273 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:48:59,833 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:48:59,833 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:49:14,135 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:49:14,135 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:49:43,811 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:49:43,812 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:49:57,303 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:49:57,305 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:50:10,843 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:50:10,844 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:50:24,578 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:50:24,579 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:50:38,442 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:50:38,443 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:50:52,107 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:50:52,108 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 02:51:05,828 - WARNING - Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss
+2023-12-23 02:51:05,829 - WARNING - Can save best model only with val_loss available, skipping.
+2023-12-23 03:07:54,709 - INFO - D:\zcj\myweb\teststock\prediction\LSTMPredictStock\predic.py changed, reloading.
