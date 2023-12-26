@@ -126,6 +126,29 @@
             return ema;
         }
 
+        function calculateMACD(data) {
+            // 第一天全部为0
+            var dif = [0];
+            var dea = [0];
+            var osc = [0];
+        
+            var ema12 = calculateEMA(12, data);
+            var ema26 = calculateEMA(26, data);
+        
+            // 第三天开始
+            for (var i = 1; i < data.length; i++) {
+                dif.push((ema12[i] - ema26[i]).toFixed(3));
+                dea.push((dea[i - 1] * 0.8 + dif[i] * 0.2).toFixed(3));
+                osc.push((2 * (dif[i] - dea[i])).toFixed(3));
+            }
+        
+            return {
+                'DIF': dif,
+                'DEA': dea,
+                'OSC': osc
+            }
+        }
+
         function barColor(oscData) {
             var res = []
             for (var i = 0; i < oscData.length; i++) {
@@ -424,6 +447,34 @@
                     xAxisIndex: 1,
                     yAxisIndex: 1,
                     data: inflowColor(data0.open_close_low_high),
+                },
+                {
+                    name: 'MACD',
+                    type: 'bar',
+                    color: '#FF0000',
+                    data: barColor(calculateMACD(data0.open_close_low_high).OSC)
+                },
+                {
+                    name: 'DIF',
+                    type: 'line',
+                    color: '#ed9ffc',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: calculateMACD(data0.open_close_low_high).DIF
+                },
+                {
+                    name: 'DEA',
+                    type: 'line',
+                    color: '#FFFF00',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: calculateMACD(data0.open_close_low_high).DEA
                 }
             ]
         };
