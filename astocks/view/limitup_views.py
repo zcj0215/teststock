@@ -37,8 +37,9 @@ class StockChooseListView(ListView):
     
 def byDateListView(request):
     by = request.GET.get('by') 
+    print(by)
     if by:
-        limitups = StockLimitup.objects.all().filter(limitup_date=by)
+        limitups = StockLimitup.objects.all().filter(pick_date=by)
     
         return render(request, 'pickstock/limitup_list_by_date.html', {'limitups': limitups,'by':by })
     else:
