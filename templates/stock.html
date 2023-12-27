@@ -280,14 +280,20 @@
                 {
                     left: '10%',
                     right: '8%',
-                    height: '64%'
+                    height: '45%'
+                },
+                {
+                    left: '10%',
+                    right: '8%',
+                    top: '56%',
+                    height: '16%'
                 },
                 {
                     left: '10%',
                     right: '8%',
                     top: '73%',
                     height: '16%'
-                } 
+                }  
             ],
             xAxis: [
                 {
@@ -313,6 +319,18 @@
                     axisLabel: { show: false },
                     min: 'dataMin',
                     max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 2,
+                    data: data0.date,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false },
+                    min: 'dataMin',
+                    max: 'dataMax'
                 }
             ],
             yAxis: [
@@ -330,18 +348,27 @@
                     axisLine: { show: false },
                     axisTick: { show: false },
                     splitLine: { show: false }
+                },
+                {
+                    scale: true,
+                    gridIndex: 2,
+                    splitNumber: 2,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
                 }
             ],
             dataZoom: [
                 {
                     type: 'inside',
-                    xAxisIndex: [0, 1],
+                    xAxisIndex: [0,1,2],
                     start: 100 - Math.floor((60 / data0.date.length) * 100),
                     end: 100
                 },
                 {
                     show: true,
-                    xAxisIndex: [0, 1],
+                    xAxisIndex: [0,1,2],
                     type: 'slider',
                     top: '90%',
                     start: 100 - Math.floor((60 / data0.date.length) * 100),
@@ -420,7 +447,7 @@
                     type: 'line',
                     xAxisIndex: 1,
                     yAxisIndex: 1,
-                    color: '#ed9ffc',
+                    color: '#e9b002',
                     smooth: true,
                     showSymbol: false,
                     lineStyle: {
@@ -433,7 +460,7 @@
                     type: 'line',
                     xAxisIndex: 1,
                     yAxisIndex: 1,
-                    color: '#FFFF00',
+                    color: '#0099FF',
                     smooth: true,
                     showSymbol: false,
                     lineStyle: {
@@ -451,13 +478,17 @@
                 {
                     name: 'MACD',
                     type: 'bar',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
                     color: '#FF0000',
                     data: barColor(calculateMACD(data0.open_close_low_high).OSC)
                 },
                 {
                     name: 'DIF',
                     type: 'line',
-                    color: '#ed9ffc',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    color: '#e9b002',
                     smooth: true,
                     showSymbol: false,
                     lineStyle: {
@@ -468,7 +499,9 @@
                 {
                     name: 'DEA',
                     type: 'line',
-                    color: '#FFFF00',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    color: '#0099FF',
                     smooth: true,
                     showSymbol: false,
                     lineStyle: {
@@ -553,7 +586,13 @@
                 {
                     left: '10%',
                     right: '8%',
-                    height: '64%'
+                    height: '45%'
+                },
+                {
+                    left: '10%',
+                    right: '8%',
+                    top: '56%',
+                    height: '16%'
                 },
                 {
                     left: '10%',
@@ -587,6 +626,18 @@
                     axisLabel: { show: false },
                     min: 'dataMin',
                     max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 2,
+                    data: data1.date,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false },
+                    min: 'dataMin',
+                    max: 'dataMax'
                 }
             ],
             yAxis: [
@@ -604,18 +655,27 @@
                     axisLine: { show: false },
                     axisTick: { show: false },
                     splitLine: { show: false }
+                },
+                {
+                    scale: true,
+                    gridIndex: 2,
+                    splitNumber: 2,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
                 }
             ],
             dataZoom: [
                 {
                     type: 'inside',
-                    xAxisIndex: [0, 1],
+                    xAxisIndex: [0, 1, 2],
                     start: 100 - Math.floor((60 / data1.date.length) * 100),
                     end: 100
                 },
                 {
                     show: true,
-                    xAxisIndex: [0, 1],
+                    xAxisIndex: [0, 1, 2],
                     type: 'slider',
                     top: '90%',
                     start: 100 - Math.floor((60 / data1.date.length) * 100),
@@ -694,7 +754,7 @@
                     type: 'line',
                     xAxisIndex: 1,
                     yAxisIndex: 1,
-                    color: '#ed9ffc',
+                    color: '#e9b002',
                     smooth: true,
                     showSymbol: false,
                     lineStyle: {
@@ -707,13 +767,47 @@
                     type: 'line',
                     xAxisIndex: 1,
                     yAxisIndex: 1,
-                    color: '#FFFF00',
+                    color: '#0099FF',
                     smooth: true,
                     showSymbol: false,
                     lineStyle: {
                         width: 1
                     },
                     data: calculateVOL(60,data1.open_close_low_high)
+                },
+                {
+                    name: 'MACD',
+                    type: 'bar',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    color: '#FF0000',
+                    data: barColor(calculateMACD(data1.open_close_low_high).OSC)
+                },
+                {
+                    name: 'DIF',
+                    type: 'line',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    color: '#e9b002',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: calculateMACD(data1.open_close_low_high).DIF
+                },
+                {
+                    name: 'DEA',
+                    type: 'line',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    color: '#0099FF',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: calculateMACD(data1.open_close_low_high).DEA
                 }
             ]
         };
