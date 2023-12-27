@@ -212,6 +212,29 @@
             return ema;
         }
 
+        function calculateMACD(data) {
+            // 第一天全部为0
+            var dif = [0];
+            var dea = [0];
+            var osc = [0];
+        
+            var ema12 = calculateEMA(12, data);
+            var ema26 = calculateEMA(26, data);
+        
+            // 第三天开始
+            for (var i = 1; i < data.length; i++) {
+                dif.push((ema12[i] - ema26[i]).toFixed(3));
+                dea.push((dea[i - 1] * 0.8 + dif[i] * 0.2).toFixed(3));
+                osc.push((2 * (dif[i] - dea[i])).toFixed(3));
+            }
+        
+            return {
+                'DIF': dif,
+                'DEA': dea,
+                'OSC': osc
+            }
+        }
+
         function barColor(oscData) {
             var res = []
             for (var i = 0; i < oscData.length; i++) {
@@ -326,14 +349,20 @@
                 {
                     left: '10%',
                     right: '8%',
-                    height: '64%'
+                    height: '45%'
+                },
+                {
+                    left: '10%',
+                    right: '8%',
+                    top: '56%',
+                    height: '16%'
                 },
                 {
                     left: '10%',
                     right: '8%',
                     top: '73%',
                     height: '16%'
-                }
+                }  
                 
             ],
             xAxis: [
@@ -360,6 +389,18 @@
                     axisLabel: { show: false },
                     min: 'dataMin',
                     max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 2,
+                    data: data0.date,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false },
+                    min: 'dataMin',
+                    max: 'dataMax'
                 }
             ],
             yAxis: [
@@ -377,18 +418,27 @@
                     axisLine: { show: false },
                     axisTick: { show: false },
                     splitLine: { show: false }
+                },
+                {
+                    scale: true,
+                    gridIndex: 2,
+                    splitNumber: 2,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
                 }
             ],
             dataZoom: [
                 {
                     type: 'inside',
-                    xAxisIndex: [0, 1],
+                    xAxisIndex: [0, 1, 2],
                     start: 100 - Math.floor((60 / data0.date.length) * 100),
                     end: 100
                 },
                 {
                     show: true,
-                    xAxisIndex: [0, 1],
+                    xAxisIndex: [0, 1, 2],
                     type: 'slider',
                     top: '90%',
                     start: 100 - Math.floor((60 / data0.date.length) * 100),
@@ -487,6 +537,40 @@
                         width: 1
                     },
                     data: calculateVOL(60,data0.open_close_low_high)
+                },
+                {
+                    name: 'MACD',
+                    type: 'bar',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    color: '#FF0000',
+                    data: barColor(calculateMACD(data0.open_close_low_high).OSC)
+                },
+                {
+                    name: 'DIF',
+                    type: 'line',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    color: '#e9b002',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: calculateMACD(data0.open_close_low_high).DIF
+                },
+                {
+                    name: 'DEA',
+                    type: 'line',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    color: '#0099FF',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: calculateMACD(data0.open_close_low_high).DEA
                 }
             ]
         };
