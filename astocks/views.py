@@ -310,6 +310,8 @@ def enter(beginindex,endindex,start,end):
                                     ) 
                             else:     
                                 try:
+                                    print(code)
+                                    print(mydate)
                                     stock = get_object_or_404(Stocksh, code=code,date=mydate)
                                     stock.open = dict['open']
                                     stock.high = dict['high']
