@@ -138,7 +138,14 @@
         var downBorderColor = '#008F28';
         var data = {{ data|safe }}
 
-        var data0 = splitData(data.reverse());
+        var data0
+
+        if(data.length==0){
+            data0 = JSON.parse(localStorage.getItem(code)); 
+        }else{
+            data0 = splitData(data.reverse());
+            localStorage.setItem(code, JSON.stringify(data0));
+        }
 
 
         function splitData(rawData) {

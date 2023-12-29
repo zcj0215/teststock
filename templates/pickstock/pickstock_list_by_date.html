@@ -2,6 +2,7 @@
 
 
 {% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
   <li class="breadcrumb-item"><a href="{% url 'astocks:home' %}">选股</a></li>
   <li class="breadcrumb-item active">选股日期 {{ by }}</li>
 {% endblock %}

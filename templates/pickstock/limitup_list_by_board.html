@@ -2,6 +2,7 @@
 
 
 {% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
   <li class="breadcrumb-item"><a href="{% url 'astocks:limitup' %}">涨停</a></li>
   <li class="breadcrumb-item active">涨停板块 {{ limitupboard.name }}</li>
 {% endblock %}

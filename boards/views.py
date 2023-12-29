@@ -69,13 +69,18 @@ class StockListView(ListView):
         kwargs['form'] = self.form
         return super().get_context_data(**kwargs)
 
-    def get_queryset(self):
+    def get_queryset(self,request):
         self.board = get_object_or_404(Board, name=self.kwargs.get('name'))
         self.form = CodeForm()
         jsonlist = []
-        try:
-            data = Stocksector.objects.all().filter(name=self.board.name).order_by('-date')
-            for row in data:
+        key = self.kwargs.get('name') + time.strftime("%Y-%m-%d", time.localtime())
+        if request.session.get(key):
+            self.data = json.dumps(jsonlist)
+        else:
+            request.session[key] = key   
+            try:
+                data = Stocksector.objects.all().filter(name=self.board.name).order_by('-date')
+                for row in data:
                   dict = {}
                   dict["name"] = self.board.name
                   dict["code"] = str(row.code)
@@ -87,10 +92,11 @@ class StockListView(ListView):
                   dict["trade_date"] = str(row.date)  
                   jsonlist.append(dict) 
                
-        except EXCEPTION:
-              pass
+            except EXCEPTION:
+                pass
         
-        self.data = json.dumps(jsonlist)
+            self.data = json.dumps(jsonlist)
+            
         queryset = Stocks.objects.filter(boards__name__in = [self.board.name]).order_by('-growth')
         return queryset
 
