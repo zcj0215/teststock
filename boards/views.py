@@ -69,15 +69,15 @@ class StockListView(ListView):
         kwargs['form'] = self.form
         return super().get_context_data(**kwargs)
 
-    def get_queryset(self,request):
+    def get_queryset(self):
         self.board = get_object_or_404(Board, name=self.kwargs.get('name'))
         self.form = CodeForm()
         jsonlist = []
         key = self.kwargs.get('name') + time.strftime("%Y-%m-%d", time.localtime())
-        if request.session.get(key):
+        if self.request.session.get(key):
             self.data = json.dumps(jsonlist)
         else:
-            request.session[key] = key   
+            self.request.session[key] = key  
             try:
                 data = Stocksector.objects.all().filter(name=self.board.name).order_by('-date')
                 for row in data:
