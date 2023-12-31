@@ -126,6 +126,18 @@
             return ema;
         }
 
+       {% comment %}  // 计算CCI
+        function calculateCCI(dayCount, data) {
+            let typ = [0];
+        
+            for (var i = 1; i < data.length; i++) {
+                let todayTYP = (data[i][3]+data[i][2]+data[i][1])/3
+                typ.push(todayTYP.toFixed(2));
+            }
+        
+            return ema;
+        } {% endcomment %}
+
         function calculateMACD(data) {
             // 第一天全部为0
             var dif = [0];
