@@ -13,6 +13,8 @@ from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 import time
 import json
+import pandas as pd
+import numpy as np
 
 class BoardListView(ListView):
     model = Board
@@ -321,7 +323,15 @@ def stock_detail(request, board_name, stock_name):
               pass
         
         return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist)})
-
+    
+def calculate_CCI(dayCount,data):
+    typical_price = (data["high"]+data["low"]+data["vol"])/3
+    sma = typical_price.rolling(dayCount).mean()
+    mean_deviation = np.abs(typical_price-sma).rolling(dayCount).mean()
+    cci = (typical_price-sma)/(0.015*mean_deviation)
+    
+    return cci
+    
 def query(request):
     if request.method == 'POST':
         stock_code = request.POST['code']
