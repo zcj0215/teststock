@@ -176,7 +176,7 @@ def stock_detail(request, board_name, stock_name):
     name = stock.name
     jsonlist = []
     blocklist = []
-    
+    cci = []
     try:
         data = Stocksector.objects.all().filter(name=board_name).order_by('-date')
         for row in data:
@@ -195,7 +195,7 @@ def stock_detail(request, board_name, stock_name):
     
     key = code + time.strftime("%Y-%m-%d", time.localtime())
     if request.session.get(key):
-        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist)})
+        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"cci":json.dumps(cci)})
     else:
         request.session[key] = key
         if flag == 'SZ':
@@ -322,15 +322,26 @@ def stock_detail(request, board_name, stock_name):
           except EXCEPTION:
               pass
         
-        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist)})
+        mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow'])
+        cci = calculate_CCI(14,mypd)
+       
+        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"cci":json.dumps(cci)})
     
 def calculate_CCI(dayCount,data):
-    typical_price = (data["high"]+data["low"]+data["vol"])/3
+    typical_price = (data["high"].astype(float)+data["low"].astype(float)+data["close"].astype(float))/3
     sma = typical_price.rolling(dayCount).mean()
     mean_deviation = np.abs(typical_price-sma).rolling(dayCount).mean()
     cci = (typical_price-sma)/(0.015*mean_deviation)
+    num = cci.isna().sum()
+    retList = cci.dropna().round(2).astype(str).tolist() 
     
-    return cci
+    print( retList)
+    i = 0 
+    while i < num:
+        retList.insert(0, '0')
+        i = i+1
+        
+    return  retList
     
 def query(request):
     if request.method == 'POST':

@@ -17,8 +17,8 @@
 {% block content %}
 <center>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
-    <div style="width:100%;height:1000px;margin-top:50px;">
-        <div id="hist_futu" style="float:left;width: 100%;height:750px;"></div>
+    <div style="width:100%;height:1200px;margin-top:50px;">
+        <div id="hist_futu" style="float:left;width: 100%;height:1000px;"></div>
     </div>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
     <div style="width:100%;height:800px;margin-top:50px;">
@@ -41,18 +41,23 @@
         var upBorderColor = '#8A0000';
         var downColor = '#00da3c';
         var downBorderColor = '#008F28';
+        var data0;
         var data = {{ data|safe }}
         var bdata = {{ bdata|safe }}
         var code = {{ stock.symbol|safe }}
-        var data0
-
+        var cci0 =  {{ cci|safe }}
+       
         if(data.length==0){
             data0 = JSON.parse(localStorage.getItem(code)); 
+            cci0 =  JSON.parse(localStorage.getItem('cci'+code)); 
         }else{
             data0 = splitData(data.reverse());
             localStorage.setItem(code, JSON.stringify(data0));
+            localStorage.setItem('cci'+code, JSON.stringify(cci0));
         }
-       
+        //console.log('data:'+JSON.stringify(data0))
+        // console.log('cci:'+JSON.stringify(cci0))
+
         var data1 = splitData(bdata.reverse());
 
         function splitData(rawData) {
@@ -126,34 +131,17 @@
             return ema;
         }
 
-        // 移动平均值算法        
-        function movingAverage(n, arr) {
-            let sum = arr.slice(0, n).reduce((accumulator, currentValue) => accumulator + currentValue); // 初始化前n个元素的求和结果
-            console.log('sum:'+sum);
-            let movAve = [0]
-            for (let i = n; i < arr.length; i++) {
-                sum += arr[i] - arr[i-n]; // 更新每次迭代时的求和结果
-                
-                if ((i+1) % n === 0) {
-                    movAve.push(sum/n.toFixed(2));
-                    console.log(`第 ${Math.floor((i+1)/n)} 周期的移动平均值为：${sum/n}`);
-                }
-            }
-
-            return movAve
-        }
-
-        // 计算CCI
-        function calculateCCI(dayCount, data) {
-            let typ = [0];
-            for (let i = 1; i < data.length; i++) {
+    
+       {% comment %}  function calculateCCI(dayCount, data) {
+            let typ = [];
+            for (let i = 0; i < data.length; i++) {
                 let todayTYP = (parseFloat(data[i][3])+parseFloat(data[i][2])+parseFloat(data[i][1]))/3
-                typ.push(todayTYP.toFixed(2));
+                typ.push(parseFloat(todayTYP.toFixed(2)));
             }
             
             console.log('typ:'+JSON.stringify(typ))
-            let maTyp = [0]
-            for (let i = 1, len = typ.length; i < len; i++) {
+            let maTyp = []
+            for (let i = 0, len = typ.length; i < len; i++) {
 		        if (i < dayCount) {
 			      continue;
 		        }
@@ -166,20 +154,22 @@
 
             console.log('maTyp:'+JSON.stringify(maTyp))
             
-            let movingAverages =  movingAverage(dayCount, typ)
+            const movingAverages = typ.slice(dayCount - 1).map((currentElement, index) => (
+			    typ.slice(index, index + dayCount).reduce((sum, element) => sum + element) / dayCount
+			));
 			    
 
             console.log('avedev:'+JSON.stringify(movingAverages))
 
             let cci = [0];
-            for (let i = 1; i < typ.length; i++) {
+            for (let i = 0; i < typ.length; i++) {
                 let todayCCI = (typ[i]-maTyp[i])*1000/(15*movingAverages[i])
                 cci.push(todayCCI.toFixed(2));
             }
             console.log('cci:'+JSON.stringify(cci))
             return cci;
         }
-
+        {% endcomment %}
         function calculateMACD(data) {
             // 第一天全部为0
             var dif = [0];
@@ -339,20 +329,20 @@
                 {
                     left: '10%',
                     right: '8%',
-                    top: '56%',
-                    height: '16%'
+                    top: '46%',
+                    height: '14%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '73%',
-                    height: '16%'
+                    top: '63%',
+                    height: '15%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '83%',
-                    height: '16%'
+                    top: '82%',
+                    height: '14%'
                 }  
             ],
             xAxis: [
@@ -451,7 +441,7 @@
                     show: true,
                     xAxisIndex: [0,1,2,3],
                     type: 'slider',
-                    top: '90%',
+                    top: '96%',
                     start: 100 - Math.floor((60 / data0.date.length) * 100),
                     end: 100
                 }
@@ -601,7 +591,7 @@
                     lineStyle: {
                         width: 1
                     },
-                    data: calculateCCI(14,data0.open_close_low_high)
+                    data: cci0
                 }
             ]
         };
