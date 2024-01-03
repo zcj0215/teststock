@@ -17,11 +17,11 @@
 {% block content %}
 <center>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
-    <div style="width:100%;height:1200px;margin-top:50px;">
-        <div id="hist_futu" style="float:left;width: 100%;height:1000px;"></div>
+    <div style="width:100%;height:1000px;margin-top:20px;">
+        <div id="hist_futu" style="float:left;width: 100%;height:900px;"></div>
     </div>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
-    <div style="width:100%;height:800px;margin-top:50px;">
+    <div style="width:100%;height:800px;margin-top:5px;">
         <div id="hist_block" style="float:left;width: 100%;height:750px;"></div>
     </div>
 </center>
@@ -44,6 +44,7 @@
         var data0;
         var data = {{ data|safe }}
         var bdata = {{ bdata|safe }}
+        var cci1 =  {{ bcci|safe }}
         var code = {{ stock.symbol|safe }}
         var cci0 =  {{ cci|safe }}
        
@@ -55,9 +56,7 @@
             localStorage.setItem(code, JSON.stringify(data0));
             localStorage.setItem('cci'+code, JSON.stringify(cci0));
         }
-        //console.log('data:'+JSON.stringify(data0))
-        // console.log('cci:'+JSON.stringify(cci0))
-
+        
         var data1 = splitData(bdata.reverse());
 
         function splitData(rawData) {
@@ -132,44 +131,6 @@
         }
 
     
-       {% comment %}  function calculateCCI(dayCount, data) {
-            let typ = [];
-            for (let i = 0; i < data.length; i++) {
-                let todayTYP = (parseFloat(data[i][3])+parseFloat(data[i][2])+parseFloat(data[i][1]))/3
-                typ.push(parseFloat(todayTYP.toFixed(2)));
-            }
-            
-            console.log('typ:'+JSON.stringify(typ))
-            let maTyp = []
-            for (let i = 0, len = typ.length; i < len; i++) {
-		        if (i < dayCount) {
-			      continue;
-		        }
-		        var sum = 0;
-		        for (let j = 0; j < dayCount; j++) {
-			        sum += +typ[i - j];
-		        }
-		        maTyp.push(parseFloat((sum / dayCount).toFixed(2)));
-	        }
-
-            console.log('maTyp:'+JSON.stringify(maTyp))
-            
-            const movingAverages = typ.slice(dayCount - 1).map((currentElement, index) => (
-			    typ.slice(index, index + dayCount).reduce((sum, element) => sum + element) / dayCount
-			));
-			    
-
-            console.log('avedev:'+JSON.stringify(movingAverages))
-
-            let cci = [0];
-            for (let i = 0; i < typ.length; i++) {
-                let todayCCI = (typ[i]-maTyp[i])*1000/(15*movingAverages[i])
-                cci.push(todayCCI.toFixed(2));
-            }
-            console.log('cci:'+JSON.stringify(cci))
-            return cci;
-        }
-        {% endcomment %}
         function calculateMACD(data) {
             // 第一天全部为0
             var dif = [0];
@@ -329,14 +290,14 @@
                 {
                     left: '10%',
                     right: '8%',
-                    top: '46%',
+                    top: '50%',
                     height: '14%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '63%',
-                    height: '15%'
+                    top: '65%',
+                    height: '14%'
                 },
                 {
                     left: '10%',
@@ -670,21 +631,27 @@
                 {
                     left: '10%',
                     right: '8%',
-                    height: '45%'
+                    height: '40%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '56%',
-                    height: '16%'
+                    top: '50%',
+                    height: '14%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '73%',
-                    height: '16%'
-                }
-                
+                    top: '65%',
+                    height: '14%'
+                },
+                {
+                    left: '10%',
+                    right: '8%',
+                    top: '81%',
+                    height: '14%'
+                }  
+
             ],
             xAxis: [
                 {
@@ -722,6 +689,18 @@
                     axisLabel: { show: false },
                     min: 'dataMin',
                     max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 3,
+                    data: data1.date,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false },
+                    min: 'dataMin',
+                    max: 'dataMax'
                 }
             ],
             yAxis: [
@@ -748,20 +727,29 @@
                     axisLine: { show: false },
                     axisTick: { show: false },
                     splitLine: { show: false }
+                },
+                {
+                    scale: true,
+                    gridIndex: 3,
+                    splitNumber: 2,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
                 }
             ],
             dataZoom: [
                 {
                     type: 'inside',
-                    xAxisIndex: [0, 1, 2],
+                    xAxisIndex: [0, 1, 2, 3],
                     start: 100 - Math.floor((60 / data1.date.length) * 100),
                     end: 100
                 },
                 {
                     show: true,
-                    xAxisIndex: [0, 1, 2],
+                    xAxisIndex: [0, 1, 2, 3],
                     type: 'slider',
-                    top: '90%',
+                    top: '95%',
                     start: 100 - Math.floor((60 / data1.date.length) * 100),
                     end: 100
                 }
@@ -892,6 +880,19 @@
                         width: 1
                     },
                     data: calculateMACD(data1.open_close_low_high).DEA
+                },
+                {
+                    name: 'CCI',
+                    type: 'line',
+                    xAxisIndex: 3,
+                    yAxisIndex: 3,
+                    color: '#e9b002',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: cci1
                 }
             ]
         };
