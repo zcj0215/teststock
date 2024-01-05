@@ -53,7 +53,8 @@ def turnover(code,flag,dd,amount,dt):
             try:
                 stock = get_object_or_404(Stockszc, code=code,date=dt)
                 stock.turnover = float(dd)
-                stock.amount = amount
+                if amount !=0:
+                    stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -61,7 +62,9 @@ def turnover(code,flag,dd,amount,dt):
             try:
                 stock = get_object_or_404(Stocksz, code=code,date=dt)
                 stock.turnover = float(dd)
-                stock.amount = amount
+                if amount !=0:
+                    stock.amount = amount
+                
                 stock.save()
             except Http404:
                 pass
@@ -70,7 +73,8 @@ def turnover(code,flag,dd,amount,dt):
             try:
                 stock = get_object_or_404(Stockshk, code=code,date=dt)
                 stock.turnover = float(dd)
-                stock.amount = amount
+                if amount !=0:
+                    stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -78,7 +82,8 @@ def turnover(code,flag,dd,amount,dt):
             try:
                 stock = get_object_or_404(Stocksh, code=code,date=dt)
                 stock.turnover = float(dd)
-                stock.amount = amount
+                if amount !=0:
+                    stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -86,7 +91,8 @@ def turnover(code,flag,dd,amount,dt):
             try:
                 stock = get_object_or_404(Stockbj, code=code,date=dt)
                 stock.turnover = float(dd)
-                stock.amount = amount
+                if amount !=0:
+                    stock.amount = amount
                 stock.save()
             except Http404:
                 pass
@@ -811,6 +817,6 @@ def stock_single(request):
         print(row.金额)
         amount = round((row.金额)/10000,2)
         
-        turnover('002241','SZ',row.换手, amount, dt)
+        turnover('600272','SH',row.换手, amount, dt)
         
     return HttpResponse('执行完毕！')

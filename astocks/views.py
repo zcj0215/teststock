@@ -231,6 +231,8 @@ def enter(beginindex,endindex,start,end):
                     if flag == 'SZ':
                             if code[:2] == '30':  
                                 try:
+                                    print(code)
+                                    print(mydate)
                                     stock = get_object_or_404(Stockszc, code=code,date=mydate)
                                     stock.open = dict['open']
                                     stock.high = dict['high']
@@ -257,6 +259,8 @@ def enter(beginindex,endindex,start,end):
                                     )
                             else:
                                 try:
+                                    print(code)
+                                    print(mydate)
                                     stock = get_object_or_404(Stocksz, code=code,date=mydate)
                                     stock.open = dict['open']
                                     stock.high = dict['high']
