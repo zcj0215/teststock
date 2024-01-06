@@ -137,17 +137,17 @@
         var downColor = '#00da3c';
         var downBorderColor = '#008F28';
         var data = {{ data|safe }}
+        var blockname = '{{ board.name|safe }}';
 
         var data0
 
         if(data.length==0){
-            data0 = JSON.parse(localStorage.getItem(code)); 
+            data0 = JSON.parse(localStorage.getItem(blockname)); 
         }else{
             data0 = splitData(data.reverse());
-            localStorage.setItem(code, JSON.stringify(data0));
+            localStorage.setItem(blockname, JSON.stringify(data0));
         }
-
-
+        
         function splitData(rawData) {
             var open_close_low_high = []
             var volumes = []
@@ -281,8 +281,8 @@
             return result
         }
 
-
-        option = {
+        if( data0 != null){
+          option = {
             title: {
                 text: data0.name
             },
@@ -580,13 +580,15 @@
                     data: calculateMACD(data0.open_close_low_high).DEA
                 }
             ]
-        };
+          };
 
-        option && myChart.setOption(option)
+          option && myChart.setOption(option)
 
-	    window.addEventListener('resize', () => {
+	      window.addEventListener('resize', () => {
 		    myChart.resize()
-	    })
+	      })
+
+        }
  
     </script>
     <script>

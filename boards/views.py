@@ -76,6 +76,7 @@ class StockListView(ListView):
         self.form = CodeForm()
         jsonlist = []
         key = self.kwargs.get('name') + time.strftime("%Y-%m-%d", time.localtime())
+        print(key)
         if self.request.session.get(key):
             self.data = json.dumps(jsonlist)
         else:
@@ -98,7 +99,7 @@ class StockListView(ListView):
                 pass
         
             self.data = json.dumps(jsonlist)
-            
+        
         queryset = Stocks.objects.filter(boards__name__in = [self.board.name]).order_by('-growth')
         return queryset
 
@@ -164,7 +165,7 @@ def stock_detail(request, board_name, stock_name):
     if board_name == stock.name:
         board_name = stock.blockname
     stock = get_object_or_404(StockList, symbol=stock.code)
-   
+  
     start = request.GET.get("start")
     end =  request.GET.get("end")
     if start == None or end == None:
@@ -179,6 +180,7 @@ def stock_detail(request, board_name, stock_name):
     cci = []
     try:
         data = Stocksector.objects.all().filter(name=board_name).order_by('-date')
+        
         for row in data:
             dict = {}
             dict["name"] = board_name 
@@ -197,6 +199,7 @@ def stock_detail(request, board_name, stock_name):
     bcci = round(calculate_CCI(14,mybpd), 2).tolist()
     
     key = code + time.strftime("%Y-%m-%d", time.localtime())
+    
     if request.session.get(key):
         return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"cci":json.dumps(cci),"bcci":json.dumps(bcci)})
     else:
@@ -327,7 +330,8 @@ def stock_detail(request, board_name, stock_name):
         jsonlist.reverse()
         
         mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow'])
-        cci = round(calculate_CCI(14,mypd), 2).tolist()       
+        cci = round(calculate_CCI(14,mypd), 2).tolist() 
+             
         return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"cci":json.dumps(cci),"bcci":json.dumps(bcci)})
     
 def calculate_CCI(dayCount,data):

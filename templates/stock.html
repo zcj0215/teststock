@@ -42,10 +42,10 @@
         var downColor = '#00da3c';
         var downBorderColor = '#008F28';
         var data0;
+        var code = '{{ stock.symbol|safe }}';
         var data = {{ data|safe }}
         var bdata = {{ bdata|safe }}
         var cci1 =  {{ bcci|safe }}
-        var code = {{ stock.symbol|safe }}
         var cci0 =  {{ cci|safe }}
        
         if(data.length==0){
