@@ -192,9 +192,9 @@ def stock_detail(request, board_name, stock_name):
             blocklist.append(dict)         
     except EXCEPTION:
         pass
-    
+    blocklist.reverse()
     mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
-    bcci = calculate_CCI(14,mybpd).tolist()
+    bcci = round(calculate_CCI(14,mybpd), 2).tolist()
     
     key = code + time.strftime("%Y-%m-%d", time.localtime())
     if request.session.get(key):
@@ -324,9 +324,10 @@ def stock_detail(request, board_name, stock_name):
                     
           except EXCEPTION:
               pass
+        jsonlist.reverse()
         
         mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow'])
-        cci = calculate_CCI(14,mypd).tolist()       
+        cci = round(calculate_CCI(14,mypd), 2).tolist()       
         return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"cci":json.dumps(cci),"bcci":json.dumps(bcci)})
     
 def calculate_CCI(dayCount,data):

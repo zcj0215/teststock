@@ -52,12 +52,12 @@
             data0 = JSON.parse(localStorage.getItem(code)); 
             cci0 =  JSON.parse(localStorage.getItem('cci'+code)); 
         }else{
-            data0 = splitData(data.reverse());
+            data0 = splitData(data);
             localStorage.setItem(code, JSON.stringify(data0));
             localStorage.setItem('cci'+code, JSON.stringify(cci0));
         }
         
-        var data1 = splitData(bdata.reverse());
+        var data1 = splitData(bdata);
 
         function splitData(rawData) {
             var open_close_low_high = []
