@@ -137,15 +137,15 @@
         var downColor = '#00da3c';
         var downBorderColor = '#008F28';
         var data = {{ data|safe }}
-        var blockname = '{{ board.name|safe }}';
+        var blockid = '{{ board.id|safe }}';
 
         var data0
 
         if(data.length==0){
-            data0 = JSON.parse(localStorage.getItem(blockname)); 
+            data0 = JSON.parse(localStorage.getItem('block'+blockid)); 
         }else{
             data0 = splitData(data.reverse());
-            localStorage.setItem(blockname, JSON.stringify(data0));
+            localStorage.setItem('block'+blockid, JSON.stringify(data0));
         }
         
         function splitData(rawData) {

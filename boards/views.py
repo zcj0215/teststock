@@ -76,7 +76,7 @@ class StockListView(ListView):
         self.form = CodeForm()
         jsonlist = []
         key = self.kwargs.get('name') + time.strftime("%Y-%m-%d", time.localtime())
-        print(key)
+        
         if self.request.session.get(key):
             self.data = json.dumps(jsonlist)
         else:
@@ -160,6 +160,8 @@ def reply_topic(request, pk, topic_pk):
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
 
 def stock_detail(request, board_name, stock_name):
+    print(board_name)
+    print(stock_name)
     stock = get_object_or_404(Stocks, name=stock_name)
     boards = stock.boards
     if board_name == stock.name:
