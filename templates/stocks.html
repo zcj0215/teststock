@@ -142,10 +142,10 @@
         var data0
 
         if(data.length==0){
-            data0 = JSON.parse(localStorage.getItem('block'+blockid)); 
+            data0 = JSON.parse(sessionStorage.getItem('block'+blockid)); 
         }else{
             data0 = splitData(data.reverse());
-            localStorage.setItem('block'+blockid, JSON.stringify(data0));
+            sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
         }
         
         function splitData(rawData) {

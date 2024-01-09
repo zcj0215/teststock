@@ -49,12 +49,12 @@
         var cci0 =  {{ cci|safe }}
        
         if(data.length==0){
-            data0 = JSON.parse(localStorage.getItem(code)); 
-            cci0 =  JSON.parse(localStorage.getItem('cci'+code)); 
+            data0 = JSON.parse(sessionStorage.getItem(code)); 
+            cci0 =  JSON.parse(sessionStorage.getItem('cci'+code)); 
         }else{
             data0 = splitData(data);
-            localStorage.setItem(code, JSON.stringify(data0));
-            localStorage.setItem('cci'+code, JSON.stringify(cci0));
+            sessionStorage.setItem(code, JSON.stringify(data0));
+            sessionStorage.setItem('cci'+code, JSON.stringify(cci0));
         }
         
         var data1 = splitData(bdata);

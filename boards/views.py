@@ -196,7 +196,7 @@ def stock_detail(request, board_name, stock_name):
         pass
     blocklist.reverse()
     mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
-    bcci = round(calculate_CCI(14,mybpd), 2).tolist()
+    bcci = round(calculate_CCI(mybpd), 2).tolist()
     
     key = code + time.strftime("%Y-%m-%d", time.localtime())
     
@@ -330,15 +330,39 @@ def stock_detail(request, board_name, stock_name):
         jsonlist.reverse()
         
         mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow'])
-        cci = round(calculate_CCI(14,mypd), 2).tolist() 
+        cci = round(calculate_CCI(mypd), 2).tolist() 
              
         return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"cci":json.dumps(cci),"bcci":json.dumps(bcci)})
     
-def calculate_CCI(dayCount,data):
+def calculate_CCI(data,n=14):
     
-    cci = talib.CCI(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),dayCount)
+    cci = talib.CCI(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),timeperiod=n)
  
     return  cci
+
+def calculate_KDJ(data,n=9,m1=3,m2=3):
+    
+    k,d = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=n,slowk_period=m1,slowd_period=m2)
+    j = 3*d - 2*k
+    
+    return  k, d, j
+
+def generate_signals(data):
+    
+    k, d, j = calculate_KDJ(data)
+    cci = calculate_CCI(data)
+    
+    signals = pd.DataFrame(index=data.index)
+    signals['k'] = k
+    signals['d'] = d
+    signals['j'] = j
+    signals['cci'] = cci
+    #生成买入和卖出信号
+    signals['buy_signal'] = ((signals['k'] < 20) & (signals['d'] < 20) & (signals['cci'] < -100)).astype(int)
+    signals['sell_signal'] = ((signals['k'] > 80) & (signals['d'] > 80) & (signals['cci'] > 100)).astype(int)
+    
+    return signals
+    
     
 def query(request):
     if request.method == 'POST':
