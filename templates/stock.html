@@ -63,6 +63,10 @@
             signals =  JSON.parse(sessionStorage.getItem('signals'+code)); 
         }else{
             data0 = splitData(data);
+           
+            if(sessionStroage.length>4){
+                sessionStroage.clear() 
+            }
             sessionStorage.setItem(code, JSON.stringify(data0));
             sessionStorage.setItem('signals'+code, JSON.stringify(signals));
         }
