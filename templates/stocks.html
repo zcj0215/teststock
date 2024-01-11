@@ -145,8 +145,8 @@
             data0 = JSON.parse(sessionStorage.getItem('block'+blockid)); 
         }else{
             data0 = splitData(data.reverse());
-            if(sessionStroage.length>4){
-                sessionStroage.clear() 
+            if(sessionStorage.length>4){
+                sessionStorage.clear() 
             }
             sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
         }
