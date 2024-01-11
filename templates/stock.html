@@ -37,6 +37,7 @@
         var option;
         var option1;
 
+        const signals_state = ['买入', '卖出']
         var upColor = '#ec0000';
         var upBorderColor = '#8A0000';
         var downColor = '#00da3c';
@@ -44,19 +45,28 @@
         var data0;
         var code = '{{ stock.symbol|safe }}';
         var data = {{ data|safe }}
+        var signals = {{ signals|safe }}
         var bdata = {{ bdata|safe }}
         var cci1 =  {{ bcci|safe }}
-        var cci0 =  {{ cci|safe }}
+        
+        {% comment %} 
+        console.log("cci:"+JSON.stringify(signals.cci));
+        console.log("cci数组:"+JSON.stringify(Object.values(signals.cci)));
+        console.log("buy_signal:"+JSON.stringify(signals.buy_signal));
+        console.log("sell_signal:"+JSON.stringify(signals.sell_signal));
+        console.log("signal:"+JSON.stringify(cciAnalysis(signals))); {% endcomment %}
+       
+ 
        
         if(data.length==0){
             data0 = JSON.parse(sessionStorage.getItem(code)); 
-            cci0 =  JSON.parse(sessionStorage.getItem('cci'+code)); 
+            signals =  JSON.parse(sessionStorage.getItem('signals'+code)); 
         }else{
             data0 = splitData(data);
             sessionStorage.setItem(code, JSON.stringify(data0));
-            sessionStorage.setItem('cci'+code, JSON.stringify(cci0));
+            sessionStorage.setItem('signals'+code, JSON.stringify(signals));
         }
-        
+
         var data1 = splitData(bdata);
 
         function splitData(rawData) {
@@ -205,6 +215,55 @@
                         color: open_close[i][6] >= 0 ? upColor : downColor
                     }
                 })
+            }
+        
+            return result
+        }
+
+
+        /**
+         * 通过Signal做买入，卖出点
+         */
+        function cciAnalysis(signals) {
+	        var result = [];
+            let cci = Object.values(signals.cci);
+            let buy = Object.values(signals.buy_signal);
+            let sell = Object.values(signals.sell_signal);
+	        for (var i = 0; i < cci.length-1; i++) {
+		        if(signals.cci[i] != null){
+                    if(buy[i] == 1){
+                        result.push(0)
+                    }else if(sell[i]==1){
+                        result.push(1)
+                    }else{
+                        result.push('-')
+                    }
+                }else{
+                    result.push('-')
+                }
+	        }
+	        return result;
+        }
+
+        function formatCCIAnalysis(signal, cciData, date) {
+            var result = []
+         
+            for (var i = 0; i < signal.length-1; i++) {
+                 
+                if (signal[i] !== '-') {
+                    result.push({
+                        symbolSize: 70,
+                        yAxis: cciData[i],
+                        xAxis: date[i],
+                        value: signals_state[signal[i]],
+                        itemStyle: {
+                            color: signal[i] == 0 ? '#FFD700' : '#000000',
+                            shadowColor: '#FFFFFF',
+                            shadowBlur: 20
+                        },
+                        animation: true
+                    })
+                }
             }
         
             return result
@@ -552,7 +611,10 @@
                     lineStyle: {
                         width: 1
                     },
-                    data: cci0
+                    data: Object.values(signals.cci),
+                    markPoint: {
+                        data: formatCCIAnalysis(cciAnalysis(signals), Object.values(signals.cci), data0.date)
+                    }
                 }
             ]
         };

@@ -177,7 +177,7 @@ def stock_detail(request, board_name, stock_name):
     name = stock.name
     jsonlist = []
     blocklist = []
-    cci = []
+   
     try:
         data = Stocksector.objects.all().filter(name=board_name).order_by('-date')
         
@@ -201,7 +201,7 @@ def stock_detail(request, board_name, stock_name):
     key = code + time.strftime("%Y-%m-%d", time.localtime())
     
     if request.session.get(key):
-        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"cci":json.dumps(cci),"bcci":json.dumps(bcci)})
+        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"signals":{},"bcci":json.dumps(bcci)})
     else:
         request.session[key] = key
         if flag == 'SZ':
@@ -330,9 +330,10 @@ def stock_detail(request, board_name, stock_name):
         jsonlist.reverse()
         
         mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow'])
-        cci = round(calculate_CCI(mypd), 2).tolist() 
+        # cci = round(calculate_CCI(mypd), 2).tolist() 
+        signals = generate_signals(mypd)
              
-        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"cci":json.dumps(cci),"bcci":json.dumps(bcci)})
+        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"signals":signals.to_json(),"bcci":json.dumps(bcci)})
     
 def calculate_CCI(data,n=14):
     
@@ -350,7 +351,7 @@ def calculate_KDJ(data,n=9,m1=3,m2=3):
 def generate_signals(data):
     
     k, d, j = calculate_KDJ(data)
-    cci = calculate_CCI(data)
+    cci = round(calculate_CCI(data), 2)
     
     signals = pd.DataFrame(index=data.index)
     signals['k'] = k
