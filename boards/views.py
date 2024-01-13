@@ -196,12 +196,13 @@ def stock_detail(request, board_name, stock_name):
         pass
     blocklist.reverse()
     mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
-    bcci = round(calculate_CCI(mybpd), 2).tolist()
+    #bcci = round(calculate_CCI(mybpd), 2).tolist()
+    bsignals = generate_signals(mybpd)
     
     key = code + time.strftime("%Y-%m-%d", time.localtime())
     
     if request.session.get(key):
-        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"signals":{},"bcci":json.dumps(bcci)})
+        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"signals":{},"bsignals":bsignals.to_json()})
     else:
         request.session[key] = key
         if flag == 'SZ':
@@ -333,7 +334,7 @@ def stock_detail(request, board_name, stock_name):
         # cci = round(calculate_CCI(mypd), 2).tolist() 
         signals = generate_signals(mypd)
              
-        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"signals":signals.to_json(),"bcci":json.dumps(bcci)})
+        return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"signals":signals.to_json(),"bsignals":bsignals.to_json()})
     
 def calculate_CCI(data,n=14):
     
@@ -363,8 +364,8 @@ def generate_signals(data):
     #生成买入和卖出信号
     signals['buy_signal'] = ((signals['k'] < 20) & (signals['d'] < 20) & (signals['cci1'] < -100)).astype(int)
     signals['sell_signal'] = ((signals['k'] > 80) & (signals['d'] > 80) & (signals['cci1'] > 100)).astype(int)
-    signals['ybuy_signal'] = ((signals['cci2'] > 300) & (signals['cci2'].shift(-1).fillna(method="ffill") < 300)).astype(int)
-    signals['ysell_signal'] = ((signals['cci2'] < 300) & (signals['cci2'].shift(-1).fillna(method="ffill") > 300)).astype(int)
+    signals['ybuy_signal'] = ((signals['cci2'] < 300) & (signals['cci2'].shift(-1).fillna(method="ffill") > 300)).astype(int)
+    signals['ysell_signal'] = ((signals['cci2'] > 300) & (signals['cci2'].shift(-1).fillna(method="ffill") < 300)).astype(int)
     
     return signals
     
