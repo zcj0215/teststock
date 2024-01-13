@@ -351,16 +351,20 @@ def calculate_KDJ(data,n=9,m1=3,m2=3):
 def generate_signals(data):
     
     k, d, j = calculate_KDJ(data)
-    cci = round(calculate_CCI(data), 2)
+    cci1 = round(calculate_CCI(data), 2)
+    cci2 = round(calculate_CCI(data,89), 2)
     
     signals = pd.DataFrame(index=data.index)
     signals['k'] = k
     signals['d'] = d
     signals['j'] = j
-    signals['cci'] = cci
+    signals['cci1'] = cci1
+    signals['cci2'] = cci2
     #生成买入和卖出信号
-    signals['buy_signal'] = ((signals['k'] < 20) & (signals['d'] < 20) & (signals['cci'] < -100)).astype(int)
-    signals['sell_signal'] = ((signals['k'] > 80) & (signals['d'] > 80) & (signals['cci'] > 100)).astype(int)
+    signals['buy_signal'] = ((signals['k'] < 20) & (signals['d'] < 20) & (signals['cci1'] < -100)).astype(int)
+    signals['sell_signal'] = ((signals['k'] > 80) & (signals['d'] > 80) & (signals['cci1'] > 100)).astype(int)
+    signals['ybuy_signal'] = ((signals['cci2'] > 300) & (signals['cci2'].shift(-1).fillna(method="ffill") < 300)).astype(int)
+    signals['ysell_signal'] = ((signals['cci2'] < 300) & (signals['cci2'].shift(-1).fillna(method="ffill") > 300)).astype(int)
     
     return signals
     

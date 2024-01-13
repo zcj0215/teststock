@@ -37,7 +37,7 @@
         var option;
         var option1;
 
-        const signals_state = ['买入', '卖出']
+        const signals_state = ['买入', '卖出', '买二', '卖二']
         var upColor = '#ec0000';
         var upBorderColor = '#8A0000';
         var downColor = '#00da3c';
@@ -47,7 +47,7 @@
         var data = {{ data|safe }}
         var signals = {{ signals|safe }}
         var bdata = {{ bdata|safe }}
-        var cci1 =  {{ bcci|safe }}
+        var bcci =  {{ bcci|safe }}
         
         {% comment %} 
         console.log("cci:"+JSON.stringify(signals.cci));
@@ -72,6 +72,8 @@
         }
 
         var data1 = splitData(bdata);
+
+        var cciAna = cciAnalysis(signals);
 
         function splitData(rawData) {
             var open_close_low_high = []
@@ -229,24 +231,37 @@
          * 通过Signal做买入，卖出点
          */
         function cciAnalysis(signals) {
-	        var result = [];
+	        var result1 = [];
+            var result2 = [];
             let cci = Object.values(signals.cci);
             let buy = Object.values(signals.buy_signal);
             let sell = Object.values(signals.sell_signal);
+            let ybuy = Object.values(signals.ybuy_signal);
+            let ysell = Object.values(signals.ysell_signal);
 	        for (var i = 0; i < cci.length-1; i++) {
 		        if(signals.cci[i] != null){
                     if(buy[i] == 1){
-                        result.push(0)
+                        result1.push(0);
                     }else if(sell[i]==1){
-                        result.push(1)
+                        result1.push(1);
+                    }else if(ybuy[i]==1){
+                        result2.push(2);
+                    }else if(ysell[i]==1){
+                        result2.push(3);
                     }else{
-                        result.push('-')
+                        result1.push('-');
+                        result2.push('-');
                     }
                 }else{
-                    result.push('-')
+                    result1.push('-');
+                    result2.push('-');
                 }
 	        }
-	        return result;
+	        return {
+              'buysell1': result1,
+              'buysell2': result2
+            } 
+           
         }
 
         function formatCCIAnalysis(signal, cciData, date) {
@@ -261,7 +276,7 @@
                         xAxis: date[i],
                         value: signals_state[signal[i]],
                         itemStyle: {
-                            color: signal[i] == 0 ? '#FFD700' : '#000000',
+                            color: signal[i] <= 2 ? '#FFD700' : '#000000',
                             shadowColor: '#FFFFFF',
                             shadowBlur: 20
                         },
@@ -605,7 +620,7 @@
                     data: calculateMACD(data0.open_close_low_high).DEA
                 },
                 {
-                    name: 'CCI',
+                    name: 'CCI1',
                     type: 'line',
                     xAxisIndex: 3,
                     yAxisIndex: 3,
@@ -615,9 +630,25 @@
                     lineStyle: {
                         width: 1
                     },
-                    data: Object.values(signals.cci),
+                    data: Object.values(signals.cci1),
                     markPoint: {
-                        data: formatCCIAnalysis(cciAnalysis(signals), Object.values(signals.cci), data0.date)
+                        data: formatCCIAnalysis(cciAna.buysell1, Object.values(signals.cci1), data0.date)
+                    }
+                },
+                {
+                    name: 'CCI2',
+                    type: 'line',
+                    xAxisIndex: 3,
+                    yAxisIndex: 3,
+                    color: '#0099FF',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(signals.cci2),
+                    markPoint: {
+                        data: formatCCIAnalysis(cciAna.buysell1, Object.values(signals.cci2), data0.date)
                     }
                 }
             ]
@@ -958,7 +989,7 @@
                     lineStyle: {
                         width: 1
                     },
-                    data: cci1
+                    data: bcci
                 }
             ]
         };
