@@ -160,11 +160,18 @@ def reply_topic(request, pk, topic_pk):
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
 
 def stock_detail(request, board_name, stock_name):
+    print('板块：'+ board_name + ' 个股：' + stock_name)
     stock = get_object_or_404(Stocks, name=stock_name)
+    print('在Stocks中'+  stock.name+ ' ' + stock.code)
     boards = stock.boards
     if board_name == stock.name:
         board_name = stock.blockname
-    stock = get_object_or_404(StockList, symbol=stock.code)
+        
+    try:    
+        stock = get_object_or_404(StockList, symbol=stock.code)
+    except EXCEPTION:
+        print('StockList中没有找到')
+    
   
     start = request.GET.get("start")
     end =  request.GET.get("end")
