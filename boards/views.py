@@ -398,6 +398,33 @@ def blockquery(request):
         except Http404:
             data = {"result":"fail"}
             return JsonResponse({"data": json.dumps(data)})  
+        
+def blockget(request):
+    if request.method == 'POST':
+        blockid = request.POST['blockid']
+        blocklist = []
+        try:
+            board = get_object_or_404(Board, pk=blockid)
+            data = Stocksector.objects.all().filter(name=board.name).order_by('-date')
+        
+            for row in data:
+                dict = {}
+                dict["name"] = board.name 
+                dict["code"] = str(row.code)
+                dict["open"] = str(row.open)
+                dict["close"] = str(row.close)
+                dict["low"] = str(row.low)
+                dict["high"] = str(row.high)
+                dict["vol"] = str(row.volume)
+                dict["trade_date"] = str(row.date)  
+                blocklist.append(dict)      
+                 
+            blocklist.reverse()  
+            return JsonResponse({"data": json.dumps(blocklist)})
+        except Http404:
+            data = {"result":"fail"}
+            return JsonResponse({"data": json.dumps(data)})  
+
 
 @method_decorator(login_required, name='dispatch')    
 class TopicUpdateView(UpdateView):

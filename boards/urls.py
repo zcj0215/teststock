@@ -16,5 +16,6 @@ urlpatterns = [
     re_path(r'^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
         views.PostUpdateView.as_view(), name='edit_post'),  
     path('query', views.query, name='query'),
-    path('blockquery', views.blockquery, name='blockquery'),   
+    path('blockquery', views.blockquery, name='blockquery'),  
+    path('blockget', views.blockget, name='blockget'),  
 ]

@@ -143,6 +143,36 @@
 
         if(data.length==0){
             data0 = JSON.parse(sessionStorage.getItem('block'+blockid)); 
+            if (data0 == null){
+                // 临时获取后端板块数据
+                $(document).ready(function(){
+                    $.ajaxSetup({
+                        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+                    });
+                    $.ajax({
+                        type:"POST",
+                        data: {blockid:blockid},
+                        url: "{% url 'boards:blockget' %}",
+                        cache: false,
+                        dataType: "json",
+                        async:false,
+                        success: function (res) {
+                            if (res.data && !res.data.result){
+                                data0 =splitData(JSON.parse(res.data)); 
+                                if(sessionStorage.length>4){
+                                    sessionStorage.clear() 
+                                }
+                                sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
+                                console.log("data0get:"+JSON.stringify(data0))
+                            }
+                        },
+                        error: function (msg) {
+                            alert(JSON.stringify(msg));
+                        }
+                    });
+    
+                });
+            }
         }else{
             data0 = splitData(data.reverse());
             if(sessionStorage.length>4){
@@ -592,7 +622,8 @@
 	      })
 
         }
- 
+
+        // 临时获取后端板块数据
     </script>
     <script>
         $(document).ready(function(){
