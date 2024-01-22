@@ -356,6 +356,14 @@ def calculate_KDJ(data,n=9,m1=3,m2=3):
     
     return  k, d, j
 
+def calculate_DMI(data,n=14,m=6):
+    pdi = talib.PLUS_DI(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float), di_period=n) 
+    mdi = talib.MINUS_DI(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float), di_period=n)
+    adx = talib.ADX(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float), timeperiod=m)
+    adxr = talib.ADXR(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float), timeperiod=m)
+    
+    return  pdi, mdi, adx, adxr
+
 def generate_signals(data):
     
     k, d, j = calculate_KDJ(data)
