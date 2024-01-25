@@ -18,4 +18,5 @@ urlpatterns = [
     path('query', views.query, name='query'),
     path('blockquery', views.blockquery, name='blockquery'),  
     path('blockget', views.blockget, name='blockget'),  
+    path('singleget', views.singleget, name='singleget'),  
 ]

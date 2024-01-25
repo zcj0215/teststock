@@ -163,7 +163,8 @@
                                     sessionStorage.clear() 
                                 }
                                 sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
-                                console.log("data0get:"+JSON.stringify(data0))
+                                //console.log("data0get:"+JSON.stringify(data0))
+                                runChart();
                             }
                         },
                         error: function (msg) {
@@ -314,315 +315,317 @@
             return result
         }
 
-        if( data0 != null){
-          option = {
-            title: {
-                text: data0.name
-            },
-            animation: false,
-            legend: {
-                top: 10,
-                data: ['日K', 'MA5', 'MA12','MA25','MA120']
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross'
+        function runChart() {
+            option = {
+                title: {
+                    text: data0.name
                 },
-                borderWidth: 1,
-                borderColor: '#ccc',
-                padding: 10,
-                textStyle: {
-                    color: '#000'
+                animation: false,
+                legend: {
+                    top: 10,
+                    data: ['日K', 'MA5', 'MA12','MA25','MA120']
                 },
-                position: function (pos, params, el, elRect, size) {
-                    const obj = {
-                        top: 10
-                    };
-                    obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
-                    return obj;
-                }
-            },
-            axisPointer: {
-                link: [
-                    {
-                        xAxisIndex: 'all'
-                    }
-                ],
-                label: {
-                    backgroundColor: '#777'
-                }
-            },
-            toolbox: {
-                feature: {
-                    dataZoom: {
-                        yAxisIndex: false
-                    },
-                    brush: {
-                        type: ['lineX', 'clear']
-                    }
-                }
-            },
-            brush: {
-                xAxisIndex: 'all',
-                brushLink: 'all',
-                outOfBrush: {
-                    colorAlpha: 0.1
-                }
-            },
-            visualMap: {
-                show: false,
-                seriesIndex: 5,
-                dimension: 2,
-                pieces: [
-                    {
-                        value: 1,
-                        color: downColor
-                    },
-                    {
-                        value: -1,
-                        color: upColor
-                    }
-                ]
-            },
-            grid: [
-                {
-                    left: '10%',
-                    right: '8%',
-                    height: '45%'
-                },
-                {
-                    left: '10%',
-                    right: '8%',
-                    top: '56%',
-                    height: '16%'
-                },
-                {
-                    left: '10%',
-                    right: '8%',
-                    top: '73%',
-                    height: '16%'
-                }  
-                
-            ],
-            xAxis: [
-                {
-                    type: 'category',
-                    data: data0.date,
-                    boundaryGap: false,
-                    axisLine: { onZero: false },
-                    splitLine: { show: false },
-                    min: 'dataMin',
-                    max: 'dataMax',
+                tooltip: {
+                    trigger: 'axis',
                     axisPointer: {
-                        z: 100
-                    }
-                },
-                {
-                    type: 'category',
-                    gridIndex: 1,
-                    data: data0.date,
-                    boundaryGap: false,
-                    axisLine: { onZero: false },
-                    axisTick: { show: false },
-                    splitLine: { show: false },
-                    axisLabel: { show: false },
-                    min: 'dataMin',
-                    max: 'dataMax'
-                },
-                {
-                    type: 'category',
-                    gridIndex: 2,
-                    data: data0.date,
-                    boundaryGap: false,
-                    axisLine: { onZero: false },
-                    axisTick: { show: false },
-                    splitLine: { show: false },
-                    axisLabel: { show: false },
-                    min: 'dataMin',
-                    max: 'dataMax'
-                }
-            ],
-            yAxis: [
-                {
-                    scale: true,
-                    splitArea: {
-                        show: true
-                    }
-                },
-                {
-                    scale: true,
-                    gridIndex: 1,
-                    splitNumber: 2,
-                    axisLabel: { show: false },
-                    axisLine: { show: false },
-                    axisTick: { show: false },
-                    splitLine: { show: false }
-                },
-                {
-                    scale: true,
-                    gridIndex: 2,
-                    splitNumber: 2,
-                    axisLabel: { show: false },
-                    axisLine: { show: false },
-                    axisTick: { show: false },
-                    splitLine: { show: false }
-                }
-            ],
-            dataZoom: [
-                {
-                    type: 'inside',
-                    xAxisIndex: [0, 1, 2],
-                    start: 100 - Math.floor((60 / data0.date.length) * 100),
-                    end: 100
-                },
-                {
-                    show: true,
-                    xAxisIndex: [0, 1, 2],
-                    type: 'slider',
-                    top: '90%',
-                    start: 100 - Math.floor((60 / data0.date.length) * 100),
-                    end: 100
-                }
-            ],
-            series: [
-                {
-                    name: '日K',
-                    type: 'candlestick',
-                    data: data0.open_close_low_high,
-                    itemStyle: {
-                        color: upColor,
-                        color0: downColor,
-                        borderColor: upBorderColor,
-                        borderColor0: downBorderColor
+                        type: 'cross'
                     },
-                    tooltip: {
-                        formatter: function (param) {
-                            param = param[0];
-                            return [
-                                'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
-                                'Open: ' + param.data[0] + '<br/>',
-                                'Close: ' + param.data[1] + '<br/>',
-                                'Lowest: ' + param.data[2] + '<br/>',
-                                'Highest: ' + param.data[3] + '<br/>'
-                            ].join('');
+                    borderWidth: 1,
+                    borderColor: '#ccc',
+                    padding: 10,
+                    textStyle: {
+                        color: '#000'
+                    },
+                    position: function (pos, params, el, elRect, size) {
+                        const obj = {
+                            top: 10
+                        };
+                        obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+                        return obj;
+                    }
+                },
+                axisPointer: {
+                    link: [
+                        {
+                            xAxisIndex: 'all'
+                        }
+                    ],
+                    label: {
+                        backgroundColor: '#777'
+                    }
+                },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: false
+                        },
+                        brush: {
+                            type: ['lineX', 'clear']
                         }
                     }
                 },
-                {
-                    name: 'MA5',
-                    type: 'line',
-                    data: calculateMA(5,data0.open_close_low_high),
-                    smooth: true,
-                    lineStyle: {
-                        opacity: 0.5
+                brush: {
+                    xAxisIndex: 'all',
+                    brushLink: 'all',
+                    outOfBrush: {
+                        colorAlpha: 0.1
                     }
                 },
-                {
-                    name: 'MA12',
-                    type: 'line',
-                    data: calculateMA(12,data0.open_close_low_high),
-                    smooth: true,
-                    lineStyle: {
-                        opacity: 0.5
+                visualMap: {
+                    show: false,
+                    seriesIndex: 5,
+                    dimension: 2,
+                    pieces: [
+                        {
+                            value: 1,
+                            color: downColor
+                        },
+                        {
+                            value: -1,
+                            color: upColor
+                        }
+                    ]
+                },
+                grid: [
+                    {
+                        left: '10%',
+                        right: '8%',
+                        height: '45%'
+                    },
+                    {
+                        left: '10%',
+                        right: '8%',
+                        top: '56%',
+                        height: '16%'
+                    },
+                    {
+                        left: '10%',
+                        right: '8%',
+                        top: '73%',
+                        height: '16%'
+                    }  
+                    
+                ],
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: data0.date,
+                        boundaryGap: false,
+                        axisLine: { onZero: false },
+                        splitLine: { show: false },
+                        min: 'dataMin',
+                        max: 'dataMax',
+                        axisPointer: {
+                            z: 100
+                        }
+                    },
+                    {
+                        type: 'category',
+                        gridIndex: 1,
+                        data: data0.date,
+                        boundaryGap: false,
+                        axisLine: { onZero: false },
+                        axisTick: { show: false },
+                        splitLine: { show: false },
+                        axisLabel: { show: false },
+                        min: 'dataMin',
+                        max: 'dataMax'
+                    },
+                    {
+                        type: 'category',
+                        gridIndex: 2,
+                        data: data0.date,
+                        boundaryGap: false,
+                        axisLine: { onZero: false },
+                        axisTick: { show: false },
+                        splitLine: { show: false },
+                        axisLabel: { show: false },
+                        min: 'dataMin',
+                        max: 'dataMax'
                     }
-                },
-                {
-                    name: 'MA25',
-                    type: 'line',
-                    data: calculateMA(25,data0.open_close_low_high),
-                    smooth: true,
-                    lineStyle: {
-                        opacity: 0.5
+                ],
+                yAxis: [
+                    {
+                        scale: true,
+                        splitArea: {
+                            show: true
+                        }
+                    },
+                    {
+                        scale: true,
+                        gridIndex: 1,
+                        splitNumber: 2,
+                        axisLabel: { show: false },
+                        axisLine: { show: false },
+                        axisTick: { show: false },
+                        splitLine: { show: false }
+                    },
+                    {
+                        scale: true,
+                        gridIndex: 2,
+                        splitNumber: 2,
+                        axisLabel: { show: false },
+                        axisLine: { show: false },
+                        axisTick: { show: false },
+                        splitLine: { show: false }
                     }
-                },
-                {
-                    name: 'MA120',
-                    type: 'line',
-                    data: calculateMA(120,data0.open_close_low_high),
-                    smooth: true,
-                    lineStyle: {
-                        opacity: 0.5
+                ],
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        xAxisIndex: [0, 1, 2],
+                        start: 100 - Math.floor((60 / data0.date.length) * 100),
+                        end: 100
+                    },
+                    {
+                        show: true,
+                        xAxisIndex: [0, 1, 2],
+                        type: 'slider',
+                        top: '90%',
+                        start: 100 - Math.floor((60 / data0.date.length) * 100),
+                        end: 100
                     }
-                },
-                {
-                    name: '成交量',
-                    type: 'bar',
-                    xAxisIndex: 1,
-                    yAxisIndex: 1,
-                    data: volumeColor(data0.open_close_low_high),
-                },
-                {
-                    name: '5日均量线',
-                    type: 'line',
-                    xAxisIndex: 1,
-                    yAxisIndex: 1,
-                    color: '#ed9ffc',
-                    smooth: true,
-                    showSymbol: false,
-                    lineStyle: {
-                        width: 1
+                ],
+                series: [
+                    {
+                        name: '日K',
+                        type: 'candlestick',
+                        data: data0.open_close_low_high,
+                        itemStyle: {
+                            color: upColor,
+                            color0: downColor,
+                            borderColor: upBorderColor,
+                            borderColor0: downBorderColor
+                        },
+                        tooltip: {
+                            formatter: function (param) {
+                                param = param[0];
+                                return [
+                                    'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
+                                    'Open: ' + param.data[0] + '<br/>',
+                                    'Close: ' + param.data[1] + '<br/>',
+                                    'Lowest: ' + param.data[2] + '<br/>',
+                                    'Highest: ' + param.data[3] + '<br/>'
+                                ].join('');
+                            }
+                        }
                     },
-                    data: calculateVOL(5,data0.open_close_low_high)
-                },
-                {
-                    name: '60日均量线',
-                    type: 'line',
-                    xAxisIndex: 1,
-                    yAxisIndex: 1,
-                    color: '#FFFF00',
-                    smooth: true,
-                    showSymbol: false,
-                    lineStyle: {
-                        width: 1
+                    {
+                        name: 'MA5',
+                        type: 'line',
+                        data: calculateMA(5,data0.open_close_low_high),
+                        smooth: true,
+                        lineStyle: {
+                            opacity: 0.5
+                        }
                     },
-                    data: calculateVOL(60,data0.open_close_low_high)
-                },
-                {
-                    name: 'MACD',
-                    type: 'bar',
-                    xAxisIndex: 2,
-                    yAxisIndex: 2,
-                    color: '#FF0000',
-                    data: barColor(calculateMACD(data0.open_close_low_high).OSC)
-                },
-                {
-                    name: 'DIF',
-                    type: 'line',
-                    xAxisIndex: 2,
-                    yAxisIndex: 2,
-                    color: '#e9b002',
-                    smooth: true,
-                    showSymbol: false,
-                    lineStyle: {
-                        width: 1
+                    {
+                        name: 'MA12',
+                        type: 'line',
+                        data: calculateMA(12,data0.open_close_low_high),
+                        smooth: true,
+                        lineStyle: {
+                            opacity: 0.5
+                        }
                     },
-                    data: calculateMACD(data0.open_close_low_high).DIF
-                },
-                {
-                    name: 'DEA',
-                    type: 'line',
-                    xAxisIndex: 2,
-                    yAxisIndex: 2,
-                    color: '#0099FF',
-                    smooth: true,
-                    showSymbol: false,
-                    lineStyle: {
-                        width: 1
+                    {
+                        name: 'MA25',
+                        type: 'line',
+                        data: calculateMA(25,data0.open_close_low_high),
+                        smooth: true,
+                        lineStyle: {
+                            opacity: 0.5
+                        }
                     },
-                    data: calculateMACD(data0.open_close_low_high).DEA
-                }
-            ]
-          };
-
-          option && myChart.setOption(option)
-
-	      window.addEventListener('resize', () => {
-		    myChart.resize()
-	      })
-
+                    {
+                        name: 'MA120',
+                        type: 'line',
+                        data: calculateMA(120,data0.open_close_low_high),
+                        smooth: true,
+                        lineStyle: {
+                            opacity: 0.5
+                        }
+                    },
+                    {
+                        name: '成交量',
+                        type: 'bar',
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        data: volumeColor(data0.open_close_low_high),
+                    },
+                    {
+                        name: '5日均量线',
+                        type: 'line',
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        color: '#ed9ffc',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: {
+                            width: 1
+                        },
+                        data: calculateVOL(5,data0.open_close_low_high)
+                    },
+                    {
+                        name: '60日均量线',
+                        type: 'line',
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        color: '#FFFF00',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: {
+                            width: 1
+                        },
+                        data: calculateVOL(60,data0.open_close_low_high)
+                    },
+                    {
+                        name: 'MACD',
+                        type: 'bar',
+                        xAxisIndex: 2,
+                        yAxisIndex: 2,
+                        color: '#FF0000',
+                        data: barColor(calculateMACD(data0.open_close_low_high).OSC)
+                    },
+                    {
+                        name: 'DIF',
+                        type: 'line',
+                        xAxisIndex: 2,
+                        yAxisIndex: 2,
+                        color: '#e9b002',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: {
+                            width: 1
+                        },
+                        data: calculateMACD(data0.open_close_low_high).DIF
+                    },
+                    {
+                        name: 'DEA',
+                        type: 'line',
+                        xAxisIndex: 2,
+                        yAxisIndex: 2,
+                        color: '#0099FF',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: {
+                            width: 1
+                        },
+                        data: calculateMACD(data0.open_close_low_high).DEA
+                    }
+                ]
+              };
+    
+              option && myChart.setOption(option)
+    
+              window.addEventListener('resize', () => {
+                myChart.resize()
+              })
         }
 
+        if( data0 != null){
+            runChart()
+        }
         // 临时获取后端板块数据
     </script>
     <script>
@@ -648,13 +651,6 @@
                         url: "{% url 'boards:query' %}",
                         cache: false,
                         dataType: "json",
-                        beforeSend: function(){
-                            $('#preModel').modal({backdrop: 'static', keyboard: false}); //设置模态框之外点击无效
-                            $('#preModel').modal('show');      // 弹出模态框
-                            setTimeout(function(){
-                                $('#preModel').modal('hide');  
-                            }, 3000); //ms为单位
-                        },
                         success: function (res) {
                             if (res.data){
                                 var data = JSON.parse(res.data); 

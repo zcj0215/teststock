@@ -4,7 +4,19 @@
 {% block title %}
   {{ stock.name }} - {{ block.super }}
 {% endblock %}
-
+{% block hjavascript %}
+<script>   
+    $(document).ready(function(){
+        var loadData = document.getElementById("loadData");
+        loadData.parentNode.removeChild(loadData);
+        $('#loadModel').modal({backdrop: 'static', keyboard: false}); //设置模态框之外点击无效
+        $('#loadModel').modal('show');  
+        setTimeout(function(){
+            $('#loadModel').modal('hide');  
+        }, 1000); //ms为单位
+    });
+</script>
+{% endblock %}
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
   <li class="breadcrumb-item">
@@ -16,6 +28,7 @@
 {% endblock %}
 {% block content %}
 <center>
+    <div id="loadData">数据加载中......</div>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
     <div style="width:100%;height:1000px;margin-top:20px;">
         <div id="hist_futu" style="float:left;width: 100%;height:900px;"></div>
@@ -25,6 +38,20 @@
         <div id="hist_block" style="float:left;width: 100%;height:750px;"></div>
     </div>
 </center>
+<div class="modal fade" id="loadModel">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:400px;height:80px;margin-top:220px;margin-left:130px">
+            <div class="modal-header" style="text-align:left;font-size:small;height:3px;margin-bottom:1px">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top:-30px"><span
+                    aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body" style="text-align: center;font-size:16px;height: 18px;color:chocolate">
+                <p style="margin-top:-15px">数据正在加载中，请耐心等待......</p>
+            </div>
+           
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 {% endblock %}
 
 {% block javascript %}
@@ -62,7 +89,41 @@
          
        
         if(data.length==0){
-            data0 = JSON.parse(sessionStorage.getItem(code)); 
+            data0 = JSON.parse(sessionStorage.getItem(code));
+            if (data0 == null){
+                // 临时获取后端板块数据
+                $(document).ready(function(){
+                    $.ajaxSetup({
+                        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+                    });
+                    $.ajax({
+                        type:"POST",
+                        data: {code:code},
+                        url: "{% url 'boards:singleget' %}",
+                        cache: false,
+                        dataType: "json",
+                        async:false,
+                        success: function (res) {
+                            if (res.data && res.signals){
+                                data0 =splitData(JSON.parse(res.data)); 
+                                console.log("data0:"+JSON.stringify(data0));
+                                if(sessionStorage.length>4){
+                                    sessionStorage.clear() 
+                                }
+                                sessionStorage.setItem(code, JSON.stringify(data0));
+                                sessionStorage.setItem('signals'+code, JSON.stringify(JSON.parse(res.signals)));
+                                //console.log("data0get:"+JSON.stringify(data0))
+                                signals =  JSON.parse(res.signals);
+                                runChart();
+                            }
+                        },
+                        error: function (msg) {
+                            alert(JSON.stringify(msg));
+                        }
+                    });
+    
+                });
+            }
             signals =  JSON.parse(sessionStorage.getItem('signals'+code)); 
         }else{
             data0 = splitData(data);
@@ -76,6 +137,7 @@
 
         var data1 = splitData(bdata);
 
+        
         function splitData(rawData) {
             var open_close_low_high = []
             var volumes = []
@@ -325,8 +387,8 @@
             return result
         }
 
-
-        option = {
+        function runChart() {
+          option = {
             title: {
                 text: data0.name
             },
@@ -689,7 +751,13 @@
                     }
                 }
             ]
-        };
+          };
+          option && myChart.setOption(option)
+
+	      window.addEventListener('resize', () => {
+		    myChart.resize()
+	      })
+        } 
 
         option1 = {
             title: {
@@ -1050,16 +1118,12 @@
             ]
         };
 
-
-        option && myChart.setOption(option)
-
-	    window.addEventListener('resize', () => {
-		    myChart.resize()
-	    })
+        if( data0 != null){
+            runChart()
+        }
 
         option1 && myChart1.setOption(option1)
 
-        
 	    window.addEventListener('resize', () => {
 		    myChart1.resize()
 	    })
