@@ -25,8 +25,8 @@
 <center>
     <div id="loadData">数据加载中......</div>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
-    <div style="width:100%;height:1000px;margin-top:20px;">
-        <div id="hist_futu" style="float:left;width: 100%;height:900px;"></div>
+    <div style="width:100%;height:1500px;margin-top:20px;">
+        <div id="hist_futu" style="float:left;width: 100%;height:1400px;"></div>
     </div>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
     <div style="width:100%;height:800px;margin-top:5px;">
@@ -59,9 +59,9 @@
         var option;
         var option1;
 
-        const signals_state1 = ['买入', '卖出', '买入', '卖出'];
+        const signals_state1 = ['买入', '卖出', '买入', '卖出', '买入', '卖出'];
         const signals_state2 = ['买二', '卖二'];
-        const colors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605'];
+        const colors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','ff6600','#00ccff'];
 
         var upColor = '#ec0000';
         var upBorderColor = '#8A0000';
@@ -298,6 +298,8 @@
             let sell = Object.values(signals.sell_signal);
             let mdibuy = Object.values(signals.mdibuy_signal);
             let mdisell = Object.values(signals.mdisell_signal);
+            let ccibuy = Object.values(signals.cci84buy_signal);
+            let ccisell = Object.values(signals.cci84sell_signal);
             
 	        for (var i = 0; i < cci1.length-1; i++) {
 		        if(cci1[i] != null){
@@ -309,6 +311,10 @@
                         result.push(2);
                     }else if(mdisell[i]==1){
                         result.push(3);
+                    }else if(ccibuy[i]==1){
+                        result.push(4);
+                    }else if(ccisell[i]==1){
+                        result.push(5);
                     }else{
                         result.push('-');
                     }
@@ -465,18 +471,24 @@
                 {
                     left: '10%',
                     right: '8%',
-                    height: '40%'
+                    height: '35%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '50%',
+                    top: '41%',
                     height: '14%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '65%',
+                    top: '53%',
+                    height: '14%'
+                },
+                {
+                    left: '10%',
+                    right: '8%',
+                    top: '69%',
                     height: '14%'
                 },
                 {
@@ -484,7 +496,7 @@
                     right: '8%',
                     top: '82%',
                     height: '14%'
-                }  
+                }    
             ],
             xAxis: [
                 {
@@ -534,6 +546,18 @@
                     axisLabel: { show: false },
                     min: 'dataMin',
                     max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 4,
+                    data: data0.date,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false },
+                    min: 'dataMin',
+                    max: 'dataMax'
                 }
             ],
             yAxis: [
@@ -569,18 +593,27 @@
                     axisLine: { show: false },
                     axisTick: { show: false },
                     splitLine: { show: false }
+                },
+                {
+                    scale: true,
+                    gridIndex: 4,
+                    splitNumber: 2,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
                 }
             ],
             dataZoom: [
                 {
                     type: 'inside',
-                    xAxisIndex: [0,1,2,3],
+                    xAxisIndex: [0,1,2,3,4],
                     start: 100 - Math.floor((60 / data0.date.length) * 100),
                     end: 100
                 },
                 {
                     show: true,
-                    xAxisIndex: [0,1,2,3],
+                    xAxisIndex: [0,1,2,3,4],
                     type: 'slider',
                     top: '96%',
                     start: 100 - Math.floor((60 / data0.date.length) * 100),
@@ -752,6 +785,58 @@
                     markPoint: {
                         data: formatCCIAnalysis2(cciAnalysis2(signals), Object.values(signals.cci2), data0.date)
                     }
+                },
+                {
+                    name: 'PDI',
+                    type: 'line',
+                    xAxisIndex: 4,
+                    yAxisIndex: 4,
+                    color: '#e9b002',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(signals.pdi)
+                },
+                {
+                    name: 'MDI',
+                    type: 'line',
+                    xAxisIndex: 4,
+                    yAxisIndex: 4,
+                    color: '#00ffff',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(signals.mdi)
+                },
+                {
+                    name: 'ADX',
+                    type: 'line',
+                    xAxisIndex: 4,
+                    yAxisIndex: 4,
+                    color: '#cc00ff',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(signals.adx)
+                },
+                {
+                    name: 'ADXR',
+                    type: 'line',
+                    xAxisIndex: 4,
+                    yAxisIndex: 4,
+                    color: '#00cc33',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(signals.adxr)
                 }
             ]
           };
