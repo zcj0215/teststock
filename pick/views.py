@@ -596,7 +596,7 @@ def dayadd(request):
                 data[6] = round(float(data[6][0:-1])*10000,2)
         
         print(data)
-        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-01-30')
+        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-01-31')
 
     return HttpResponse('执行完毕！')
 
@@ -605,9 +605,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\地热能.xls"
+        filename = path+"\\医废处理.xls"
     else:
-        filename = path+"/地热能.xls"
+        filename = path+"/医废处理.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -626,23 +626,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='地热能')  
+        board = get_object_or_404(Board,name='医废处理')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='地热能'):
+            if  not stocks.boards.filter(name='医废处理'):
                 stocks.boards.add(board)
-                stocks.blockname = '地热能'
+                stocks.blockname = '医废处理'
                 stocks.save()
-            elif stocks.boards.filter(name='地热能'):
-                stocks.blockname = '地热能'
+            elif stocks.boards.filter(name='医废处理'):
+                stocks.blockname = '医废处理'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = '地热能'
+                blockname = '医废处理'
             )
             stocks.boards.add(board)
             stocks.save() 
@@ -716,7 +716,7 @@ def blockdayadd(request):
         except:
             pass
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-01-30')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-01-31')
 
     return HttpResponse('执行完毕！')
 
@@ -761,7 +761,7 @@ def inflow(request):
             except: 
                inf = 0
             
-        everyday_inflow(code, inf, '2024-01-30')
+        everyday_inflow(code, inf, '2024-01-31')
     
     return HttpResponse('执行完毕！')
 

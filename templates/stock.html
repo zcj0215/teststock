@@ -29,8 +29,8 @@
         <div id="hist_futu" style="float:left;width: 100%;height:1400px;"></div>
     </div>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
-    <div style="width:100%;height:800px;margin-top:5px;">
-        <div id="hist_block" style="float:left;width: 100%;height:750px;"></div>
+    <div style="width:100%;height:1000px;margin-top:5px;">
+        <div id="hist_block" style="float:left;width: 100%;height:930px;"></div>
     </div>
 </center>
 <div class="modal fade" id="loadModel">
@@ -61,7 +61,7 @@
 
         const signals_state1 = ['买入', '卖出', '买入', '卖出', '买入', '卖出'];
         const signals_state2 = ['买二', '卖二'];
-        const colors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','ff6600','#00ccff'];
+        const colors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','#ff6600','#00ccff'];
 
         var upColor = '#ec0000';
         var upBorderColor = '#8A0000';
@@ -384,7 +384,7 @@
                         xAxis: date[i],
                         value: signals_state2[signal[i]],
                         itemStyle: {
-                            color: signal[i] == 0 ? '#C02906' : '#04F2F2',
+                            color: signal[i] == 0 ? '#C02906' : '#0033CC',
                             shadowColor: '#FFFFFF',
                             shadowBlur: 20
                         },
@@ -921,18 +921,24 @@
                 {
                     left: '10%',
                     right: '8%',
-                    height: '40%'
+                    height: '35%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '50%',
+                    top: '41%',
                     height: '14%'
                 },
                 {
                     left: '10%',
                     right: '8%',
-                    top: '65%',
+                    top: '53%',
+                    height: '14%'
+                },
+                {
+                    left: '10%',
+                    right: '8%',
+                    top: '70%',
                     height: '14%'
                 },
                 {
@@ -991,6 +997,18 @@
                     axisLabel: { show: false },
                     min: 'dataMin',
                     max: 'dataMax'
+                },
+                {
+                    type: 'category',
+                    gridIndex: 4,
+                    data: data1.date,
+                    boundaryGap: false,
+                    axisLine: { onZero: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { show: false },
+                    min: 'dataMin',
+                    max: 'dataMax'
                 }
             ],
             yAxis: [
@@ -1026,18 +1044,27 @@
                     axisLine: { show: false },
                     axisTick: { show: false },
                     splitLine: { show: false }
+                },
+                {
+                    scale: true,
+                    gridIndex: 4,
+                    splitNumber: 2,
+                    axisLabel: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    splitLine: { show: false }
                 }
             ],
             dataZoom: [
                 {
                     type: 'inside',
-                    xAxisIndex: [0, 1, 2, 3],
+                    xAxisIndex: [0, 1, 2, 3,4],
                     start: 100 - Math.floor((60 / data1.date.length) * 100),
                     end: 100
                 },
                 {
                     show: true,
-                    xAxisIndex: [0, 1, 2, 3],
+                    xAxisIndex: [0, 1, 2, 3,4],
                     type: 'slider',
                     top: '95%',
                     start: 100 - Math.floor((60 / data1.date.length) * 100),
@@ -1202,6 +1229,58 @@
                     markPoint: {
                         data: formatCCIAnalysis2(cciAnalysis2(bsignals), Object.values(bsignals.cci2), data1.date)
                     }
+                },
+                {
+                    name: 'PDI',
+                    type: 'line',
+                    xAxisIndex: 4,
+                    yAxisIndex: 4,
+                    color: '#e9b002',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(bsignals.pdi)
+                },
+                {
+                    name: 'MDI',
+                    type: 'line',
+                    xAxisIndex: 4,
+                    yAxisIndex: 4,
+                    color: '#00ffff',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(bsignals.mdi)
+                },
+                {
+                    name: 'ADX',
+                    type: 'line',
+                    xAxisIndex: 4,
+                    yAxisIndex: 4,
+                    color: '#cc00ff',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(bsignals.adx)
+                },
+                {
+                    name: 'ADXR',
+                    type: 'line',
+                    xAxisIndex: 4,
+                    yAxisIndex: 4,
+                    color: '#00cc33',
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: {
+                        width: 1
+                    },
+                    data: Object.values(bsignals.adxr)
                 }
             ]
         };
