@@ -69,17 +69,19 @@ class StockListView(ListView):
     def get_context_data(self, **kwargs):
         kwargs['board'] = self.board
         kwargs['data'] = self.data
+        kwargs['bsignals'] = self.bsignals
         kwargs['form'] = self.form
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
         self.board = get_object_or_404(Board, name=self.kwargs.get('name'))
         self.form = CodeForm()
-        jsonlist = []
+        blocklist = []
         key = self.kwargs.get('name') + time.strftime("%Y-%m-%d", time.localtime())
         
         if self.request.session.get(key):
-            self.data = json.dumps(jsonlist)
+            self.data = json.dumps(blocklist)
+            self.bsignals = {}
         else:
             self.request.session[key] = key  
             try:
@@ -94,12 +96,16 @@ class StockListView(ListView):
                   dict["high"] = str(row.high)
                   dict["vol"] = str(row.volume)
                   dict["trade_date"] = str(row.date)  
-                  jsonlist.append(dict) 
+                  blocklist.append(dict) 
                
             except EXCEPTION:
                 pass
-        
-            self.data = json.dumps(jsonlist)
+            blocklist.reverse()
+            mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
+            bsignals = generate_signals(mybpd)
+            
+            self.data = json.dumps(blocklist)
+            self.bsignals = bsignals.to_json()
         
         queryset = Stocks.objects.filter(boards__name__in = [self.board.name]).order_by('-growth')
         return queryset
@@ -393,8 +399,8 @@ def generate_signals(data):
     #生成买入和卖出信号
     signals['buy_signal'] = (((signals['k'] < 20) & (signals['d'] < 20) & (signals['cci1'] < -100) & (signals['cci1'] > signals['cci1'].shift(1).fillna(method="ffill"))& (signals['rsi6']< 20))|((signals['cci1'] >-100)&(signals['cci1'].shift(1).fillna(method="ffill")<-100))|((signals['rsi6'] > signals['rsi12'])&(signals['rsi6'].shift(1).fillna(method="ffill") < signals['rsi12'].shift(1).fillna(method="ffill"))&(signals['rsi6']<50))).astype(int)
     signals['sell_signal'] = (((signals['k'] > 80) & (signals['d'] > 80) & (signals['cci1'] > 100) &(signals['rsi6']>80)& (signals['cci1'] < signals['cci1'].shift(1).fillna(method="ffill")))|((signals['cci1'] < 100)&(signals['cci1'].shift(1).fillna(method="ffill") > 100))|((signals['rsi6'] < signals['rsi12'])&(signals['rsi6'].shift(1).fillna(method="ffill") > signals['rsi12'].shift(1).fillna(method="ffill"))&(signals['rsi6']>50))).astype(int)
-    signals['mdibuy_signal'] = ((((signals['pdi'] > signals['mdi']) & (signals['pdi'].shift(1).fillna(method="ffill") < signals['mdi'].shift(1).fillna(method="ffill")) & (signals['mdi'] < 20)) |((signals['mdi'] < signals['adxr'])&(signals['mdi'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['pdi'] < signals['mdi'])&(signals['pdi'] < signals['adx'])&(signals['pdi'] < signals['adxr']) )| ((signals['adx'] < signals['adxr'])& (signals['adx'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['pdi'] < signals['mdi'])&(signals['pdi'] < signals['adx'])&(signals['pdi'] < signals['adxr']) ))).astype(int)
-    signals['mdisell_signal'] = ((((signals['mdi'] > signals['pdi']) & (signals['mdi'].shift(1).fillna(method="ffill") < signals['pdi'].shift(1).fillna(method="ffill")) & (signals['pdi'] < 20))| ((signals['pdi'] < signals['adxr']) & (signals['pdi'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['mdi'] < signals['pdi'])&(signals['mdi'] < signals['adx'])&(signals['mdi'] < signals['adxr']))|((signals['adx'] < signals['adxr']) & (signals['adx'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['mdi'] < signals['pdi'])&(signals['mdi'] < signals['adx'])&(signals['mdi'] < signals['adxr'])))).astype(int)
+    signals['mdibuy_signal'] = ((((signals['pdi'] > signals['mdi']) & (signals['pdi'].shift(1).fillna(method="ffill") < signals['mdi'].shift(1).fillna(method="ffill")) & (signals['mdi'] < 30)) |((signals['mdi'] < signals['adxr'])&(signals['mdi'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['pdi'] < signals['mdi'])&(signals['pdi'] < signals['adx'])&(signals['pdi'] < signals['adxr'])&(signals['pdi']>signals['pdi'].shift(1).fillna(method="ffill")) )| ((signals['adx'] < signals['adxr'])& (signals['adx'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['pdi'] < signals['mdi'])&(signals['pdi'] < signals['adx'])&(signals['pdi'] < signals['adxr'])&(signals['pdi'] > signals['pdi'].shift(1).fillna(method="ffill"))))).astype(int)
+    signals['mdisell_signal'] = ((((signals['mdi'] > signals['pdi']) & (signals['mdi'].shift(1).fillna(method="ffill") < signals['pdi'].shift(1).fillna(method="ffill")) & (signals['pdi'] < 30))| ((signals['pdi'] < signals['adxr']) & (signals['pdi'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['mdi'] < signals['pdi'])&(signals['mdi'] < signals['adx'])&(signals['mdi'] < signals['adxr']))|((signals['adx'] < signals['adxr']) & (signals['adx'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['mdi'] < signals['pdi'])&(signals['mdi'] < signals['adx'])&(signals['mdi'] < signals['adxr'])&(signals['mdi'] > signals['mdi'].shift(1).fillna(method="ffill")))|((signals['mdi'] > signals['adxr'])& (signals['mdi'].shift(1).fillna(method="ffill") < signals['adxr'].shift(1).fillna(method="ffill"))& (signals['mdi'] > signals['mdi'].shift(1).fillna(method="ffill"))))).astype(int)
     signals['ybuy_signal'] = ((signals['cci2'] > 300) & (signals['cci2'].shift(1).fillna(method="ffill") < 300) & (signals['cci2'] > signals['cci1']) & (signals['cci2'].shift(2).fillna(method="ffill") < signals['cci1'].shift(2).fillna(method="ffill"))).astype(int)
     signals['ysell_signal'] = (((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 600)) | ((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 300) & (signals['cci2']< signals['cci2'].shift(1).fillna(method="ffill")))).astype(int)
     signals['cci84buy_signal'] = ((signals['cci3'] < -220)|(signals['cci2'] < -220)).astype(int)
@@ -447,38 +453,14 @@ def blockget(request):
                 blocklist.append(dict)      
                  
             blocklist.reverse()  
-            return JsonResponse({"data": json.dumps(blocklist)})
+            mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
+            bsignals = generate_signals(mybpd)
+            
+            return JsonResponse({"data": json.dumps(blocklist),"bsignals":bsignals.to_json()})
         except Http404:
             data = {"result":"fail"}
             return JsonResponse({"data": json.dumps(data)})  
         
-def blockget(request):
-    if request.method == 'POST':
-        blockid = request.POST['blockid']
-        blocklist = []
-        try:
-            board = get_object_or_404(Board, pk=blockid)
-            data = Stocksector.objects.all().filter(name=board.name).order_by('-date')
-        
-            for row in data:
-                dict = {}
-                dict["name"] = board.name 
-                dict["code"] = str(row.code)
-                dict["open"] = str(row.open)
-                dict["close"] = str(row.close)
-                dict["low"] = str(row.low)
-                dict["high"] = str(row.high)
-                dict["vol"] = str(row.volume)
-                dict["trade_date"] = str(row.date)  
-                blocklist.append(dict)      
-                 
-            blocklist.reverse()  
-            return JsonResponse({"data": json.dumps(blocklist)})
-        except Http404:
-            data = {"result":"fail"}
-            return JsonResponse({"data": json.dumps(data)})  
-
-
 def singleget(request):
     if request.method == 'POST':
         code = request.POST['code']
