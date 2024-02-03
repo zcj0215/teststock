@@ -352,7 +352,7 @@ def calculate_CCI(data,n=14):
  
     return  cci
 
-def calculate_KDJ(data,n=9,m1=3,m2=3):
+def calculate_KDJ(data,n=18,m1=3,m2=3):
     
     k,d = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=n,slowk_period=m1,slowd_period=m2)
     j = 3*d - 2*k
@@ -378,6 +378,7 @@ def generate_signals(data):
     ma5 = talib.SMA(data["close"].astype(float), timeperiod=5)
     rsi_6days = talib.RSI(data["close"].astype(float), timeperiod=6)          
     rsi_12days = talib.RSI(data["close"].astype(float), timeperiod=12)
+    sk,sd = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=35,slowk_period=5,slowd_period=5)
     
     signals = pd.DataFrame(index=data.index)
     signals['k'] = k
@@ -394,7 +395,9 @@ def generate_signals(data):
     signals['ma5'] = ma5
     signals['rsi6'] = rsi_6days
     signals['rsi12'] = rsi_12days
-    
+    signals['rsi12'] = rsi_12days
+    signals['sk'] = sk
+    signals['sd'] = sd
     
     #生成买入和卖出信号
     signals['buy_signal'] = (((signals['k'] < 20) & (signals['d'] < 20) & (signals['cci1'] < -100) & (signals['cci1'] > signals['cci1'].shift(1).fillna(method="ffill"))& (signals['rsi6']< 20))|((signals['cci1'] >-100)&(signals['cci1'].shift(1).fillna(method="ffill")<-100))|((signals['rsi6'] > signals['rsi12'])&(signals['rsi6'].shift(1).fillna(method="ffill") < signals['rsi12'].shift(1).fillna(method="ffill"))&(signals['rsi6']<50))).astype(int)
@@ -405,6 +408,8 @@ def generate_signals(data):
     signals['ysell_signal'] = (((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 600)) | ((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 300) & (signals['cci2']< signals['cci2'].shift(1).fillna(method="ffill")))).astype(int)
     signals['cci84buy_signal'] = ((signals['cci3'] < -220)|(signals['cci2'] < -220)).astype(int)
     signals['cci84sell_signal'] = (signals['cci3'] > 220).astype(int)
+    signals['skdjbuy_signal'] = ((signals['sk'] > signals['sd'])&(signals['sk'].shift(1).fillna(method="ffill") < signals['sd'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['skdjsell_signal'] = ((signals['sd'] > signals['sk'])&(signals['sd'].shift(1).fillna(method="ffill") < signals['sk'].shift(1).fillna(method="ffill"))).astype(int)
     
     #print(signals['mdisell_signal'].tolist())
     return signals

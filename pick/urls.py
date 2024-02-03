@@ -1,6 +1,7 @@
 
 from django.urls import re_path,path
-from .import views as pick_views
+from . import views as pick_views
+from .view import pick_views as select_views
 
 urlpatterns = [ 
     re_path(r'^$', pick_views.home, name='home'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('inflow/', pick_views.inflow,name='inflow'),
     path('inflow_single/', pick_views.inflow_single,name='inflow_single'),
     path('stock_single/', pick_views.stock_single,name='stock_single'),
+    path('stock_select/', select_views.stock_select,name='stock_select'),
 ]

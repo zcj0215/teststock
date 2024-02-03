@@ -60,8 +60,9 @@
         var option1;
 
         const signals_state1 = ['买入', '卖出', '买入', '卖出', '买入', '卖出'];
-        const signals_state2 = ['买二', '卖二'];
+        const signals_state2 = ['买二', '卖二','买三', '卖三'];
         const colors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','#ff6600','#00ccff'];
+        const colors_state2 = ['#C02906', '#0033CC', '#cc6600', '#336600']; 
 
         var upColor = '#ec0000';
         var upBorderColor = '#8A0000';
@@ -331,6 +332,8 @@
             let cci2 = Object.values(signals.cci2);
             let buy = Object.values(signals.ybuy_signal);
             let sell = Object.values(signals.ysell_signal);
+            let skdjbuy = Object.values(signals.skdjbuy_signal);
+            let skdjsell = Object.values(signals.skdjsell_signal);
             
 	        for (var i = 0; i < cci2.length-1; i++) {
 		        if(cci2[i] != null){
@@ -338,6 +341,10 @@
                         result.push(0);
                     }else if(sell[i]==1){
                         result.push(1);
+                    }else if(skdjbuy[i]==1){
+                        result.push(2);
+                    }else if(skdjsell[i]==1){
+                        result.push(3);
                     }else{
                         result.push('-');
                     }
@@ -384,7 +391,7 @@
                         xAxis: date[i],
                         value: signals_state2[signal[i]],
                         itemStyle: {
-                            color: signal[i] == 0 ? '#C02906' : '#0033CC',
+                            color: colors_state2[signal[i]],
                             shadowColor: '#FFFFFF',
                             shadowBlur: 20
                         },
