@@ -416,7 +416,6 @@ def generate_signals(data):
     #print(signals['mdisell_signal'].tolist())
     return signals
     
-    
 def query(request):
     if request.method == 'POST':
         stock_code = request.POST['code']
