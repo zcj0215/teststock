@@ -282,11 +282,12 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 volume_ratio = round(float(volume_ratio),2)
             )
             
-def everyday_inflow(code,inflow,dt):
+def everyday_inflow(code,inflow,dt,turnover):
     
     if code[:2] == '30':  
         try:
             stock = get_object_or_404(Stockszc, code=code,date=dt)
+            stock.turnover = turnover
             stock.capital_inflow = inflow
             stock.save()
         except Http404:
@@ -294,13 +295,15 @@ def everyday_inflow(code,inflow,dt):
     elif code[:2] == '00':
         try:
             stock = get_object_or_404(Stocksz, code=code,date=dt)
+            stock.turnover = turnover
             stock.capital_inflow = inflow
             stock.save()
         except Http404:
             pass
     elif code[:2] == '68':
         try:
-            stock = get_object_or_404(Stockshk, code=code,date=dt)   
+            stock = get_object_or_404(Stockshk, code=code,date=dt)
+            stock.turnover = turnover   
             stock.capital_inflow = inflow
             stock.save()   
         except Http404:
@@ -308,6 +311,7 @@ def everyday_inflow(code,inflow,dt):
     elif code[:2] == '60':    
         try:
             stock = get_object_or_404(Stocksh, code=code,date=dt)
+            stock.turnover = turnover
             stock.capital_inflow = inflow
             stock.save()
         except Http404:
@@ -315,6 +319,7 @@ def everyday_inflow(code,inflow,dt):
     else:
         try:
             stock = get_object_or_404(Stockbj, code=code,date=dt)
+            stock.turnover = turnover
             stock.capital_inflow = inflow
             stock.save()
         except Http404:
@@ -801,6 +806,50 @@ def inflow_single(request):
         form = CodeForm()
         
         return render(request, 'inflow.html', {'form': form})
+
+def get_file_list(path):
+    file_list = []
+    for file_name in  os.listdir(path):
+        full_path = os.path.join(path,file_name)
+        if os.path.isfile(full_path):
+            file_list.append(full_path)
+        elif os.path.isdir(full_path):
+            file_list.extend(get_file_list(full_path))
+            
+    return file_list
+            
+    
+def inflow_files(request):
+    path =  os.path.dirname(__file__)
+    file_path = "" 
+    if(sysstr =="Windows"):
+        file_path = path+"\\files"     
+    else:
+        file_path = path+"/files"
+    
+    file_list = get_file_list(file_path)
+   
+    for file_name in file_list:
+        print(file_name)
+        df = pd.read_excel(file_name, sheet_name='Sheet1', header=0)
+        for row in df.itertuples():            
+            print(file_name[-10:-4])
+            print(row.日期.strftime("%Y-%m-%d"))
+            print(row.换手率)
+            inf = str(row.主力净流入)
+            print(inf)
+            if '万' in inf:
+                inf = round(float(inf[0:-1]),2)
+            elif '亿' in inf:
+                inf = round(float(inf[0:-1])*10000,2)
+            else:
+                try:
+                    inf = round(float(inf[0:-1])*0.001,2)
+                except: 
+                    inf = 0
+            everyday_inflow(file_name[-10:-4], inf, row.日期.strftime("%Y-%m-%d"),row.换手率)
+    
+    return HttpResponse('执行完毕！')     
     
 def stock_single(request):
     path =  os.path.dirname(__file__)
