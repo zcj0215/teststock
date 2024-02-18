@@ -610,9 +610,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\MiniLED.xls"
+        filename = path+"\\MicroLED.xls"
     else:
-        filename = path+"/MiniLED.xls"
+        filename = path+"/MicroLED.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -631,23 +631,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='MiniLED')  
+        board = get_object_or_404(Board,name='MicroLED')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='MiniLED'):
+            if  not stocks.boards.filter(name='MicroLED'):
                 stocks.boards.add(board)
-                stocks.blockname = 'MiniLED'
+                stocks.blockname = 'MicroLED'
                 stocks.save()
-            elif stocks.boards.filter(name='MiniLED'):
-                stocks.blockname = 'MiniLED'
+            elif stocks.boards.filter(name='MicroLED'):
+                stocks.blockname = 'MicroLED'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = 'MiniLED'
+                blockname = 'MicroLED'
             )
             stocks.boards.add(board)
             stocks.save() 
