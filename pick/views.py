@@ -282,6 +282,44 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 volume_ratio = round(float(volume_ratio),2)
             )
             
+def everyday_inflow0(code,inflow,dt):
+    
+    if code[:2] == '30':  
+        try:
+            stock = get_object_or_404(Stockszc, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '00':
+        try:
+            stock = get_object_or_404(Stocksz, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '68':
+        try:
+            stock = get_object_or_404(Stockshk, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()   
+        except Http404:
+            pass
+    elif code[:2] == '60':    
+        try:
+            stock = get_object_or_404(Stocksh, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()
+        except Http404:
+            pass
+    else:
+        try:
+            stock = get_object_or_404(Stockbj, code=code,date=dt)
+            stock.capital_inflow = inflow
+            stock.save()
+        except Http404:
+            pass
+
 def everyday_inflow(code,inflow,dt,turnover):
     
     if code[:2] == '30':  
@@ -601,7 +639,7 @@ def dayadd(request):
                 data[6] = round(float(data[6][0:-1])*10000,2)
         
         print(data)
-        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-02-08')
+        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-02-19')
 
     return HttpResponse('执行完毕！')
 
@@ -610,9 +648,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\动力电池回收.xls"
+        filename = path+"\\虚拟电厂.xls"
     else:
-        filename = path+"/动力电池回收.xls"
+        filename = path+"/虚拟电厂.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -631,23 +669,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='动力电池回收')  
+        board = get_object_or_404(Board,name='虚拟电厂')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='动力电池回收'):
+            if  not stocks.boards.filter(name='虚拟电厂'):
                 stocks.boards.add(board)
-                stocks.blockname = '动力电池回收'
+                stocks.blockname = '虚拟电厂'
                 stocks.save()
-            elif stocks.boards.filter(name='动力电池回收'):
-                stocks.blockname = '动力电池回收'
+            elif stocks.boards.filter(name='虚拟电厂'):
+                stocks.blockname = '虚拟电厂'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = '动力电池回收'
+                blockname = '虚拟电厂'
             )
             stocks.boards.add(board)
             stocks.save() 
@@ -721,7 +759,7 @@ def blockdayadd(request):
         except:
             pass
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-02-08')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-02-19')
 
     return HttpResponse('执行完毕！')
 
@@ -766,7 +804,7 @@ def inflow(request):
             except: 
                inf = 0
             
-        everyday_inflow(code, inf, '2024-02-08')
+        everyday_inflow0(code, inf, '2024-02-19')
     
     return HttpResponse('执行完毕！')
 
