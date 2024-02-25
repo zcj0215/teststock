@@ -60,9 +60,9 @@
         var option1;
 
         const signals_state1 = ['买入', '卖出', '买入', '卖出', '买入', '卖出'];
-        const signals_state2 = ['买二', '卖二','买三', '卖三'];
+        const signals_state2 = ['买二', '卖二','买三', '卖三','买四', '卖四', '买五', '卖五'];
         const colors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','#ff6600','#00ccff'];
-        const colors_state2 = ['#C02906', '#0033CC', '#cc6600', '#336600']; 
+        const colors_state2 = ['#C02906', '#0033CC', '#cc6600', '#336600','#ff9900','#ccff00','#ffcccc','#ccffcc']; 
 
         var upColor = '#ec0000';
         var upBorderColor = '#8A0000';
@@ -79,9 +79,10 @@
         //console.log("bcci1数组:"+JSON.stringify(Object.values(bsignals.cci1)));
         //console.log("bcci2数组:"+JSON.stringify(Object.values(bsignals.cci2)));
         //console.log("buy_signal:"+JSON.stringify(Object.values(bsignals.buy_signal)));
-        //console.log("sell_signal:"+JSON.stringify(Object.values(bsignals.sell_signal)));
-        //console.log("ybuy_signal:"+JSON.stringify(Object.values(bsignals.ybuy_signal)));
-        //console.log("ysell_signal:"+JSON.stringify(Object.values(bsignals.ysell_signal)));
+        //console.log("willrbuy_signal:"+JSON.stringify(Object.values(signals.willrbuy_signal)));
+        //console.log("willrsell_signal:"+JSON.stringify(Object.values(signals.willrsell_signal)));
+        //console.log("mfibuy_signal:"+JSON.stringify(Object.values(signals.mfibuy_signal)));
+        //console.log("mfisell_signal:"+JSON.stringify(Object.values(signals.mfisell_signal)));
         //console.log("signal1:"+JSON.stringify(cciAnalysis1(bsignals)));  
         //console.log("signal2:"+JSON.stringify(cciAnalysis2(bsignals))); 
          
@@ -111,7 +112,7 @@
                                 sessionStorage.setItem(code, JSON.stringify(data0));
                                 sessionStorage.setItem('signals'+code, JSON.stringify(JSON.parse(res.signals)));
                                 //console.log("data0get:"+JSON.stringify(data0))
-                                signals =  JSON.parse(res.signals);
+                                signals =  JSON.parse(res.signals);console.log("willrbuy_signal:"+JSON.stringify(Object.values(signals.willrbuy_signal)));
                                 runChart();
                             }
                         },
@@ -334,6 +335,10 @@
             let sell = Object.values(signals.ysell_signal);
             let skdjbuy = Object.values(signals.skdjbuy_signal);
             let skdjsell = Object.values(signals.skdjsell_signal);
+            let willrbuy = Object.values(signals.willrbuy_signal);
+            let willrsell = Object.values(signals.willrsell_signal);
+            let mfibuy = Object.values(signals.mfibuy_signal);
+            let mfisell = Object.values(signals.mfisell_signal);
             
 	        for (var i = 0; i < cci2.length-1; i++) {
 		        if(cci2[i] != null){
@@ -345,6 +350,14 @@
                         result.push(2);
                     }else if(skdjsell[i]==1){
                         result.push(3);
+                    }else if(willrbuy[i]==1){
+                        result.push(4);
+                    }else if(willrsell[i]==1){
+                        result.push(5);
+                    }else if(mfibuy[i]==1){
+                        result.push(6);
+                    }else if(mfisell[i]==1){
+                        result.push(7);
                     }else{
                         result.push('-');
                     }

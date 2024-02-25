@@ -379,6 +379,9 @@ def generate_signals(data):
     rsi_6days = talib.RSI(data["close"].astype(float), timeperiod=6)          
     rsi_12days = talib.RSI(data["close"].astype(float), timeperiod=12)
     sk,sd = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=35,slowk_period=5,slowd_period=5)
+    willr = talib.WILLR(data["high"].astype(float), data["low"].astype(float),data["close"].astype(float), timeperiod = 6)
+    #  MFI ：资金流量指标
+    mfi = talib.MFI(data["high"].astype(float), data["low"].astype(float),data["close"].astype(float),data["vol"].astype(float))
     
     signals = pd.DataFrame(index=data.index)
     signals['k'] = k
@@ -400,6 +403,9 @@ def generate_signals(data):
     signals['sd'] = sd
     signals['vol'] = data["vol"].astype(float)
     signals['close'] = data["close"].astype(float)
+    signals['willr'] = willr
+    signals['mfi'] = mfi
+    
     
     #生成买入和卖出信号
     signals['buy_signal'] = (((signals['j'] < 20) & (signals['cci1'] < -100) & (signals['cci1'] > signals['cci1'].shift(1).fillna(method="ffill"))& (signals['rsi6']< 20))|((signals['cci1'] >-100)&(signals['cci1'].shift(1).fillna(method="ffill")<-100))|((signals['rsi6'] > signals['rsi12'])&(signals['rsi6'].shift(1).fillna(method="ffill") < signals['rsi12'].shift(1).fillna(method="ffill"))&(signals['rsi6']<50))).astype(int)
@@ -412,6 +418,10 @@ def generate_signals(data):
     signals['cci84sell_signal'] = (signals['cci3'] > 220).astype(int)
     signals['skdjbuy_signal'] = ((signals['sk'] > signals['sd'])&(signals['sk'].shift(1).fillna(method="ffill") < signals['sd'].shift(1).fillna(method="ffill"))).astype(int)
     signals['skdjsell_signal'] = ((signals['sd'] > signals['sk'])&(signals['sd'].shift(1).fillna(method="ffill") < signals['sk'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['willrbuy_signal'] = ((signals['willr'] < 80)&(signals['willr'].shift(1).fillna(method="ffill") > 80)).astype(int)
+    signals['willrsell_signal'] = ((signals['willr'] > 20)&(signals['willr'].shift(1).fillna(method="ffill") < 20)).astype(int)
+    signals['mfibuy_signal'] = ((signals['mfi'] < 20)&(signals['mfi'] > signals['mfi'].shift(1).fillna(method="ffill"))&(signals['close'] < signals['close'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['mfisell_signal'] = ((signals['mfi'] > 80)&(signals['mfi'] < signals['mfi'].shift(1).fillna(method="ffill"))&(signals['close'] > signals['close'].shift(1).fillna(method="ffill"))).astype(int)
     
     #print(signals['mdisell_signal'].tolist())
     return signals
