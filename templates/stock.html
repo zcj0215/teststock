@@ -214,14 +214,14 @@
             var dea = [0];
             var osc = [0];
         
-            var ema12 = calculateEMA(12, data);
-            var ema26 = calculateEMA(26, data);
+            var ema12 = calculateEMA(6, data);
+            var ema26 = calculateEMA(13, data);
         
             // 第三天开始
             for (var i = 1; i < data.length; i++) {
-                dif.push((ema12[i] - ema26[i]).toFixed(3));
-                dea.push((dea[i - 1] * 0.8 + dif[i] * 0.2).toFixed(3));
-                osc.push((2 * (dif[i] - dea[i])).toFixed(3));
+                dif.push((ema12[i] - ema26[i]).toFixed(2));
+                dea.push((dea[i - 1] * 0.8 + dif[i] * 0.2).toFixed(2));
+                osc.push((2 * (dif[i] - dea[i])).toFixed(2));
             }
         
             return {
@@ -643,10 +643,10 @@
                             param = param[0];
                             return [
                                 'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
-                                'Open: ' + param.data[0] + '<br/>',
-                                'Close: ' + param.data[1] + '<br/>',
-                                'Lowest: ' + param.data[2] + '<br/>',
-                                'Highest: ' + param.data[3] + '<br/>'
+                                '开盘: ' + param.data[0] + '<br/>',
+                                '收盘: ' + param.data[1] + '<br/>',
+                                '最低: ' + param.data[2] + '<br/>',
+                                '最高: ' + param.data[3] + '<br/>'
                             ].join('');
                         }
                     }
