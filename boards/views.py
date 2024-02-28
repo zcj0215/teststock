@@ -379,7 +379,10 @@ def generate_signals(data):
     rsi_6days = talib.RSI(data["close"].astype(float), timeperiod=6)          
     rsi_12days = talib.RSI(data["close"].astype(float), timeperiod=12)
     sk,sd = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=35,slowk_period=5,slowd_period=5)
-    willr = talib.WILLR(data["high"].astype(float), data["low"].astype(float),data["close"].astype(float), timeperiod = 6)
+  
+    willr32 = talib.WILLR(data["high"].astype(float), data["low"].astype(float),data["close"].astype(float), timeperiod = 32)
+    willr = willr32.apply(lambda x: abs(x))
+  
     #  MFI ：资金流量指标
     mfi = talib.MFI(data["high"].astype(float), data["low"].astype(float),data["close"].astype(float),data["vol"].astype(float))
     
