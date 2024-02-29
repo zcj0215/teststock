@@ -355,7 +355,7 @@ def calculate_CCI(data,n=14):
 def calculate_KDJ(data,n=60,m1=20,m2=5):
     
     k,d = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=n,slowk_period=m1,slowd_period=m2)
-    j = 3*d - 2*k
+    j = 3*k - 2*d
     
     return  k, d, j
 
@@ -378,7 +378,7 @@ def generate_signals(data):
     ma5 = talib.SMA(data["close"].astype(float), timeperiod=5)
     rsi_6days = talib.RSI(data["close"].astype(float), timeperiod=6)          
     rsi_12days = talib.RSI(data["close"].astype(float), timeperiod=12)
-    sk,sd = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=35,slowk_period=5,slowd_period=5)
+    #sk,sd = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=35,slowk_period=5,slowd_period=5)
   
     willr32 = talib.WILLR(data["high"].astype(float), data["low"].astype(float),data["close"].astype(float), timeperiod = 32)
     willr = willr32.apply(lambda x: abs(x))
@@ -402,8 +402,8 @@ def generate_signals(data):
     signals['rsi6'] = rsi_6days
     signals['rsi12'] = rsi_12days
     signals['rsi12'] = rsi_12days
-    signals['sk'] = sk
-    signals['sd'] = sd
+    #signals['sk'] = sk
+    #signals['sd'] = sd
     signals['vol'] = data["vol"].astype(float)
     signals['close'] = data["close"].astype(float)
     signals['willr'] = willr
@@ -419,8 +419,8 @@ def generate_signals(data):
     signals['ysell_signal'] = (((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 600)) | ((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 300) & (signals['cci2']< signals['cci2'].shift(1).fillna(method="ffill")))).astype(int)
     signals['cci84buy_signal'] = ((signals['cci3'] < -220)|(signals['cci2'] < -220)).astype(int)
     signals['cci84sell_signal'] = (signals['cci3'] > 220).astype(int)
-    signals['skdjbuy_signal'] = ((signals['sk'] > signals['sd'])&(signals['sk'].shift(1).fillna(method="ffill") < signals['sd'].shift(1).fillna(method="ffill"))).astype(int)
-    signals['skdjsell_signal'] = ((signals['sd'] > signals['sk'])&(signals['sd'].shift(1).fillna(method="ffill") < signals['sk'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['skdjbuy_signal'] = ((signals['k'] > signals['d'])&(signals['k'].shift(1).fillna(method="ffill") < signals['d'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['skdjsell_signal'] = (((signals['d'] > signals['k'])&(signals['d'].shift(1).fillna(method="ffill") < signals['k'].shift(1).fillna(method="ffill")))|((signals['j']<signals['j'].shift(1).fillna(method="ffill"))&(signals['k']<signals['k'].shift(1).fillna(method="ffill")))).astype(int)
     signals['willrbuy_signal'] = ((signals['willr'] < 80)&(signals['willr'].shift(1).fillna(method="ffill") > 80)).astype(int)
     signals['willrsell_signal'] = ((signals['willr'] > 20)&(signals['willr'].shift(1).fillna(method="ffill") < 20)).astype(int)
     signals['mfibuy_signal'] = ((signals['mfi'] < 20)&(signals['mfi'] > signals['mfi'].shift(1).fillna(method="ffill"))&(signals['close'] < signals['close'].shift(1).fillna(method="ffill"))).astype(int)
