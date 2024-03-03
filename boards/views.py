@@ -386,6 +386,11 @@ def generate_signals(data):
     #  MFI ：资金流量指标
     mfi = talib.MFI(data["high"].astype(float), data["low"].astype(float),data["close"].astype(float),data["vol"].astype(float))
     
+    ht = talib.HT_TRENDLINE(data["close"].astype(float))
+    
+    obv = talib.OBV(data["close"].astype(float),data["vol"].astype(float))
+    maobv = talib.SMA(obv,timeperiod = 30)
+    
     signals = pd.DataFrame(index=data.index)
     signals['k'] = k
     signals['d'] = d
@@ -408,7 +413,9 @@ def generate_signals(data):
     signals['close'] = data["close"].astype(float)
     signals['willr'] = willr
     signals['mfi'] = mfi
-    
+    signals['ht'] = ht
+    signals['obv'] = obv
+    signals['maobv'] = maobv
     
     #生成买入和卖出信号
     signals['buy_signal'] = (((signals['j'] < 20) & (signals['cci1'] < -100) & (signals['cci1'] > signals['cci1'].shift(1).fillna(method="ffill"))& (signals['rsi6']< 20))|((signals['cci1'] >-100)&(signals['cci1'].shift(1).fillna(method="ffill")<-100))|((signals['rsi6'] > signals['rsi12'])&(signals['rsi6'].shift(1).fillna(method="ffill") < signals['rsi12'].shift(1).fillna(method="ffill"))&(signals['rsi6']<50))).astype(int)
@@ -425,8 +432,11 @@ def generate_signals(data):
     signals['willrsell_signal'] = ((signals['willr'] > 20)&(signals['willr'].shift(1).fillna(method="ffill") < 20)).astype(int)
     signals['mfibuy_signal'] = ((signals['mfi'] < 20)&(signals['mfi'] > signals['mfi'].shift(1).fillna(method="ffill"))&(signals['close'] < signals['close'].shift(1).fillna(method="ffill"))).astype(int)
     signals['mfisell_signal'] = ((signals['mfi'] > 80)&(signals['mfi'] < signals['mfi'].shift(1).fillna(method="ffill"))&(signals['close'] > signals['close'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['obvbuy_signal'] = ((signals['obv'] > signals['maobv'])&(signals['obv'].shift(1).fillna(method="ffill") < signals['maobv'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['obvsell_signal'] = ((signals['obv'] < signals['maobv'])&(signals['obv'].shift(1).fillna(method="ffill") > signals['maobv'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['htbuy_signal'] = ((signals['close'] > signals['ht'])&(signals['close'].shift(1).fillna(method="ffill") < signals['ht'].shift(1).fillna(method="ffill"))).astype(int)
+    signals['htsell_signal'] = ((signals['close'] < signals['ht'])&(signals['close'].shift(1).fillna(method="ffill") > signals['ht'].shift(1).fillna(method="ffill"))).astype(int)
     
-    #print(signals['mdisell_signal'].tolist())
     return signals
     
 def query(request):

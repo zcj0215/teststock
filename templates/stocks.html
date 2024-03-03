@@ -140,8 +140,8 @@
        
         var option;
 
-        const bsignals_state = ['买入', '卖出', '买入', '卖出', '买入', '卖出','买二', '卖二','买三', '卖三','买四', '卖四', '买五', '卖五'];
-        const bcolors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','#ff6600','#00ccff','#C02906', '#0033CC','#cc6600', '#336600','#ff9900','#ccff00','#ffcccc','#ccffcc'];
+        const bsignals_state = ['买入', '卖出', '买入', '卖出', '买入', '卖出','买二', '卖二','买三', '卖三','买四', '卖四', '买五', '卖五','买六', '卖六', '买七', '卖七'];
+        const bcolors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','#ff6600','#00ccff','#C02906', '#0033CC','#cc6600', '#336600','#ff9900','#ccff00','#ffcccc','#ccffcc','#9900cc','#00ccff','#ff0066','#00ff99'];
 
         var upColor = '#ec0000';
         var upBorderColor = '#8A0000';
@@ -352,6 +352,10 @@
             let willrsell = Object.values(signals.willrsell_signal);
             let mfibuy = Object.values(signals.mfibuy_signal);
             let mfisell = Object.values(signals.mfisell_signal);
+            let obvbuy = Object.values(signals.obvbuy_signal);
+            let obvsell = Object.values(signals.obvsell_signal);
+            let htbuy = Object.values(signals.htbuy_signal);
+            let htsell = Object.values(signals.htsell_signal);
 
             
 	        for (var i = 0; i < cci1.length-1; i++) {
@@ -384,6 +388,14 @@
                         result.push(12);
                     }else if(mfisell[i]==1){
                         result.push(13);
+                    }else if(obvbuy[i]==1){
+                        result.push(14);
+                    }else if(obvsell[i]==1){
+                        result.push(15);
+                    }else if(htbuy[i]==1){
+                        result.push(16);
+                    }else if(htsell[i]==1){
+                        result.push(17);
                     }else{
                         result.push('-');
                     }

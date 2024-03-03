@@ -648,9 +648,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\稀土永磁.xls"
+        filename = path+"\\工业大麻.xls"
     else:
-        filename = path+"/稀土永磁.xls"
+        filename = path+"/工业大麻.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -669,23 +669,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='稀土永磁')  
+        board = get_object_or_404(Board,name='工业大麻')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='稀土永磁'):
+            if  not stocks.boards.filter(name='工业大麻'):
                 stocks.boards.add(board)
-                stocks.blockname = '稀土永磁'
+                stocks.blockname = '工业大麻'
                 stocks.save()
-            elif stocks.boards.filter(name='稀土永磁'):
-                stocks.blockname = '稀土永磁'
+            elif stocks.boards.filter(name='工业大麻'):
+                stocks.blockname = '工业大麻'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = '稀土永磁'
+                blockname = '工业大麻'
             )
             stocks.boards.add(board)
             stocks.save() 
