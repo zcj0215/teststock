@@ -354,7 +354,7 @@ def calculate_CCI(data,n=14):
 
 def calculate_KDJ(data,n=60,m1=20,m2=5):
     
-    k,d = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=n,slowk_period=m1,slowd_period=m2)
+    k,d = talib.STOCH(data["high"].astype(float),data["low"].astype(float),data["close"].astype(float),fastk_period=n,slowk_period=m1,slowk_matype=0,slowd_period=m2,slowd_matype=0)
     j = 3*k - 2*d
     
     return  k, d, j
@@ -393,11 +393,15 @@ def generate_signals(data):
     
     signals = pd.DataFrame(index=data.index)
     signals['k'] = k
+    #print(k.tolist())
     signals['d'] = d
+    #print(d.tolist())
     signals['j'] = j
+    #print(j.tolist())
     signals['cci1'] = cci1
     signals['cci2'] = cci2
     signals['cci3'] = cci3
+    #print(cci2.tolist())
     signals['pdi'] = pdi
     signals['mdi'] = mdi
     signals['adx'] = adx
@@ -422,12 +426,12 @@ def generate_signals(data):
     signals['sell_signal'] = (((signals['j'] > 80) & (signals['cci1'] > 100) &(signals['rsi6']>80)& (signals['cci1'] < signals['cci1'].shift(1).fillna(method="ffill")))|((signals['cci1'] < 100)&(signals['cci1'].shift(1).fillna(method="ffill") > 100))|((signals['rsi6'] < signals['rsi12'])&(signals['rsi6'].shift(1).fillna(method="ffill") > signals['rsi12'].shift(1).fillna(method="ffill"))&(signals['rsi6']>50))).astype(int)
     signals['mdibuy_signal'] = ((((signals['pdi'] > 20)&(signals['pdi'].shift(1).fillna(method="ffill") <=20)&(signals['vol']>signals['vol'].shift(1).fillna(method="ffill")))|((signals['mdi'] < 20)&(signals['mdi'].shift(1).fillna(method="ffill")>20)&(signals['pdi']>signals['pdi'].shift(1).fillna(method="ffill"))&(signals['cci1']>signals['cci1'].shift(1).fillna(method="ffill")))|((signals['pdi']<20)&(signals['pdi']>signals['pdi'].shift(1).fillna(method="ffill"))&(signals['cci1']>signals['cci1'].shift(1).fillna(method="ffill"))&(signals['cci1']<-100))|((signals['pdi'] > signals['mdi']) & (signals['pdi'].shift(1).fillna(method="ffill") < signals['mdi'].shift(1).fillna(method="ffill")) & (signals['pdi'] > 20) & (signals['adx'] < 20)&(signals['adxr']<20)&(signals['vol']>signals['vol'].shift(1).fillna(method="ffill"))&((signals['close']>signals['close'].shift(1).fillna(method="ffill"))))|((signals['mdi'] < signals['adxr'])&(signals['mdi'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['pdi'] < signals['mdi'])&(signals['pdi'] < signals['adx'])&(signals['pdi'] < signals['adxr'])&(signals['pdi']>signals['pdi'].shift(1).fillna(method="ffill"))&(signals['mdi']>45)&(signals['pdi']<15))| ((signals['adx'] > signals['adxr'])&(signals['adx'].shift(1).fillna(method="ffill") < signals['adxr'].shift(1).fillna(method="ffill"))&(signals['adx']<20)&(signals['adxr']<20)&(signals['pdi'] > signals['mdi'])&(signals['pdi']>20))|((signals['pdi']<10)&(signals['pdi']>signals['pdi'].shift(1).fillna(method="ffill"))&(signals['mdi']>45)&(signals['adx']>60)&(signals['adx']<signals['adx'].shift(1).fillna(method="ffill"))&(signals['adx'] < signals['adxr'])&(signals['adx'].shift(1).fillna(method="ffill")>signals['adxr'].shift(1).fillna(method="ffill"))))).astype(int)
     signals['mdisell_signal'] = ((((signals['mdi'] > 20)&(signals['mdi'].shift(1).fillna(method="ffill") <=20)&(signals['vol']<signals['vol'].shift(1).fillna(method="ffill")))|((signals['pdi'] < 20)&(signals['pdi'].shift(1).fillna(method="ffill")>20)&(signals['mdi']>signals['mdi'].shift(1).fillna(method="ffill"))&(signals['cci1']<signals['cci1'].shift(1).fillna(method="ffill")))|((signals['mdi'] > signals['pdi']) & (signals['mdi'].shift(1).fillna(method="ffill") < signals['pdi'].shift(1).fillna(method="ffill"))&(signals['mdi'] > 20)&(signals['adx']<20)&(signals['adxr']<20)&(signals['vol']<signals['vol'].shift(1).fillna(method="ffill")))| ((signals['pdi'] < signals['adxr']) & (signals['pdi'].shift(1).fillna(method="ffill") > signals['adxr'].shift(1).fillna(method="ffill"))&(signals['mdi'] < signals['pdi'])&(signals['mdi'] < signals['adx'])&(signals['mdi'] < signals['adxr'])&((signals['mdi']>signals['mdi'].shift(1).fillna(method="ffill")))&(signals['pdi']>45)&(signals['mdi']<15))|((signals['adx'] > signals['adxr']) & (signals['adx'].shift(1).fillna(method="ffill") < signals['adxr'].shift(1).fillna(method="ffill"))&(signals['adx']<20)&(signals['adxr']<20)&(signals['mdi'] > signals['pdi'])&(signals['mdi']>20))|((signals['mdi']<10)&(signals['mdi']>signals['mdi'].shift(1).fillna(method="ffill"))&(signals['pdi']>45)&(signals['adx']>60)&(signals['adx']<signals['adx'].shift(1).fillna(method="ffill"))&(signals['adx'] < signals['adxr'])&(signals['adx'].shift(1).fillna(method="ffill")>signals['adxr'].shift(1).fillna(method="ffill"))))).astype(int)
-    signals['ybuy_signal'] = ((signals['cci2'] > 300) & (signals['cci2'].shift(1).fillna(method="ffill") < 300) & (signals['cci2'] > signals['cci1']) & (signals['cci2'].shift(2).fillna(method="ffill") < signals['cci1'].shift(2).fillna(method="ffill"))).astype(int)
+    signals['ybuy_signal'] = ((signals['cci2'] > 300) & (signals['cci2'].shift(1).fillna(method="ffill") < 300) & (signals['cci2'] > signals['cci1'])).astype(int)
     signals['ysell_signal'] = (((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 600)) | ((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 300) & (signals['cci2']< signals['cci2'].shift(1).fillna(method="ffill")))).astype(int)
     signals['cci84buy_signal'] = ((signals['cci3'] < -220)|((signals['cci3'] > 100)&(signals['cci3'].shift(1).fillna(method="ffill")<100))|((signals['cci1'] > 100)&(signals['cci1'].shift(1).fillna(method="ffill")<100))).astype(int)
-    signals['cci84sell_signal'] = ((signals['cci3'] > 200)|((signals['cci1'] < -100)&(signals['cci1'].shift(1).fillna(method="ffill")> -100))).astype(int)
+    signals['cci84sell_signal'] = ((signals['cci3'] > 220)|((signals['cci1'] < -100)&(signals['cci1'].shift(1).fillna(method="ffill")> -100))).astype(int)
     signals['skdjbuy_signal'] = ((signals['k'] > signals['d'])&(signals['k'].shift(1).fillna(method="ffill") < signals['d'].shift(1).fillna(method="ffill"))).astype(int)
-    signals['skdjsell_signal'] = (((signals['d'] > signals['k'])&(signals['d'].shift(1).fillna(method="ffill") < signals['k'].shift(1).fillna(method="ffill")))|((signals['j']<signals['j'].shift(1).fillna(method="ffill"))&(signals['k']<signals['k'].shift(1).fillna(method="ffill"))&(signals['j']>75))).astype(int)
+    signals['skdjsell_signal'] = ((signals['j']<signals['j'].shift(1).fillna(method="ffill"))&(signals['k']<signals['k'].shift(1).fillna(method="ffill"))&(signals['j']>84)).astype(int)
     signals['willrbuy_signal'] = ((signals['willr'] < 80)&(signals['willr'].shift(1).fillna(method="ffill") > 80)).astype(int)
     signals['willrsell_signal'] = ((signals['willr'] > 20)&(signals['willr'].shift(1).fillna(method="ffill") < 20)).astype(int)
     signals['mfibuy_signal'] = ((signals['mfi'] < 20)&(signals['mfi'] > signals['mfi'].shift(1).fillna(method="ffill"))&(signals['close'] < signals['close'].shift(1).fillna(method="ffill"))).astype(int)

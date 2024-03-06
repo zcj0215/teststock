@@ -61,7 +61,7 @@
 
         const signals_state1 = ['买入', '卖出', '买入', '卖出', '买入', '卖出'];
         const signals_state2 = ['买二', '卖二','买三', '卖三','买四', '卖四', '买五', '卖五','买六', '卖六', '买七', '卖七'];
-        const colors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','#ff6600','#00ccff'];
+        const colors_state1 = ['#FFD700', '#000000', '#f905d9', '#1d9605','#ff6600','#00ccff'];
         const colors_state2 = ['#C02906', '#0033CC', '#cc6600', '#336600','#ff9900','#ccff00','#ffcccc','#ccffcc','#9900cc','#00ccff','#ff0066','#00ff99']; 
         const bsignals_state = ['买入', '卖出', '买入', '卖出', '买入', '卖出','买二', '卖二','买三', '卖三','买四', '卖四', '买五', '卖五','买六', '卖六', '买七', '卖七'];
         const bcolors_state = ['#FFD700', '#000000', '#f905d9', '#1d9605','#ff6600','#00ccff','#C02906', '#0033CC','#cc6600', '#336600','#ff9900','#ccff00','#ffcccc','#ccffcc','#9900cc','#00ccff','#ff0066','#00ff99'];
@@ -81,6 +81,12 @@
      
         //console.log("bcci1数组:"+JSON.stringify(Object.values(bsignals.cci1)));
         //console.log("bcci2数组:"+JSON.stringify(Object.values(bsignals.cci2)));
+        //console.log("cci2数组:"+JSON.stringify(Object.values(signals.cci2)));
+        //console.log("cci84sell_signal:"+JSON.stringify(Object.values(signals.cci84sell_signal)));
+        //console.log("ybuy_signal:"+JSON.stringify(Object.values(signals.ybuy_signal)));
+        //console.log("signal1:"+JSON.stringify(cciAnalysis1(signals))); 
+
+        //console.log("signal2:"+JSON.stringify(cciAnalysis2(signals)));   
         //console.log("buy_signal:"+JSON.stringify(Object.values(bsignals.buy_signal)));
         //console.log("willrbuy_signal:"+JSON.stringify(Object.values(signals.willrbuy_signal)));
         //console.log("willrsell_signal:"+JSON.stringify(Object.values(signals.willrsell_signal)));
@@ -358,7 +364,7 @@
             
 	        for (var i = 0; i < cci1.length-1; i++) {
 		        if(cci1[i] != null){
-                    if(buy[i] == 1){
+                    if(buy[i]==1){
                         result.push(0);
                     }else if(sell[i]==1){
                         result.push(1);
@@ -409,6 +415,7 @@
            
             let cci2 = Object.values(signals.cci2);
             let buy = Object.values(signals.ybuy_signal);
+            //console.log("buy:"+JSON.stringify(buy));   
             let sell = Object.values(signals.ysell_signal);
             let skdjbuy = Object.values(signals.skdjbuy_signal);
             let skdjsell = Object.values(signals.skdjsell_signal);
@@ -424,7 +431,7 @@
             
 	        for (var i = 0; i < cci2.length-1; i++) {
 		        if(cci2[i] != null){
-                    if(buy[i] == 1){
+                    if(buy[i]==1){
                         result.push(0);
                     }else if(sell[i]==1){
                         result.push(1);
@@ -467,7 +474,7 @@
             
 	        for (var i = 0; i < cci2.length-1; i++) {
 		        if(cci2[i] != null){
-                    if(ybuy[i] == 1){
+                    if(ybuy[i]==1){
                         result.push(6);
                     }else if(ysell[i]==1){
                         result.push(7);
@@ -494,7 +501,7 @@
                         xAxis: date[i],
                         value: signals_state1[signal[i]],
                         itemStyle: {
-                            color: colors_state[signal[i]],
+                            color: colors_state1[signal[i]],
                             shadowColor: '#FFFFFF',
                             shadowBlur: 20
                         },
