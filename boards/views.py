@@ -425,7 +425,7 @@ def generate_signals(data):
     signals['ybuy_signal'] = ((signals['cci2'] > 300) & (signals['cci2'].shift(1).fillna(method="ffill") < 300) & (signals['cci2'] > signals['cci1']) & (signals['cci2'].shift(2).fillna(method="ffill") < signals['cci1'].shift(2).fillna(method="ffill"))).astype(int)
     signals['ysell_signal'] = (((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 600)) | ((signals['cci2'] < 600) & (signals['cci2'].shift(1).fillna(method="ffill") > 300) & (signals['cci2']< signals['cci2'].shift(1).fillna(method="ffill")))).astype(int)
     signals['cci84buy_signal'] = ((signals['cci3'] < -220)|((signals['cci3'] > 100)&(signals['cci3'].shift(1).fillna(method="ffill")<100))|((signals['cci1'] > 100)&(signals['cci1'].shift(1).fillna(method="ffill")<100))).astype(int)
-    signals['cci84sell_signal'] = ((signals['cci3'] > 220)|((signals['cci1'] < -100)&(signals['cci1'].shift(1).fillna(method="ffill")> -100))).astype(int)
+    signals['cci84sell_signal'] = ((signals['cci3'] > 200)|((signals['cci1'] < -100)&(signals['cci1'].shift(1).fillna(method="ffill")> -100))).astype(int)
     signals['skdjbuy_signal'] = ((signals['k'] > signals['d'])&(signals['k'].shift(1).fillna(method="ffill") < signals['d'].shift(1).fillna(method="ffill"))).astype(int)
     signals['skdjsell_signal'] = (((signals['d'] > signals['k'])&(signals['d'].shift(1).fillna(method="ffill") < signals['k'].shift(1).fillna(method="ffill")))|((signals['j']<signals['j'].shift(1).fillna(method="ffill"))&(signals['k']<signals['k'].shift(1).fillna(method="ffill"))&(signals['j']>75))).astype(int)
     signals['willrbuy_signal'] = ((signals['willr'] < 80)&(signals['willr'].shift(1).fillna(method="ffill") > 80)).astype(int)
