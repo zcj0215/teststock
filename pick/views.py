@@ -648,9 +648,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\英伟达概念.xls"
+        filename = path+"\\小米概念.xls"
     else:
-        filename = path+"/英伟达概念.xls"
+        filename = path+"/小米概念.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -669,23 +669,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='英伟达概念')  
+        board = get_object_or_404(Board,name='小米概念')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='英伟达概念'):
+            if  not stocks.boards.filter(name='小米概念'):
                 stocks.boards.add(board)
-                stocks.blockname = '英伟达概念'
+                stocks.blockname = '小米概念'
                 stocks.save()
-            elif stocks.boards.filter(name='英伟达概念'):
-                stocks.blockname = '英伟达概念'
+            elif stocks.boards.filter(name='小米概念'):
+                stocks.blockname = '小米概念'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = '英伟达概念'
+                blockname = '小米概念'
             )
             stocks.boards.add(board)
             stocks.save() 
@@ -904,6 +904,6 @@ def stock_single(request):
         print(row.金额)
         amount = round((row.金额)/10000,2)
         
-        turnover('301393','SH',row.换手, amount, dt)
+        turnover('301393','SZ',row.换手, amount, dt)
         
     return HttpResponse('执行完毕！')
