@@ -579,67 +579,46 @@ def jquery(request):
 
 def dayadd(request):
     path =  os.path.dirname(__file__)
-    fl = []
+   
+    filename = ""
     if(sysstr =="Windows"):
-        filename = path+"\\Table.txt"
-        fl = readfile(filename)
+        filename = path+"\\Table1.xls"       
     else:
-        filename = path+"/Table.txt"
-        fl = readfile(filename)
+        filename = path+"/Table1.xls"
     
-    data_temp = []
-    data_list = []
-    for item in fl:
-        if item[0:2] != '代码':
-            if len(item) > 9:
-                data_temp = item.split('    ')
-                data_temp[0] = data_temp[0][0:6]
-                data_temp[1] = data_temp[1].lstrip().rstrip()
-                data_temp[2] = data_temp[2].lstrip().rstrip()
-                data_temp[3] = data_temp[3].lstrip().rstrip()
-                data_temp[4] = data_temp[4].lstrip().rstrip()
-                data_temp[5] = data_temp[5].lstrip().rstrip()
-                data_temp[6] = data_temp[6].lstrip().rstrip()
-                data_temp[7] = data_temp[7].lstrip().rstrip()
-                data_temp[8] = data_temp[8].lstrip().rstrip()
-                data_temp[9] = data_temp[9].lstrip().rstrip()
-                data_temp[10] = data_temp[10].lstrip().rstrip()
-                data_temp[11] = data_temp[11].lstrip().rstrip()
-
-                if data_temp[6] == '':
-                    data_temp[6] = data_temp[7]
-                    data_temp[7] = data_temp[8]
-                    data_temp[8] = data_temp[9]
-                    data_temp[9] = data_temp[10]
-                    data_temp[10] = data_temp[11]
-                    data_temp[11] = data_temp[12].lstrip().rstrip()
-
-                if data_temp[9] == '':
-                    data_temp[9] = data_temp[10]
-                    data_temp[10] = data_temp[11]
-                    data_temp[11] = data_temp[12].lstrip().rstrip()
-
-                if data_temp[8] == '—':
-                    data_temp[8] = '0.01'
-
-                data_list.append([data_temp[0],data_temp[1],data_temp[2],data_temp[3],data_temp[4],data_temp[5],data_temp[6],data_temp[7],
-                          data_temp[8],data_temp[9],data_temp[10],data_temp[11]])
-
-    for data in data_list:
-      if data[1][0:1] != '—':
-        if '万' in data[5]:
-            data[5] = round(float(data[5][0:-1])*10000,2)
-        else:
-            data[5] = round(float(data[5]),2)
-
-        if '万' in data[6] or '亿' in data[6]:
-            if '万' in data[6]:
-                data[6] = round(float(data[6][0:-1]),2)
-            elif '亿' in data[6]:
-                data[6] = round(float(data[6][0:-1])*10000,2)
-        
-        print(data)
-        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-03-11')
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    
+    for row in df.itertuples():
+        if str(row.开盘).lstrip().rstrip()[0:1] != '―':
+            code = str(row.代码)
+            if len(code) == 1:
+                code = '00000'+ code
+            elif len(code) == 2:
+                code = '0000'+ code
+            elif len(code) == 3:    
+                code = '000'+ code
+            elif len(code) == 4:    
+                code = '00'+ code
+            elif len(code) == 5:    
+                code = '0'+ code
+            
+            volume = 0
+            if '万' in str(row.总量):
+                volume = round(float(row.总量[0:-1])*10000,2)
+            else:
+                volume = round(float(row.总量*1),2)
+          
+            amount = 0
+            if '万' in (row.金额):
+                amount = round(float(row.金额[0:-1]),2)
+            elif '亿' in row.金额:
+                amount = round(float(row.金额[0:-1])*10000,2)
+            else:
+                amount = round(float(row.金额*0.0001),2)
+            
+            data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收]    
+            print(data)
+            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-03-12')
 
     return HttpResponse('执行完毕！')
 
@@ -648,9 +627,9 @@ def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\超导概念.xls"
+        filename = path+"\\免疫治疗.xls"
     else:
-        filename = path+"/超导概念.xls"
+        filename = path+"/免疫治疗.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
@@ -669,23 +648,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='超导概念')  
+        board = get_object_or_404(Board,name='免疫治疗')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='超导概念'):
+            if  not stocks.boards.filter(name='免疫治疗'):
                 stocks.boards.add(board)
-                stocks.blockname = '超导概念'
+                stocks.blockname = '免疫治疗'
                 stocks.save()
-            elif stocks.boards.filter(name='超导概念'):
-                stocks.blockname = '超导概念'
+            elif stocks.boards.filter(name='免疫治疗'):
+                stocks.blockname = '免疫治疗'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = '超导概念'
+                blockname = '免疫治疗'
             )
             stocks.boards.add(board)
             stocks.save() 
@@ -759,7 +738,7 @@ def blockdayadd(request):
         except:
             pass
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-03-11')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-03-12')
 
     return HttpResponse('执行完毕！')
 
@@ -772,9 +751,9 @@ def inflow(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\Table.xls"       
+        filename = path+"\\Table2.xls"       
     else:
-        filename = path+"/Table.xls"
+        filename = path+"/Table2.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     for row in df.itertuples():
@@ -804,7 +783,7 @@ def inflow(request):
             except: 
                inf = 0
             
-        everyday_inflow0(code, inf, '2024-03-11')
+        everyday_inflow0(code, inf, '2024-03-12')
     
     return HttpResponse('执行完毕！')
 
