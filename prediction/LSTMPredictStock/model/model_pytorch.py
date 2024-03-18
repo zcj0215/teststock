@@ -4,7 +4,7 @@ pytorch 模型
 """
 
 import torch
-from torch.nn import Module, LSTM, Linear
+from torch.nn import Module, LSTM, Linear, GRU
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 
