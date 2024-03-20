@@ -249,9 +249,7 @@ def main(code,good,again):
                                             config.label_in_feature_index]
             predict_data = pred_result * data_gainer.std[config.label_in_feature_index] + \
                    data_gainer.mean[config.label_in_feature_index] 
-                   
-            print(label_data.shape[0])   
-            print(predict_data.shape[0])     
+                      
             assert label_data.shape[0]==predict_data.shape[0], "The element number in origin and predicted data is different"    
             
             label_name = [data_gainer.data_column_name[i] for i in config.label_in_feature_index]
