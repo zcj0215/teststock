@@ -7,3 +7,9 @@ __pycache__/
 ../Pipfile.lock
 *.sqlite3
 .DS_Store
+./astocks/migrations/*
+./accounts/migrations/*
+./boards/migrations/*
+./prediction/migrations/*
+
+

@@ -220,3 +220,18 @@ class Stocksector(models.Model):
     Continuerise_days=models.DecimalField(max_digits=5, decimal_places=0,null=True) 
     date = models.DateField(max_length=10,db_index=True,null=True)
     name = models.CharField(max_length=50,db_index=True,null=True)
+    
+class Stockindex(models.Model):
+    code = models.CharField(max_length=11, db_index=True) 
+    name = models.CharField(max_length=50,db_index=True,null=True)                      
+    open = models.DecimalField(max_digits=11, decimal_places=2)
+    high = models.DecimalField(max_digits=11, decimal_places=2)
+    close = models.DecimalField(max_digits=11, decimal_places=2)
+    low = models.DecimalField(max_digits=11, decimal_places=2)
+    volume = models.DecimalField(max_digits=18, decimal_places=2)
+    amount = models.DecimalField(max_digits=15, decimal_places=2,null=True)
+    price_change = models.DecimalField(max_digits=7, decimal_places=2)      # 涨跌额
+    growth = models.DecimalField(max_digits=10, decimal_places=2,null=True)   # 涨幅
+    amplitude = models.DecimalField(max_digits=10, decimal_places=2,null=True)   # 振幅
+    date = models.DateField(max_length=10,db_index=True,null=True)
+    
