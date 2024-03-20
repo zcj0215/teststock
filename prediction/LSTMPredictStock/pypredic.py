@@ -35,7 +35,7 @@ class Config:
     output_size = len(label_columns)
 
     hidden_size = 128           # LSTM的隐藏层大小，也是输出大小
-    lstm_layers = 2             # LSTM的堆叠层数
+    lstm_layers = 3             # LSTM的堆叠层数
     dropout_rate = 0.2          # dropout概率
     time_step = 20              # 这个参数很重要，是设置用前多少天的数据来预测，也是LSTM的time step数，请保证训练数据量大于它
 
@@ -51,7 +51,7 @@ class Config:
 
     batch_size = 64
     learning_rate = 0.001
-    epoch = 20                  # 整个训练集被训练多少遍，不考虑早停的前提下
+    epoch = 50                  # 整个训练集被训练多少遍，不考虑早停的前提下
     patience = 5                # 训练多少epoch，验证集没提升就停掉
     random_seed = 42            # 随机种子，保证可复现
 
@@ -249,6 +249,9 @@ def main(code,good,again):
                                             config.label_in_feature_index]
             predict_data = pred_result * data_gainer.std[config.label_in_feature_index] + \
                    data_gainer.mean[config.label_in_feature_index] 
+                   
+            print(label_data.shape[0])   
+            print(predict_data.shape[0])     
             assert label_data.shape[0]==predict_data.shape[0], "The element number in origin and predicted data is different"    
             
             label_name = [data_gainer.data_column_name[i] for i in config.label_in_feature_index]

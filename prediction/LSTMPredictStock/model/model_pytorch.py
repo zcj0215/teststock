@@ -4,7 +4,7 @@ pytorch 模型
 """
 
 import torch
-from torch.nn import Module, LSTM, Linear, GRU
+from torch.nn import Module, LSTM, Linear, GRU, Dropout
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 
@@ -13,16 +13,31 @@ class Net(Module):
     pytorch预测模型，包括LSTM时序预测层和Linear回归输出层
     可以根据自己的情况增加模型结构
     '''
-    def __init__(self, config):
+    def __init__(self, args, device):
         super(Net, self).__init__()
-        self.lstm = LSTM(input_size=config.input_size, hidden_size=config.hidden_size,
-                         num_layers=config.lstm_layers, batch_first=True, dropout=config.dropout_rate)
-        self.linear = Linear(in_features=config.hidden_size, out_features=config.output_size)
+        self.args = args
+        self.device = device
+        self.dropout = Dropout(args.dropout_rate)
+        self.lstm = LSTM(input_size=args.input_size, hidden_size=args.hidden_size,
+                         num_layers=args.lstm_layers, batch_first=True)
+        self.gru = GRU(input_size=args.hidden_size,hidden_size=args.hidden_size, num_layers=1, batch_first=True)
+        self.linear = Linear(in_features=args.hidden_size, out_features=args.output_size)
 
     def forward(self, x, hidden=None):
-        lstm_out, hidden = self.lstm(x, hidden)
-        linear_out = self.linear(lstm_out)
-        return linear_out, hidden
+        # hidden = ((torch.zeros(1, x.size(0), self.args.hidden_size).to(self.device)),
+        #           (torch.zeros(1, x.size(0), self.args.hidden_size).to(self.device)))
+        x, hidden = self.lstm(x, hidden)
+        x = self.dropout(x)
+        x = torch.tanh(torch.transpose(x, 1, 2))
+        x = x.permute(0, 2, 1)
+        x, gru_ = self.gru(x)
+        x = self.dropout(x)
+        x = torch.tanh(torch.transpose(x, 1, 2))
+        x = x.permute(0, 2, 1)
+        x = self.linear(x)
+        #x = x[:, -1:, :]
+    
+        return x, hidden
 
 
 def train(config, logger, train_and_valid_data,code):
@@ -38,7 +53,7 @@ def train(config, logger, train_and_valid_data,code):
     valid_loader = DataLoader(TensorDataset(valid_X, valid_Y), batch_size=config.batch_size)
 
     device = torch.device("cuda:0" if config.use_cuda and torch.cuda.is_available() else "cpu") # CPU训练还是GPU
-    model = Net(config).to(device)      # 如果是GPU训练， .to(device) 会把模型/数据复制到GPU显存中
+    model = Net(config, device).to(device)      # 如果是GPU训练， .to(device) 会把模型/数据复制到GPU显存中
     if config.add_train:                # 如果是增量训练，会先加载原模型参数
         model.load_state_dict(torch.load(config.model_save_path + code +".pth"))
     optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
@@ -112,7 +127,7 @@ def predict(config, test_X,code):
 
     # 加载模型
     device = torch.device("cuda:0" if config.use_cuda and torch.cuda.is_available() else "cpu")
-    model = Net(config).to(device)
+    model = Net(config, device).to(device)
     model.load_state_dict(torch.load(config.model_save_path + code +".pth"))   # 加载模型参数
 
     # 先定义一个tensor保存预测结果
