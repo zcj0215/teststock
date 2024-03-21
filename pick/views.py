@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 import os
-from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stocksector,StockChoose,StockLimitup
+from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stocksector,StockChoose,StockLimitup,Stockindex
 from boards.models import Board,BoardType
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
@@ -405,6 +405,36 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
                 Continuerise_days = round(float(Continuerise_days),2),
                 date = dt     
         )
+        
+def everyday_index(code,name,open,close,high,low,volume,amount,price_change,growth,amplitude,dt):
+    try:
+        block = get_object_or_404(Stockindex,code=code,date=dt)
+        block.open = round(float(open),2)
+        block.high = round(float(high),2)
+        block.low = round(float(low),2)
+        block.close = round(float(close),2)
+        block.volume = volume
+        block.amount = amount
+        block.price_change = round(float(price_change),2)
+        block.growth = round(float(growth),2)
+        block.amplitude = round(float(amplitude),2)
+        block.name = name
+        block.save()
+    except Http404:
+        block = Stockindex.objects.create(
+                code = code,
+                name = name,
+                open = round(float(open),2),
+                high = round(float(high),2),
+                close = round(float(close),2),
+                low = round(float(low),2),
+                volume = volume,
+                amount = amount,
+                price_change = round(float(price_change),2),
+                growth = round(float(growth),2),
+                amplitude = round(float(amplitude),2),
+                date = dt     
+        )
     
     
 
@@ -618,22 +648,43 @@ def dayadd(request):
             
             data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收]    
             print(data)
-            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-03-20')
+            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-03-21')
 
     return HttpResponse('执行完毕！')
 
+def indexadd(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\Table3.xls"
+        
+    else:
+        filename = path+"/Table3.xls"
+     
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
+    for row in df.itertuples():
+        print(row.名称)
+        code = str(row.代码)[-6:]
+        print(code)
+        volume = round(float(row.总手*1/1000000),2)
+        amount = round(float(row.金额/100000000),2)
+        
+        
+        everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-03-21')
+        
+    return HttpResponse('执行完毕！')    
+        
 
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
-        filename = path+"\\QFII重仓.xls"
+        filename = path+"\\智能医疗.xls"
     else:
-        filename = path+"/QFII重仓.xls"
+        filename = path+"/智能医疗.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
-
     for row in df.iloc[:,0:2].itertuples():
         my = str(row.代码)
         if len(my) == 1:
@@ -648,23 +699,23 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
-        board = get_object_or_404(Board,name='QFII重仓')  
+        board = get_object_or_404(Board,name='智能医疗')  
         try:
             stocks = get_object_or_404(Stocks,code=my)
             
-            if  not stocks.boards.filter(name='QFII重仓'):
+            if  not stocks.boards.filter(name='智能医疗'):
                 stocks.boards.add(board)
-                stocks.blockname = 'QFII重仓'
+                stocks.blockname = '智能医疗'
                 stocks.save()
-            elif stocks.boards.filter(name='QFII重仓'):
-                stocks.blockname = 'QFII重仓'
+            elif stocks.boards.filter(name='智能医疗'):
+                stocks.blockname = '智能医疗'
                 stocks.save()
                     
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
                 name = row.名称,
-                blockname = 'QFII重仓'
+                blockname = '智能医疗'
             )
             stocks.boards.add(board)
             stocks.save() 
@@ -738,7 +789,7 @@ def blockdayadd(request):
         except:
             pass
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-03-20')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-03-21')
 
     return HttpResponse('执行完毕！')
 
@@ -783,7 +834,7 @@ def inflow(request):
             except: 
                inf = 0
             
-        everyday_inflow0(code, inf, '2024-03-20')
+        everyday_inflow0(code, inf, '2024-03-21')
     
     return HttpResponse('执行完毕！')
 

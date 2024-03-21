@@ -37,7 +37,7 @@ class Config:
     hidden_size = 128           # LSTM的隐藏层大小，也是输出大小
     lstm_layers = 3             # LSTM的堆叠层数
     dropout_rate = 0.2          # dropout概率
-    time_step = 20              # 这个参数很重要，是设置用前多少天的数据来预测，也是LSTM的time step数，请保证训练数据量大于它
+    time_step = 30              # 这个参数很重要，是设置用前多少天的数据来预测，也是LSTM的time step数，请保证训练数据量大于它
 
     # 训练参数
     do_train = True
@@ -49,9 +49,9 @@ class Config:
     train_data_rate = 0.95      # 训练数据占总体数据比例，测试数据就是 1-train_data_rate
     valid_data_rate = 0.15      # 验证数据占训练数据比例，验证集在训练过程使用，为了做模型和参数选择
 
-    batch_size = 64
+    batch_size = 128
     learning_rate = 0.001
-    epoch = 50                  # 整个训练集被训练多少遍，不考虑早停的前提下
+    epoch = 100                  # 整个训练集被训练多少遍，不考虑早停的前提下
     patience = 5                # 训练多少epoch，验证集没提升就停掉
     random_seed = 42            # 随机种子，保证可复现
 
