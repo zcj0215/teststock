@@ -435,9 +435,8 @@ def everyday_index(code,name,open,close,high,low,volume,amount,price_change,grow
                 amplitude = round(float(amplitude),2),
                 date = dt     
         )
+            
     
-    
-
 def everydayout(dt):
     path =  os.path.dirname(__file__)   
     if(sysstr =="Windows"):
@@ -937,3 +936,24 @@ def stock_single(request):
         turnover('600157','SH',row.换手, amount, dt)
         
     return HttpResponse('执行完毕！')
+
+def index_single(request):
+    path =  os.path.dirname(__file__)
+    filename = ""
+    if(sysstr =="Windows"):
+        filename = path+"\\Table5.xls"       
+    else:
+        filename = path+"/Table5.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.itertuples():
+        dt = str(row.时间[0:10])
+        print(dt)
+        
+        volume = round(float(row.总手*1/1000000),2)
+        amount = round(float(row.金额/100000000),2)
+        
+        everyday_index('000001','上证指数', row.开盘, row.收盘, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, dt)
+       
+    return HttpResponse('执行完毕！')
+
