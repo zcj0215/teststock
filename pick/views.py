@@ -953,7 +953,7 @@ def index_single(request):
         volume = round(float(row.总手*1/1000000),2)
         amount = round(float(row.金额/100000000),2)
         
-        everyday_index('000001','上证指数', row.开盘, row.收盘, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, dt)
+        everyday_index('000016','上证50', row.开盘, row.收盘, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, dt)
        
     return HttpResponse('执行完毕！')
 
