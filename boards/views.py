@@ -8,7 +8,7 @@ from django.db.models import Count
 
 from .forms import NewTopicForm, PostForm, CodeForm
 from .models import Board, Topic, Post, BoardType
-from astocks.models import Stocks,StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocksector
+from astocks.models import Stocks,StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocksector,Stockindex
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 import time
@@ -79,27 +79,43 @@ class StockListView(ListView):
         blocklist = []
         key = self.kwargs.get('name') + time.strftime("%Y-%m-%d", time.localtime())
         
-        if self.request.session.get(key):
+        if self.request.session.get(key) and self.board.type.name != '大盘':
             self.data = json.dumps(blocklist)
             self.bsignals = {}
         else:
             self.request.session[key] = key  
-            try:
-                data = Stocksector.objects.all().filter(name=self.board.name).order_by('-date')
-                for row in data:
-                  dict = {}
-                  dict["name"] = self.board.name
-                  dict["code"] = str(row.code)
-                  dict["open"] = str(row.open)
-                  dict["close"] = str(row.close)
-                  dict["low"] = str(row.low)
-                  dict["high"] = str(row.high)
-                  dict["vol"] = str(row.volume)
-                  dict["trade_date"] = str(row.date)  
-                  blocklist.append(dict) 
-               
-            except EXCEPTION:
-                pass
+            if self.board.type.name == '大盘':
+                try:
+                    data = Stockindex.objects.all().filter(name=self.board.name).order_by('-date')
+                    for row in data:
+                        dict = {}
+                        dict["name"] = self.board.name
+                        dict["code"] = str(row.code)
+                        dict["open"] = str(row.open)
+                        dict["close"] = str(row.close)
+                        dict["low"] = str(row.low)
+                        dict["high"] = str(row.high)
+                        dict["vol"] = str(row.volume)
+                        dict["trade_date"] = str(row.date)  
+                        blocklist.append(dict) 
+                except EXCEPTION:
+                    pass
+            else:
+                try:
+                    data = Stocksector.objects.all().filter(name=self.board.name).order_by('-date')
+                    for row in data:
+                        dict = {}
+                        dict["name"] = self.board.name
+                        dict["code"] = str(row.code)
+                        dict["open"] = str(row.open)
+                        dict["close"] = str(row.close)
+                        dict["low"] = str(row.low)
+                        dict["high"] = str(row.high)
+                        dict["vol"] = str(row.volume)
+                        dict["trade_date"] = str(row.date)  
+                        blocklist.append(dict) 
+                except EXCEPTION:
+                    pass
             blocklist.reverse()
             mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
             bsignals = generate_signals(mybpd)
@@ -187,21 +203,38 @@ def stock_detail(request, board_name, stock_name):
     name = stock.name
     jsonlist = []
     blocklist = []
-   
+    
     try:
-        data = Stocksector.objects.all().filter(name=board_name).order_by('-date')
+        board = get_object_or_404(Board, name=board_name)
+        if board.type.name == '大盘':
+            data = Stockindex.objects.all().filter(name=board_name).order_by('-date')
         
-        for row in data:
-            dict = {}
-            dict["name"] = board_name 
-            dict["code"] = str(row.code)
-            dict["open"] = str(row.open)
-            dict["close"] = str(row.close)
-            dict["low"] = str(row.low)
-            dict["high"] = str(row.high)
-            dict["vol"] = str(row.volume)
-            dict["trade_date"] = str(row.date)  
-            blocklist.append(dict)         
+            for row in data:
+                dict = {}
+                dict["name"] = board_name 
+                dict["code"] = str(row.code)
+                dict["open"] = str(row.open)
+                dict["close"] = str(row.close)
+                dict["low"] = str(row.low)
+                dict["high"] = str(row.high)
+                dict["vol"] = str(row.volume)
+                dict["trade_date"] = str(row.date)  
+                blocklist.append(dict)         
+            
+        else:
+            data = Stocksector.objects.all().filter(name=board_name).order_by('-date')
+        
+            for row in data:
+                dict = {}
+                dict["name"] = board_name 
+                dict["code"] = str(row.code)
+                dict["open"] = str(row.open)
+                dict["close"] = str(row.close)
+                dict["low"] = str(row.low)
+                dict["high"] = str(row.high)
+                dict["vol"] = str(row.volume)
+                dict["trade_date"] = str(row.date)  
+                blocklist.append(dict)         
     except EXCEPTION:
         pass
     blocklist.reverse()

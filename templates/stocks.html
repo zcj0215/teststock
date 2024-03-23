@@ -149,6 +149,7 @@
         var downBorderColor = '#008F28';
         var data = {{ data|safe }}
         var blockid = '{{ board.id|safe }}';
+        var blocktypename = '{{ board.type.name|safe }}';
         var signals = {{ bsignals|safe }};
        
         var data0 = null;
@@ -171,11 +172,13 @@
                         success: function (res) {
                             if (res.data && !res.data.result){
                                 data0 =splitData(JSON.parse(res.data)); 
-                                if(sessionStorage.length>4){
-                                    sessionStorage.clear() 
+                                if(blocktypename !='大盘'){
+                                    if(sessionStorage.length>4){
+                                        sessionStorage.clear() 
+                                    }
+                                    sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
+                                    sessionStorage.setItem('bsignals'+blockid, JSON.stringify(JSON.parse(res.bsignals)));
                                 }
-                                sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
-                                sessionStorage.setItem('bsignals'+blockid, JSON.stringify(JSON.parse(res.bsignals)));
                                 signals =  JSON.parse(res.bsignals);
 
                                 runChart();
@@ -191,11 +194,13 @@
             signals =  JSON.parse(sessionStorage.getItem('bsignals'+blockid)); 
         }else{
             data0 = splitData(data);
-            if(sessionStorage.length>4){
-                sessionStorage.clear() 
+            if(blocktypename !='大盘'){
+                if(sessionStorage.length>4){
+                    sessionStorage.clear() 
+                }
+                sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
+                sessionStorage.setItem('bsignals'+blockid, JSON.stringify(signals));
             }
-            sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
-            sessionStorage.setItem('bsignals'+blockid, JSON.stringify(signals));
         }
         
         function splitData(rawData) {
