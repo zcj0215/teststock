@@ -669,7 +669,7 @@ def indexadd(request):
         amount = round(float(row.金额/100000000),2)
         
         
-        everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-03-22')
+        everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-03-25')
         
     return HttpResponse('执行完毕！')    
         
