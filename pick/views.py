@@ -984,9 +984,9 @@ def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
     if(sysstr =="Windows"):
-        filename = path+"\\880424.csv"       
+        filename = path+"\\880651.csv"       
     else:
-        filename = path+"/880424.csv"
+        filename = path+"/880651.csv"
         
     df = pd.read_csv(filename, encoding='utf-8')
     for row in df.itertuples():
@@ -994,7 +994,7 @@ def block_single(request):
         print(dt)
         
         volume = round(float(row.成交量*1),2)
-        block_history('880424','旅游', row.开盘, row.收盘, row.最高, row.最低, volume, dt)
+        block_history('880651','旅游概念', row.开盘, row.收盘, row.最高, row.最低, volume, dt)
        
     return HttpResponse('执行完毕！')
 
