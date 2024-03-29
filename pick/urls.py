@@ -18,4 +18,5 @@ urlpatterns = [
     path('stock_single/', pick_views.stock_single,name='stock_single'),
     path('stock_select/', select_views.stock_select,name='stock_select'),
     path('index_single/', pick_views.index_single,name='index_single'),
+    path('block_single/', pick_views.block_single,name='block_single'),
 ]

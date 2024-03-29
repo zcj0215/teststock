@@ -406,6 +406,28 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
                 date = dt     
         )
         
+def block_history(code,name,open,close,high,low,volume,dt):
+    try:
+        block = get_object_or_404(Stocksector,code=code,date=dt)
+        block.open = round(float(open),2)
+        block.high = round(float(high),2)
+        block.close = round(float(close),2)
+        block.low = round(float(low),2)
+        block.volume = volume
+        block.name = name
+        block.save()
+    except Http404:
+        block = Stocksector.objects.create(
+                code = code,
+                name = name,
+                open = round(float(open),2),
+                high = round(float(high),2),
+                close = round(float(close),2),
+                low = round(float(low),2),
+                volume = volume,
+                date = dt     
+        )
+        
 def everyday_index(code,name,open,close,high,low,volume,amount,price_change,growth,amplitude,dt):
     try:
         block = get_object_or_404(Stockindex,code=code,date=dt)
@@ -955,6 +977,24 @@ def index_single(request):
         amount = round(float(row.金额/100000000),2)
         
         everyday_index('899050','北证50', row.开盘, row.收盘, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, dt)
+       
+    return HttpResponse('执行完毕！')
+
+def block_single(request):
+    path =  os.path.dirname(__file__)
+    filename = ""
+    if(sysstr =="Windows"):
+        filename = path+"\\880424.csv"       
+    else:
+        filename = path+"/880424.csv"
+        
+    df = pd.read_csv(filename, encoding='utf-8')
+    for row in df.itertuples():
+        dt = str(row.日期)
+        print(dt)
+        
+        volume = round(float(row.成交量*1),2)
+        block_history('880424','旅游', row.开盘, row.收盘, row.最高, row.最低, volume, dt)
        
     return HttpResponse('执行完毕！')
 
