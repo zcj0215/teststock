@@ -696,56 +696,6 @@ def indexadd(request):
         
     return HttpResponse('执行完毕！')    
         
-
-def blockadd(request):
-    path =  os.path.dirname(__file__)
-    filename = "" 
-    blockname ="破净资产"
-    if(sysstr =="Windows"):
-        filename = path+"\\"+blockname+".xls"
-    else:
-        filename = path+"/"+blockname+".xls"
-        
-    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    
-    for row in df.iloc[:,0:2].itertuples():
-        my = str(row.代码)
-        if len(my) == 1:
-            my = '00000'+ my
-        elif len(my) == 2:
-            my = '0000'+ my
-        elif len(my) == 3:    
-            my = '000'+ my
-        elif len(my) == 4:    
-            my = '00'+ my
-        elif len(my) == 5:    
-            my = '0'+ my    
-        print(my)
-        print(row.名称)
-        board = get_object_or_404(Board,name=blockname)  
-        try:
-            stocks = get_object_or_404(Stocks,code=my)
-            
-            if  not stocks.boards.filter(name=blockname):
-                stocks.boards.add(board)
-                stocks.blockname = blockname
-                stocks.save()
-            elif stocks.boards.filter(name=blockname):
-                stocks.blockname = blockname
-                stocks.save()
-                    
-        except Http404:
-            stocks = Stocks.objects.create(
-                code = my,
-                name = row.名称,
-                blockname = blockname
-            )
-            stocks.boards.add(board)
-            stocks.save() 
-
-    return HttpResponse('执行完毕！')
-
-
 def blockdayadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
@@ -984,8 +934,8 @@ def index_single(request):
 def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
-    code = "880846"
-    name ="破净资产"
+    code = "880674"
+    name ="英伟达概念"
     if(sysstr =="Windows"):
         filename = path+"\\"+code+".csv"       
     else:
@@ -1001,5 +951,53 @@ def block_single(request):
         volume = round(float(row.成交量*1),2)
         block_history(code,name, row.开盘, row.收盘, row.最高, row.最低, volume, dt)
        
+    return HttpResponse('执行完毕！')
+
+def blockadd(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    blockname ="英伟达概念"
+    if(sysstr =="Windows"):
+        filename = path+"\\"+blockname+".xls"
+    else:
+        filename = path+"/"+blockname+".xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    
+    for row in df.iloc[:,0:2].itertuples():
+        my = str(row.代码)
+        if len(my) == 1:
+            my = '00000'+ my
+        elif len(my) == 2:
+            my = '0000'+ my
+        elif len(my) == 3:    
+            my = '000'+ my
+        elif len(my) == 4:    
+            my = '00'+ my
+        elif len(my) == 5:    
+            my = '0'+ my    
+        print(my)
+        print(row.名称)
+        board = get_object_or_404(Board,name=blockname)  
+        try:
+            stocks = get_object_or_404(Stocks,code=my)
+            
+            if  not stocks.boards.filter(name=blockname):
+                stocks.boards.add(board)
+                stocks.blockname = blockname
+                stocks.save()
+            elif stocks.boards.filter(name=blockname):
+                stocks.blockname = blockname
+                stocks.save()
+                    
+        except Http404:
+            stocks = Stocks.objects.create(
+                code = my,
+                name = row.名称,
+                blockname = blockname
+            )
+            stocks.boards.add(board)
+            stocks.save() 
+
     return HttpResponse('执行完毕！')
 
