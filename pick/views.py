@@ -934,8 +934,8 @@ def index_single(request):
 def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
-    code = "880906"
-    name ="智能家居"
+    code = "880656"
+    name ="CPO概念"
     if(sysstr =="Windows"):
         filename = path+"\\"+code+".csv"       
     else:
@@ -956,7 +956,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="智能家居"
+    blockname ="CPO概念"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
