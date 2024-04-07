@@ -934,8 +934,8 @@ def index_single(request):
 def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
-    code = "880493"
-    name ="软件服务"
+    code = "880916"
+    name ="国产软件"
     if(sysstr =="Windows"):
         filename = path+"\\"+code+".csv"       
     else:
