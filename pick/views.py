@@ -98,7 +98,7 @@ def turnover(code,flag,dd,amount,dt):
                 pass
 
 
-def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_change,price_change,pre_close,dt):
+def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_change,price_change,pre_close,pe,dt):
     
     try:
         stock = get_object_or_404(Stocks, code=code)
@@ -140,6 +140,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
             stock.price_change = round(float(price_change),2)
             stock.p_change = round(float(p_change),2)
             stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
             stock.save()
         except Http404:
             stock = Stockszc.objects.create(
@@ -155,7 +156,8 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 price_change = round(float(price_change),2),
                 p_change = round(float(p_change),2),
                 date = dt,
-                volume_ratio = round(float(volume_ratio),2)
+                volume_ratio = round(float(volume_ratio),2),
+                pe = round(float(pe),2)
             )
     elif code[:2] == '00':
         try:
@@ -171,6 +173,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
             stock.price_change = round(float(price_change),2)
             stock.p_change = round(float(p_change),2)
             stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
             stock.save()
         except Http404:
             stock = Stocksz.objects.create(
@@ -186,7 +189,8 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 price_change = round(float(price_change),2),
                 p_change = round(float(p_change),2),
                 date = dt,
-                volume_ratio = round(float(volume_ratio),2)
+                volume_ratio = round(float(volume_ratio),2),
+                pe = round(float(pe),2)
             )
     elif code[:2] == '68':
         try:
@@ -202,6 +206,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
             stock.price_change = round(float(price_change),2)
             stock.p_change = round(float(p_change),2)
             stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
             stock.save()   
         except Http404:
             stock = Stockshk.objects.create(
@@ -217,7 +222,8 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 price_change = round(float(price_change),2),
                 p_change = round(float(p_change),2),
                 date = dt,
-                volume_ratio = round(float(volume_ratio),2)
+                volume_ratio = round(float(volume_ratio),2),
+                pe = round(float(pe),2)
             ) 
     elif code[:2] == '60':    
         try:
@@ -233,6 +239,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
             stock.price_change = round(float(price_change),2)
             stock.p_change = round(float(p_change),2)
             stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
             stock.save()
         except Http404:
             stock = Stocksh.objects.create(
@@ -248,7 +255,8 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 price_change = round(float(price_change),2),
                 p_change = round(float(p_change),2),
                 date = dt,
-                volume_ratio = round(float(volume_ratio),2)
+                volume_ratio = round(float(volume_ratio),2),
+                pe = round(float(pe),2)
             )
     else:
         try:
@@ -264,6 +272,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
             stock.price_change = round(float(price_change),2)
             stock.p_change = round(float(p_change),2)
             stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
             stock.save()
         except Http404:
             stock = Stockbj.objects.create(
@@ -279,7 +288,8 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 price_change = round(float(price_change),2),
                 p_change = round(float(p_change),2),
                 date = dt,
-                volume_ratio = round(float(volume_ratio),2)
+                volume_ratio = round(float(volume_ratio),2),
+                pe = round(float(pe),2)
             )
             
 def everyday_inflow0(code,inflow,dt):
@@ -402,7 +412,7 @@ def everyday_inflow(code,inflow,dt,turnover):
             pass
     
 
-def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_close,limitup_number,growth,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,dt):
+def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_close,limitup_number,growth,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,pe,dt):
     try:
         block = get_object_or_404(Stocksector,code=code,date=dt)
         block.open = round(float(open),2)
@@ -421,9 +431,34 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
         block.growth_60 = round(float(growth_60),2)
         block.Continuerise_days = round(float(Continuerise_days),2)
         block.name = name
+        if str(pe).lstrip().rstrip() != '--':
+            block.pe = round(float(pe),2)
         block.save()
     except Http404:
-        block = Stocksector.objects.create(
+        if str(pe).lstrip().rstrip() != '--':
+            block = Stocksector.objects.create(
+                code = code,
+                name = name,
+                open = round(float(open),2),
+                high = round(float(high),2),
+                close = round(float(close),2),
+                pre_close = round(float(pre_close),2),
+                low = round(float(low),2),
+                volume = volume,
+                turnover = round(float(tover),2),
+                volume_ratio = round(float(volume_ratio),2),
+                limitup_number = round(float(limitup_number),2),
+                growth = round(float(growth),2),
+                growth_pre = round(float(growth_pre),2),
+                growth_3 = round(float(growth_3),2),
+                growth_20 = round(float(growth_20),2),
+                growth_60 = round(float(growth_60),2),
+                Continuerise_days = round(float(Continuerise_days),2),
+                date = dt,
+                pe = round(float(pe),2)
+            )
+        else:
+            block = Stocksector.objects.create(
                 code = code,
                 name = name,
                 open = round(float(open),2),
@@ -442,7 +477,7 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
                 growth_60 = round(float(growth_60),2),
                 Continuerise_days = round(float(Continuerise_days),2),
                 date = dt     
-        )
+            )    
         
 def everyday_blockpe(code,pe,dt):
     try:
@@ -714,9 +749,9 @@ def dayadd(request):
             else:
                 amount = round(float(row.金额*0.0001),2)
             
-            data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收]    
+            data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率]    
             print(data)
-            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],'2024-04-09')
+            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],'2024-04-10')
 
     return HttpResponse('执行完毕！')
 
@@ -739,7 +774,7 @@ def indexadd(request):
             amount = round(float(row.金额/100000000),2)
         
         
-            everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-04-09')
+            everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-04-10')
         
     return HttpResponse('执行完毕！')    
         
@@ -809,7 +844,7 @@ def blockdayadd(request):
         except:
             pass
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,'2024-04-09')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,row.市盈率,'2024-04-10')
 
     return HttpResponse('执行完毕！')
 
@@ -854,7 +889,7 @@ def inflow(request):
             except: 
                inf = 0
             
-        everyday_inflow0(code, inf, '2024-04-09')
+        everyday_inflow0(code, inf, '2024-04-10')
     
     return HttpResponse('执行完毕！')
 
@@ -1029,8 +1064,8 @@ def index_single(request):
 def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
-    code = "880534"
-    name ="锂电池概念"
+    code = "880736"
+    name ="工业母机"
     if(sysstr =="Windows"):
         filename = path+"\\"+code+".csv"       
     else:
@@ -1051,7 +1086,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="锂电池概念"
+    blockname ="工业母机"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
