@@ -319,6 +319,44 @@ def everyday_inflow0(code,inflow,dt):
             stock.save()
         except Http404:
             pass
+        
+def everyday_stockpe(code,pe,dt):
+    
+    if code[:2] == '30':  
+        try:
+            stock = get_object_or_404(Stockszc, code=code,date=dt)
+            stock.pe = pe
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '00':
+        try:
+            stock = get_object_or_404(Stocksz, code=code,date=dt)
+            stock.pe = pe
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '68':
+        try:
+            stock = get_object_or_404(Stockshk, code=code,date=dt)
+            stock.pe = pe
+            stock.save()   
+        except Http404:
+            pass
+    elif code[:2] == '60':    
+        try:
+            stock = get_object_or_404(Stocksh, code=code,date=dt)
+            stock.pe = pe
+            stock.save()
+        except Http404:
+            pass
+    else:
+        try:
+            stock = get_object_or_404(Stockbj, code=code,date=dt)
+            stock.pe = pe
+            stock.save()
+        except Http404:
+            pass
 
 def everyday_inflow(code,inflow,dt,turnover):
     
@@ -405,6 +443,15 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
                 Continuerise_days = round(float(Continuerise_days),2),
                 date = dt     
         )
+        
+def everyday_blockpe(code,pe,dt):
+    try:
+        block = get_object_or_404(Stocksector,code=code,date=dt)
+        if str(pe).lstrip().rstrip() != '--':
+            block.pe = round(float(pe),2)
+        block.save()
+    except Http404:
+        pass
         
 def block_history(code,name,open,close,high,low,volume,dt):
     try:
@@ -808,6 +855,54 @@ def inflow(request):
                inf = 0
             
         everyday_inflow0(code, inf, '2024-04-09')
+    
+    return HttpResponse('执行完毕！')
+
+
+def stock_pe(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\Table1.xls"       
+    else:
+        filename = path+"/Table1.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.itertuples():
+        if str(row.开盘).lstrip().rstrip()[0:1] != '―':
+            code = str(row.代码)
+            if len(code) == 1:
+                code = '00000'+ code
+            elif len(code) == 2:
+                code = '0000'+ code
+            elif len(code) == 3:    
+                code = '000'+ code
+            elif len(code) == 4:    
+                code = '00'+ code
+            elif len(code) == 5:    
+                code = '0'+ code
+            
+            print(code)
+            print(row.市盈率)
+            everyday_stockpe(code, row.市盈率, '2024-04-09')
+    
+    return HttpResponse('执行完毕！')
+
+def block_pe(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\板块指数.xls"
+        
+    else:
+        filename = path+"/板块指数.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.itertuples():
+        print(row.名称) 
+        print(row.市盈率)    
+        everyday_blockpe(row.代码,row.市盈率,'2024-04-09')
+
     
     return HttpResponse('执行完毕！')
 
