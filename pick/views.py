@@ -1000,4 +1000,3 @@ def blockadd(request):
             stocks.save() 
 
     return HttpResponse('执行完毕！')
-
