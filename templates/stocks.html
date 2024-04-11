@@ -78,8 +78,8 @@
   <center>
     <div id="loadData">数据加载中......</div>
     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
-    <div style="width:100%;height:1000px;margin-top:50px;">
-        <div id="hist_futu" style="float:left;width: 100%;height:930px;"></div>
+    <div style="width:100%;height:1500px;margin-top:50px;">
+        <div id="hist_futu" style="float:left;width: 100%;height:1400px;"></div>
     </div>
   </center>
   <div class="modal fade" id="lengthModel">
@@ -209,7 +209,7 @@
             var date = []
         
             for (var i = 0; i < rawData.length; i++) {
-                open_close_low_high.push([rawData[i].open, rawData[i].close, rawData[i].low, rawData[i].high,rawData[i].vol,rawData[i].trade_date])
+                open_close_low_high.push([rawData[i].open, rawData[i].close, rawData[i].low, rawData[i].high,rawData[i].vol,rawData[i].trade_date,rawData[i].pe])
                 volumes.push(rawData[i].vol)
                 date.push(rawData[i].trade_date)
             }
@@ -557,32 +557,38 @@
                    {
                     left: '10%',
                     right: '8%',
-                    height: '35%'
+                    height: '31%'
                    },
                    {
                     left: '10%',
                     right: '8%',
-                    top: '41%',
-                    height: '14%'
+                    top: '37%',
+                    height: '11%'
                    },
                    {
                     left: '10%',
                     right: '8%',
-                    top: '53%',
-                    height: '14%'
+                    top: '48%',
+                    height: '10%'
                    },
                    {
                     left: '10%',
                     right: '8%',
-                    top: '70%',
-                    height: '14%'
+                    top: '61%',
+                    height: '11%'
                    },
                    {
                     left: '10%',
                     right: '8%',
-                    top: '81%',
-                    height: '14%'
-                   }          
+                    top: '72%',
+                    height: '12%'
+                   },
+                   {
+                    left: '10%',
+                    right: '8%',
+                    top: '83%',
+                    height: '13%'
+                   }      
                 ],
                 xAxis: [
                     {
@@ -644,6 +650,18 @@
                         axisLabel: { show: false },
                         min: 'dataMin',
                         max: 'dataMax'
+                    },
+                    {
+                        type: 'category',
+                        gridIndex: 5,
+                        data: data0.date,
+                        boundaryGap: false,
+                        axisLine: { onZero: false },
+                        axisTick: { show: false },
+                        splitLine: { show: false },
+                        axisLabel: { show: false },
+                        min: 'dataMin',
+                        max: 'dataMax'
                     }
                 ],
                 yAxis: [
@@ -688,18 +706,27 @@
                         axisLine: { show: false },
                         axisTick: { show: false },
                         splitLine: { show: false }
+                    },
+                    {
+                        scale: true,
+                        gridIndex: 5,
+                        splitNumber: 2,
+                        axisLabel: { show: false },
+                        axisLine: { show: false },
+                        axisTick: { show: false },
+                        splitLine: { show: false }
                     }
                 ],
                 dataZoom: [
                     {
                         type: 'inside',
-                        xAxisIndex: [0, 1, 2, 3, 4],
+                        xAxisIndex: [0, 1, 2, 3, 4, 5],
                         start: 100 - Math.floor((60 / data0.date.length) * 100),
                         end: 100
                     },
                     {
                         show: true,
-                        xAxisIndex: [0, 1, 2, 3, 4],
+                        xAxisIndex: [0, 1, 2, 3, 4, 5],
                         type: 'slider',
                         top: '95%',
                         start: 100 - Math.floor((60 / data0.date.length) * 100),
@@ -916,6 +943,19 @@
                             width: 1
                         },
                         data: Object.values(signals.adxr)
+                    },
+                    {
+                        name: '市盈率',
+                        type: 'line',
+                        xAxisIndex: 5,
+                        yAxisIndex: 5,
+                        color: '#009933',
+                        smooth: true,
+                        showSymbol: false,
+                        lineStyle: {
+                            width: 1
+                        },
+                        data: data0.open_close_low_high.map(function(row) {return row[6];})
                     }
                 ]
               };

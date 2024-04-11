@@ -113,11 +113,12 @@ class StockListView(ListView):
                         dict["high"] = str(row.high)
                         dict["vol"] = str(row.volume)
                         dict["trade_date"] = str(row.date)  
+                        dict["pe"] = str(row.pe) 
                         blocklist.append(dict) 
                 except EXCEPTION:
                     pass
             blocklist.reverse()
-            mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
+            mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date','pe'])
             bsignals = generate_signals(mybpd)
             
             self.data = json.dumps(blocklist)
@@ -233,12 +234,13 @@ def stock_detail(request, board_name, stock_name):
                 dict["low"] = str(row.low)
                 dict["high"] = str(row.high)
                 dict["vol"] = str(row.volume)
-                dict["trade_date"] = str(row.date)  
+                dict["trade_date"] = str(row.date)
+                dict["pe"] = str(row.pe)  
                 blocklist.append(dict)         
     except EXCEPTION:
         pass
     blocklist.reverse()
-    mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
+    mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date','pe'])
     #bcci = round(calculate_CCI(mybpd), 2).tolist()
     bsignals = generate_signals(mybpd)
     
@@ -269,6 +271,7 @@ def stock_detail(request, board_name, stock_name):
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
+                      dict["pe"] = str(row.pe)
                       jsonlist.append(dict) 
                
               except EXCEPTION:
@@ -292,7 +295,8 @@ def stock_detail(request, board_name, stock_name):
                       dict["pre_close"] = str(row.pre_close)
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
-                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      dict["capital_inflow"] = str(row.capital_inflow)
+                      dict["pe"] = str(row.pe)  
                       jsonlist.append(dict) 
               
               except EXCEPTION:
@@ -317,7 +321,8 @@ def stock_detail(request, board_name, stock_name):
                       dict["pre_close"] = str(row.pre_close)
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
-                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      dict["capital_inflow"] = str(row.capital_inflow)
+                      dict["pe"] = str(row.pe)
                       jsonlist.append(dict) 
               
                      
@@ -342,7 +347,8 @@ def stock_detail(request, board_name, stock_name):
                       dict["pre_close"] = str(row.pre_close)
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
-                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      dict["capital_inflow"] = str(row.capital_inflow)
+                      dict["pe"] = str(row.pe)  
                       jsonlist.append(dict) 
                     
               except EXCEPTION:
@@ -366,14 +372,15 @@ def stock_detail(request, board_name, stock_name):
                   dict["pre_close"] = str(row.pre_close)
                   dict["turnover"] = str(row.turnover)
                   dict["trade_date"] = str(row.date)
-                  dict["capital_inflow"] = str(row.capital_inflow)  
+                  dict["capital_inflow"] = str(row.capital_inflow) 
+                  dict["pe"] = str(row.pe)
                   jsonlist.append(dict) 
                     
           except EXCEPTION:
               pass
         jsonlist.reverse()
         
-        mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow'])
+        mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow','pe'])
         # cci = round(calculate_CCI(mypd), 2).tolist() 
         signals = generate_signals(mypd)
              
