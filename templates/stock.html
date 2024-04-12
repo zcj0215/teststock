@@ -115,7 +115,7 @@
                             if (res.data && res.signals){
                                 data0 =splitData(JSON.parse(res.data)); 
                                 console.log("data0:"+JSON.stringify(data0));
-                                if(sessionStorage.length>4){
+                                if(sessionStorage.length>2){
                                     sessionStorage.clear() 
                                 }
                                 sessionStorage.setItem(code, JSON.stringify(data0));
@@ -136,7 +136,7 @@
         }else{
             data0 = splitData(data);
            
-            if(sessionStorage.length>4){
+            if(sessionStorage.length>2){
                 sessionStorage.clear() 
             }
             sessionStorage.setItem(code, JSON.stringify(data0));

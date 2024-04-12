@@ -173,7 +173,7 @@
                             if (res.data && !res.data.result){
                                 data0 =splitData(JSON.parse(res.data)); 
                                 if(blocktypename !='大盘'){
-                                    if(sessionStorage.length>4){
+                                    if(sessionStorage.length>2){
                                         sessionStorage.clear() 
                                     }
                                     sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
@@ -195,7 +195,7 @@
         }else{
             data0 = splitData(data);
             if(blocktypename !='大盘'){
-                if(sessionStorage.length>4){
+                if(sessionStorage.length>2){
                     sessionStorage.clear() 
                 }
                 sessionStorage.setItem('block'+blockid, JSON.stringify(data0));
