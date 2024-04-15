@@ -272,6 +272,7 @@ def stock_detail(request, board_name, stock_name):
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
+                      dict["nf"] = str(row.nf)
                       jsonlist.append(dict) 
                
               except EXCEPTION:
@@ -296,7 +297,8 @@ def stock_detail(request, board_name, stock_name):
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
-                      dict["pe"] = str(row.pe)  
+                      dict["pe"] = str(row.pe)
+                      dict["nf"] = str(row.nf)  
                       jsonlist.append(dict) 
               
               except EXCEPTION:
@@ -323,6 +325,7 @@ def stock_detail(request, board_name, stock_name):
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
+                      dict["nf"] = str(row.nf)
                       jsonlist.append(dict) 
               
                      
@@ -348,7 +351,8 @@ def stock_detail(request, board_name, stock_name):
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
-                      dict["pe"] = str(row.pe)  
+                      dict["pe"] = str(row.pe)
+                      dict["nf"] = str(row.nf)  
                       jsonlist.append(dict) 
                     
               except EXCEPTION:
@@ -374,6 +378,7 @@ def stock_detail(request, board_name, stock_name):
                   dict["trade_date"] = str(row.date)
                   dict["capital_inflow"] = str(row.capital_inflow) 
                   dict["pe"] = str(row.pe)
+                  dict["nf"] = str(row.nf)
                   jsonlist.append(dict) 
                     
           except EXCEPTION:
@@ -522,7 +527,8 @@ def blockget(request):
                 dict["low"] = str(row.low)
                 dict["high"] = str(row.high)
                 dict["vol"] = str(row.volume)
-                dict["trade_date"] = str(row.date)  
+                dict["trade_date"] = str(row.date)
+                dict["pe"] = str(row.pe)   
                 blocklist.append(dict)      
                  
             blocklist.reverse()  
@@ -565,6 +571,8 @@ def singleget(request):
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
+                      dict["pe"] = str(row.pe)
+                      dict["nf"] = str(row.nf)
                       jsonlist.append(dict) 
                
               except EXCEPTION:
@@ -588,7 +596,9 @@ def singleget(request):
                       dict["pre_close"] = str(row.pre_close)
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
-                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      dict["capital_inflow"] = str(row.capital_inflow)
+                      dict["pe"] = str(row.pe)
+                      dict["nf"] = str(row.nf)  
                       jsonlist.append(dict) 
               
               except EXCEPTION:
@@ -613,7 +623,9 @@ def singleget(request):
                       dict["pre_close"] = str(row.pre_close)
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
-                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      dict["capital_inflow"] = str(row.capital_inflow)
+                      dict["pe"] = str(row.pe)
+                      dict["nf"] = str(row.nf)  
                       jsonlist.append(dict) 
               
                      
@@ -638,7 +650,9 @@ def singleget(request):
                       dict["pre_close"] = str(row.pre_close)
                       dict["turnover"] = str(row.turnover)
                       dict["trade_date"] = str(row.date)
-                      dict["capital_inflow"] = str(row.capital_inflow)  
+                      dict["capital_inflow"] = str(row.capital_inflow)
+                      dict["pe"] = str(row.pe)
+                      dict["nf"] = str(row.nf)  
                       jsonlist.append(dict) 
                     
               except EXCEPTION:
@@ -662,7 +676,9 @@ def singleget(request):
                   dict["pre_close"] = str(row.pre_close)
                   dict["turnover"] = str(row.turnover)
                   dict["trade_date"] = str(row.date)
-                  dict["capital_inflow"] = str(row.capital_inflow)  
+                  dict["capital_inflow"] = str(row.capital_inflow)
+                  dict["pe"] = str(row.pe)
+                  dict["nf"] = str(row.nf)  
                   jsonlist.append(dict) 
                     
           except EXCEPTION:
