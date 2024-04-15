@@ -939,7 +939,7 @@ def nf(request):
     else:
         filename = path+"/北向资金排名.xls"
         
-    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    df = pd.read_excel(filename, sheet_name='工作表3', header=0)
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -971,8 +971,8 @@ def nf(request):
                inf = round(float(inf[0:-1])*0.001,2)
             except: 
                inf = 0
-            
-        everyday_nf(code, inf, '2024-04-12')
+        print(inf)
+        everyday_nf(code, inf, '2024-04-15')
     
     return HttpResponse('执行完毕！')
 
