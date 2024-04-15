@@ -923,7 +923,7 @@ def inflow(request):
             inf = round(float(inf[0:-1])*10000,2)
         else:
             try:
-               inf = round(float(inf[0:-1])*0.001,2)
+               inf = round(float(inf[0:-1])*0.0001,2)
             except: 
                inf = 0
             
@@ -939,7 +939,7 @@ def nf(request):
     else:
         filename = path+"/北向资金排名.xls"
         
-    df = pd.read_excel(filename, sheet_name='工作表3', header=0)
+    df = pd.read_excel(filename, sheet_name='Sheet1', header=0)
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -968,7 +968,7 @@ def nf(request):
             inf = round(float(inf[0:-1])*10000,2)
         else:
             try:
-               inf = round(float(inf[0:-1])*0.001,2)
+               inf = round(float(inf[0:-1])*0.0001,2)
             except: 
                inf = 0
         print(inf)
