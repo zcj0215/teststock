@@ -330,6 +330,44 @@ def everyday_inflow0(code,inflow,dt):
         except Http404:
             pass
         
+def everyday_nf(code,nf,dt):
+    
+    if code[:2] == '30':  
+        try:
+            stock = get_object_or_404(Stockszc, code=code,date=dt)
+            stock.nf = nf
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '00':
+        try:
+            stock = get_object_or_404(Stocksz, code=code,date=dt)
+            stock.nf = nf
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '68':
+        try:
+            stock = get_object_or_404(Stockshk, code=code,date=dt)
+            stock.nf = nf
+            stock.save()   
+        except Http404:
+            pass
+    elif code[:2] == '60':    
+        try:
+            stock = get_object_or_404(Stocksh, code=code,date=dt)
+            stock.nf = nf
+            stock.save()
+        except Http404:
+            pass
+    else:
+        try:
+            stock = get_object_or_404(Stockbj, code=code,date=dt)
+            stock.nf = nf
+            stock.save()
+        except Http404:
+            pass
+        
 def everyday_stockpe(code,pe,dt):
     
     if code[:2] == '30':  
@@ -892,6 +930,52 @@ def inflow(request):
         everyday_inflow0(code, inf, '2024-04-12')
     
     return HttpResponse('执行完毕！')
+
+def nf(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\北向资金排名.xls"       
+    else:
+        filename = path+"/北向资金排名.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.itertuples():
+        code = str(row.代码)
+        if len(code) == 1:
+            code = '00000'+ code
+        elif len(code) == 2:
+            code = '0000'+ code
+        elif len(code) == 3:    
+            code = '000'+ code
+        elif len(code) == 4:    
+            code = '00'+ code
+        elif len(code) == 5:    
+            code = '0'+ code
+            
+        print(code)
+        print(row.名称)
+        inf = str(row.净流入)
+    
+        if '万' in inf:
+            temp = inf[0:-1]
+            if ',' in temp:
+                newstr = temp.replace(',', '')
+                inf = round(float(newstr),2)
+            else:    
+                inf = round(float(inf[0:-1]),2)
+        elif '亿' in inf:
+            inf = round(float(inf[0:-1])*10000,2)
+        else:
+            try:
+               inf = round(float(inf[0:-1])*0.001,2)
+            except: 
+               inf = 0
+            
+        everyday_nf(code, inf, '2024-04-12')
+    
+    return HttpResponse('执行完毕！')
+
 
 
 def stock_pe(request):
