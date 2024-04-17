@@ -606,8 +606,13 @@
 
         function runChart() {
           option = {
-            title: {
-                text: data0.name
+            title: {  
+                text: data0.name,   
+                subtext:"估值变化",
+                subtextStyle:{
+                  color:'red'
+                },        
+                sublink: 'https://search.10jqka.com.cn/unifiedwap/result?w='+data0.name+'，市赢率；历史列表&querytype=stock',
             },
             animation: false,
             legend: {
