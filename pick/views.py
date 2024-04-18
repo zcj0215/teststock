@@ -789,7 +789,7 @@ def dayadd(request):
             
             data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率]    
             print(data)
-            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],'2024-04-16')
+            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],'2024-04-17')
 
     return HttpResponse('执行完毕！')
 
@@ -812,7 +812,7 @@ def indexadd(request):
             amount = round(float(row.金额/100000000),2)
         
         
-            everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-04-16')
+            everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-04-17')
         
     return HttpResponse('执行完毕！')    
         
@@ -882,7 +882,7 @@ def blockdayadd(request):
         except:
             pass
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,row.市盈率,'2024-04-16')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,row.市盈率,'2024-04-17')
 
     return HttpResponse('执行完毕！')
 
@@ -927,7 +927,7 @@ def inflow(request):
             except: 
                inf = 0
             
-        everyday_inflow0(code, inf, '2024-04-16')
+        everyday_inflow0(code, inf, '2024-04-17')
     
     return HttpResponse('执行完毕！')
 
@@ -972,7 +972,7 @@ def nf(request):
             except: 
                inf = 0
         print(inf)
-        everyday_nf(code, inf, '2024-04-16')
+        everyday_nf(code, inf, '2024-04-17')
     
     return HttpResponse('执行完毕！')
 
