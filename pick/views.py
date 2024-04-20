@@ -972,7 +972,7 @@ def nf(request):
             except: 
                inf = 0
         print(inf)
-        everyday_nf(code, inf, '2024-04-18')
+        everyday_nf(code, inf, '2024-04-11')
     
     return HttpResponse('执行完毕！')
 
