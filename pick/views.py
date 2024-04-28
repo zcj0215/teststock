@@ -972,7 +972,7 @@ def nf(request):
             except: 
                inf = 0
         print(inf)
-        everyday_nf(code, inf, '2024-04-03')
+        everyday_nf(code, inf, '2024-04-02')
     
     return HttpResponse('执行完毕！')
 
@@ -1148,8 +1148,8 @@ def index_single(request):
 def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
-    code = "880782"
-    name ="保险新进"
+    code = "880943"
+    name ="量子科技"
     if(sysstr =="Windows"):
         filename = path+"\\"+code+".csv"       
     else:
@@ -1170,7 +1170,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="保险新进"
+    blockname ="量子科技"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
