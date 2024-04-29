@@ -103,12 +103,14 @@ class Stocksz(models.Model):
     p_change = models.DecimalField(max_digits=7, decimal_places=2)          # 涨跌幅
     date = models.DateField(max_length=10,db_index=True)
     volume_ratio = models.DecimalField(max_digits=10, decimal_places=2,null=True)
-    capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
+    capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)     # 主力资金净流入
     pe = models.DecimalField(max_digits=7, decimal_places=2,null=True) 
-    nf = models.DecimalField(max_digits=15, decimal_places=2,null=True)
+    nf = models.DecimalField(max_digits=15, decimal_places=2,null=True)    # 北向资金净流入
+    committee = models.DecimalField(max_digits=10, decimal_places=2,null=True) # 委比
+    
 
     def __str__(self):
-        return self.name
+        return self.code
     
 class Stockszc(models.Model):
     code = models.CharField(max_length=10, db_index=True)                        
@@ -127,9 +129,10 @@ class Stockszc(models.Model):
     capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     pe = models.DecimalField(max_digits=7, decimal_places=2,null=True) 
     nf = models.DecimalField(max_digits=15, decimal_places=2,null=True) 
+    committee = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
-        return self.name
+        return self.code
     
 class Stocksh(models.Model):
     code = models.CharField(max_length=10, db_index=True)                        
@@ -148,9 +151,10 @@ class Stocksh(models.Model):
     capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     pe = models.DecimalField(max_digits=7, decimal_places=2,null=True)  
     nf = models.DecimalField(max_digits=15, decimal_places=2,null=True)
+    committee = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
-        return self.name
+        return self.code
     
 class Stockshk(models.Model):
     code = models.CharField(max_length=10, db_index=True)                        
@@ -169,9 +173,10 @@ class Stockshk(models.Model):
     capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     pe = models.DecimalField(max_digits=7, decimal_places=2,null=True) 
     nf = models.DecimalField(max_digits=15, decimal_places=2,null=True)
+    committee = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
-        return self.name
+        return self.code
        
 class Stockbj(models.Model):
     code = models.CharField(max_length=10, db_index=True)                        
@@ -190,9 +195,10 @@ class Stockbj(models.Model):
     capital_inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     pe = models.DecimalField(max_digits=7, decimal_places=2,null=True) 
     nf = models.DecimalField(max_digits=15, decimal_places=2,null=True)
+    committee = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     
     def __str__(self):
-        return self.name
+        return self.code
     
 class Stockme(models.Model):
     code = models.CharField(max_length=10, db_index=True)                        
@@ -209,7 +215,7 @@ class Stockme(models.Model):
     date = models.DateField(max_length=10,db_index=True)
     
     def __str__(self):
-        return self.name
+        return self.code
     
 class Stocksector(models.Model):
     code = models.CharField(max_length=11, db_index=True)                        
@@ -232,6 +238,14 @@ class Stocksector(models.Model):
     name = models.CharField(max_length=50,db_index=True,null=True)
     pe = models.DecimalField(max_digits=7, decimal_places=2,null=True) 
     
+    def __str__(self):
+        return self.name
+    
+    def thirty_limitup(self):
+        
+        return 
+    
+    
 class Stockindex(models.Model):
     code = models.CharField(max_length=11, db_index=True) 
     name = models.CharField(max_length=50,db_index=True,null=True)                      
@@ -245,4 +259,5 @@ class Stockindex(models.Model):
     growth = models.DecimalField(max_digits=10, decimal_places=2,null=True)   # 涨幅
     amplitude = models.DecimalField(max_digits=10, decimal_places=2,null=True)   # 振幅
     date = models.DateField(max_length=10,db_index=True,null=True)
+    pe = models.DecimalField(max_digits=7, decimal_places=2,null=True) 
     
