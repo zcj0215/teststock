@@ -1148,8 +1148,8 @@ def index_single(request):
 def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
-    code = "880629"
-    name ="MicroLED"
+    code = "880446"
+    name ="电气设备"
     if(sysstr =="Windows"):
         filename = path+"\\"+code+".csv"       
     else:
@@ -1170,7 +1170,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="MicroLED"
+    blockname ="电气设备"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
