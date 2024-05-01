@@ -34,7 +34,8 @@
       <tr>
         <th>股票代码</th>
         <th>股票名称</th>
-        <th>涨跌幅</th>
+        <th>涨跌幅%</th>
+        <th>委比%</th>
         <th>涉及板块</th>
       </tr>
     </thead>
@@ -48,6 +49,13 @@
             </p>
           </td>
           <td>{{ stock.name }}</td>
+          <td class="align-middle">
+            {% if stock.growth > 0 %}
+               <span style="color:red">{{ stock.growth }}</span>
+            {% else %}
+               <span style="color:green">{{ stock.growth }}</span>
+            {% endif %}
+          </td>
           <td class="align-middle">
             {% if stock.growth > 0 %}
                <span style="color:red">{{ stock.growth }}</span>
