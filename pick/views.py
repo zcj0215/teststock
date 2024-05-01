@@ -103,6 +103,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
     try:
         stock = get_object_or_404(Stocks, code=code)
         stock.growth = round(float(p_change),2)
+        stock.committee = round(float(committee),2)
         stock.save()
     except Http404:
         pass
@@ -1158,8 +1159,8 @@ def index_single(request):
 def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
-    code = "880847"
-    name ="行业龙头"
+    code = "880761"
+    name ="锂矿"
     if(sysstr =="Windows"):
         filename = path+"\\"+code+".csv"       
     else:
@@ -1180,7 +1181,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="行业龙头"
+    blockname ="锂矿"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
