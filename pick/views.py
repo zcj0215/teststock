@@ -880,13 +880,27 @@ def blockdayadd(request):
         except:
             pass
         
+        growth_fall = str(row.涨跌数)
+        if len(growth_fall)>=5:
+            if row.涨幅 > 0 and len(growth_fall) == 5:
+                if ',' not in growth_fall:  
+                    growth_fall = growth_fall[:3]+','+growth_fall[-2:]
+            elif row.涨幅 < 0 and len(growth_fall) == 5:
+                if ',' not in growth_fall:
+                    growth_fall = growth_fall[:2]+','+growth_fall[-3:]
+            
+            if  len(growth_fall) > 5 :
+                if ',' not in growth_fall:
+                    growth_fall = growth_fall[:3]+','+growth_fall[-3:]
+                  
+        
         Continuerise_30_limitup = 0
         try:
             Continuerise_30_limitup = Stocksector.objects.filter(code = row.代码).order_by('-date')[:30].aggregate(sum=Sum('limitup_number'))['sum']    
         except:
             pass
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,row.涨跌数,Continuerise_30_limitup,Continuerise_days,row.市盈率,'2024-04-30')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_fall,Continuerise_30_limitup,Continuerise_days,row.市盈率,'2024-04-30')
 
     return HttpResponse('执行完毕！')
 
