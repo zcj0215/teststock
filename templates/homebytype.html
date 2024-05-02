@@ -11,8 +11,10 @@
       <tr>
         <th>板块</th>
         <th>涨跌幅</th>
-        <th>涨停个数</th>
+        <th>当天涨停</th>
+        <th>30天涨停</th>
         <th>连涨天数</th>
+        <th>上涨，下跌</th>
       </tr>
     </thead>
     <tbody>
@@ -32,11 +34,17 @@
             <span style="color:red">{{ board.limitup_number }}</span>
           </td>
           <td class="align-middle">
+            <span style="color:red">{{ board.Continuerise_30_limitup }}</span>
+          </td>
+          <td class="align-middle">
             {% if board.Continuerise_days > 0 %}
                <span style="color:red">{{ board.Continuerise_days }}</span>
             {% else %}
                <span style="color:green">{{ board.Continuerise_days }}</span>
             {% endif %}
+          </td>
+          <td class="align-middle">
+            <span style="color:blue">{{ board.growth_fall }}</span>
           </td>
         </tr>
       {% endfor %}

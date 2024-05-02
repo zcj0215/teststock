@@ -9,6 +9,7 @@ from django.http import Http404, HttpResponse
 from .forms import CodeForm
 import platform
 from django.db.models import Q
+from django.db.models import Sum
 
 import pandas as pd
 
@@ -461,7 +462,7 @@ def everyday_inflow(code,inflow,dt,turnover):
             pass
     
 
-def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_close,limitup_number,growth,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,pe,dt):
+def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_close,limitup_number,growth,growth_pre,growth_3,growth_fall,Continuerise_30_limitup,Continuerise_days,pe,dt):
     try:
         block = get_object_or_404(Stocksector,code=code,date=dt)
         block.open = round(float(open),2)
@@ -476,8 +477,8 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
         block.growth = round(float(growth),2)
         block.growth_pre = round(float(growth_pre),2)
         block.growth_3 = round(float(growth_3),2)
-        block.growth_20 = round(float(growth_20),2)
-        block.growth_60 = round(float(growth_60),2)
+        block.growth_fall = growth_fall
+        block.Continuerise_30_limitup = round(float(Continuerise_30_limitup),2)
         block.Continuerise_days = round(float(Continuerise_days),2)
         block.name = name
         if str(pe).lstrip().rstrip() != '--':
@@ -500,8 +501,8 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
                 growth = round(float(growth),2),
                 growth_pre = round(float(growth_pre),2),
                 growth_3 = round(float(growth_3),2),
-                growth_20 = round(float(growth_20),2),
-                growth_60 = round(float(growth_60),2),
+                growth_fall = growth_fall,
+                Continuerise_30_limitup = round(float(Continuerise_30_limitup),2),
                 Continuerise_days = round(float(Continuerise_days),2),
                 date = dt,
                 pe = round(float(pe),2)
@@ -522,8 +523,8 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
                 growth = round(float(growth),2),
                 growth_pre = round(float(growth_pre),2),
                 growth_3 = round(float(growth_3),2),
-                growth_20 = round(float(growth_20),2),
-                growth_60 = round(float(growth_60),2),
+                growth_fall = growth_fall,
+                Continuerise_30_limitup = round(float(Continuerise_30_limitup),2),
                 Continuerise_days = round(float(Continuerise_days),2),
                 date = dt     
             )    
@@ -879,21 +880,13 @@ def blockdayadd(request):
         except:
             pass
         
-        growth_20 = 0
-        
+        Continuerise_30_limitup = 0
         try:
-            growth_20 = round(float(row.tw涨幅),2)
-        except:
-            pass
-        
-        growth_60 = 0
-        
-        try:
-            growth_60 = round(float(row.six涨幅),2)
+            Continuerise_30_limitup = Stocksector.objects.filter(code = row.代码).order_by('-date')[:30].aggregate(sum=Sum('limitup_number'))['sum']    
         except:
             pass
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_20,growth_60,Continuerise_days,row.市盈率,'2024-04-30')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,row.涨跌数,Continuerise_30_limitup,Continuerise_days,row.市盈率,'2024-04-30')
 
     return HttpResponse('执行完毕！')
 
