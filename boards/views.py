@@ -36,11 +36,12 @@ class ByTypeBoardListView(ListView):
     def get_queryset(self):
         self.type = get_object_or_404(BoardType, pk=self.kwargs.get('type_pk'))
         bds = Board.objects.filter(type = self.type)
-        date =  Stocksector.objects.last().date
+        date =  Stocksector.objects.order_by('date').last().date
         names = []
         for board in bds:
             names.append(board.name)
         queryset = Stocksector.objects.filter(name__in = names,date=date).order_by('-growth')
+        print(queryset)
         return queryset
     
     

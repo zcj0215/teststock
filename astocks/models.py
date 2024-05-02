@@ -232,8 +232,8 @@ class Stocksector(models.Model):
     growth=models.DecimalField(max_digits=10, decimal_places=2,null=True)  
     growth_pre=models.DecimalField(max_digits=10, decimal_places=2,null=True)
     growth_3=models.DecimalField(max_digits=10, decimal_places=2,null=True)
-    growth_20=models.DecimalField(max_digits=10, decimal_places=2,null=True)
-    growth_60=models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    growth_fall=models.CharField(max_length=50,db_index=True,null=True)  # 上涨数，下跌数
+    Continuerise_30_limitup=models.DecimalField(max_digits=5, decimal_places=0,null=True)  # 连续30天涨停数量
     Continuerise_days=models.DecimalField(max_digits=5, decimal_places=0,null=True) 
     date = models.DateField(max_length=10,db_index=True,null=True)
     name = models.CharField(max_length=50,db_index=True,null=True)
