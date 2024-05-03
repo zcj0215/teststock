@@ -1096,7 +1096,7 @@ def indexpe_single(request):
         dt = dt[:4]+'-'+dt[4:6]+'-'+dt[6:8]
         
         print(dt)
-        code = '000016'
+        code = '000001'
         print(code)
         print(row.市盈率)
        
