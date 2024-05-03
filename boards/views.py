@@ -96,7 +96,8 @@ class StockListView(ListView):
                         dict["low"] = str(row.low)
                         dict["high"] = str(row.high)
                         dict["vol"] = str(row.volume)
-                        dict["trade_date"] = str(row.date)  
+                        dict["trade_date"] = str(row.date)
+                        dict["pe"] = str(row.pe)  
                         blocklist.append(dict) 
                 except EXCEPTION:
                     pass
@@ -219,7 +220,8 @@ def stock_detail(request, board_name, stock_name):
                 dict["low"] = str(row.low)
                 dict["high"] = str(row.high)
                 dict["vol"] = str(row.volume)
-                dict["trade_date"] = str(row.date)  
+                dict["trade_date"] = str(row.date)
+                dict["pe"] = str(row.pe)  
                 blocklist.append(dict)         
             
         else:
