@@ -22,5 +22,8 @@ urlpatterns = [
     path('stock_pe/', pick_views.stock_pe,name='stock_pe'),
     path('block_pe/', pick_views.block_pe,name='block_pe'),
     path('stock_nf/', pick_views.nf,name='stock_nf'),
+    path('indexpe/', pick_views.indexpe,name='indexpe'),
+    path('indexpe_single/', pick_views.indexpe_single,name='indexpe_single'),
 ]
+
 

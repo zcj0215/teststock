@@ -589,7 +589,14 @@ def everyday_index(code,name,open,close,high,low,volume,amount,price_change,grow
                 amplitude = round(float(amplitude),2),
                 date = dt     
         )
-            
+ 
+def everyday_indexpe(code,pe,dt):
+    try:
+        block = get_object_or_404(Stockindex,code=code,date=dt)
+        block.pe = round(float(pe),2)
+        block.save()
+    except Http404:
+       pass
     
 def everydayout(dt):
     path =  os.path.dirname(__file__)   
@@ -827,7 +834,39 @@ def indexadd(request):
             everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-04-30')
         
     return HttpResponse('执行完毕！')    
+
+def indexpe(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\指数市盈率.xls"
         
+    else:
+        filename = path+"/指数市盈率.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
+    for row in df.itertuples():
+        code = str(row.代码)
+        if len(code) == 1:
+            code = '00000'+ code
+        elif len(code) == 2:
+            code = '0000'+ code
+        elif len(code) == 3:    
+            code = '000'+ code
+        elif len(code) == 4:    
+            code = '00'+ code
+        elif len(code) == 5:    
+            code = '0'+ code
+                
+        print(code)
+        print(row.市盈率)
+        
+        everyday_indexpe(code,row.市盈率, '2024-04-30')
+            
+    
+    return HttpResponse('执行完毕！') 
+
+      
 def blockdayadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
@@ -1043,7 +1082,31 @@ def block_pe(request):
     
     return HttpResponse('执行完毕！')
 
-
+def indexpe_single(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\指数历史市盈率.xls"  
+    else:
+        filename = path+"/指数历史市盈率.xls"
+        
+    df = pd.read_excel(filename, sheet_name='Sheet1', header=0)  
+    for row in df.itertuples():
+        dt = str(row.时间区间)
+        dt = dt[:4]+'-'+dt[4:6]+'-'+dt[6:8]
+        
+        print(dt)
+        code = '000688'
+        print(code)
+        print(row.市盈率)
+       
+        
+        
+        everyday_indexpe(code, row.市盈率, dt)
+        
+    return HttpResponse('执行完毕！')      
+    
+    
 def inflow_single(request):
     if request.method == 'POST':
         form = CodeForm(request.POST)
@@ -1166,8 +1229,8 @@ def index_single(request):
 def block_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
-    code = "880742"
-    name ="固态电池"
+    code = "880798"
+    name ="超级电容"
     if(sysstr =="Windows"):
         filename = path+"\\"+code+".csv"       
     else:
@@ -1188,7 +1251,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="固态电池"
+    blockname ="超级电容"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
