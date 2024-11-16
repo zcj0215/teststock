@@ -1253,7 +1253,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="商誉减值"
+    blockname ="北证50"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
