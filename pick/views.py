@@ -777,11 +777,11 @@ def dayadd(request):
         filename = path+"/Table1.xls"
     
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    df_unique = df.drop_duplicates(subset=['代码'])
+    df =  df.reset_index(drop=True)
     
-    dt='2024-07-05'
+    dt='2024-07-08'
     
-    for row in df_unique.itertuples():
+    for row in df.itertuples():
         if str(row.开盘).lstrip().rstrip()[0:1] != '―':
             code = str(row.代码).lstrip().rstrip()
             if len(code) == 1:
@@ -859,7 +859,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-07-05'
+    dt='2024-07-08'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -883,7 +883,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-07-05'
+    dt='2024-07-08'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -916,7 +916,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-07-05'
+    dt='2024-07-08'
     for row in df.itertuples():
         print(row.名称)
         
@@ -999,7 +999,8 @@ def inflow(request):
         filename = path+"/Table2.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-07-05'
+    df =  df.drop_duplicates()
+    dt='2024-07-08'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
