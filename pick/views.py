@@ -776,12 +776,14 @@ def dayadd(request):
     else:
         filename = path+"/Table1.xls"
     
-    symbol = ''
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     df_unique = df.drop_duplicates(subset=['代码'])
+    
+    dt='2024-07-05'
+    
     for row in df_unique.itertuples():
         if str(row.开盘).lstrip().rstrip()[0:1] != '―':
-            code = str(row.代码)
+            code = str(row.代码).lstrip().rstrip()
             if len(code) == 1:
                 code = '00000'+ code
             elif len(code) == 2:
@@ -793,6 +795,7 @@ def dayadd(request):
             elif len(code) == 5:    
                 code = '0'+ code
             
+                       
             volume = 0
             if '万' in str(row.总量):
                 volume = round(float(row.总量[0:-1])*10000,2)
@@ -806,13 +809,42 @@ def dayadd(request):
                 amount = round(float(row.金额[0:-1])*10000,2)
             else:
                 amount = round(float(row.金额*0.0001),2)
-            
-            data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]    
-            if code.lstrip().rstrip() != symbol:
-                print(data)
-                symbol = code.lstrip().rstrip()
-                print(symbol)
-                everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],'2024-07-04')
+                    
+            if code[:2] == '30':  
+                    try:
+                        get_object_or_404(Stockszc, code=code,date=dt)
+                    except Http404:
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]  
+                        print(data)
+                        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
+            elif code[:2] == '00':
+                    try:
+                        get_object_or_404(Stocksz, code=code,date=dt)
+                    except Http404:
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]  
+                        print(data)
+                        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
+            elif code[:2] == '68':
+                    try:
+                        get_object_or_404(Stockshk, code=code,date=dt)   
+                    except Http404:
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]  
+                        print(data)
+                        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
+            elif code[:2] == '60':    
+                    try:
+                        get_object_or_404(Stocksh, code=code,date=dt)
+                    except Http404:
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]
+                        print(data)
+                        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)   
+            else:
+                    try:
+                        get_object_or_404(Stockbj, code=code,date=dt)
+                    except Http404:
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]    
+                        print(data)
+                        everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
 
     return HttpResponse('执行完毕！')
 
@@ -826,6 +858,8 @@ def indexadd(request):
         filename = path+"/Table3.xls"
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
+    
+    dt='2024-07-05'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -834,7 +868,7 @@ def indexadd(request):
             volume = round(float(row.总手*1/1000000),2)
             amount = round(float(row.金额/100000000),2)
         
-            everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, '2024-07-04')
+            everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, dt)
         
     return HttpResponse('执行完毕！')    
 
@@ -848,6 +882,8 @@ def indexpe(request):
         filename = path+"/指数市盈率.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
+    
+    dt='2024-07-05'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -864,7 +900,7 @@ def indexpe(request):
         print(code)
         print(row.市盈率)
         
-        everyday_indexpe(code,row.市盈率, '2024-07-04')
+        everyday_indexpe(code,row.市盈率, dt)
             
     
     return HttpResponse('执行完毕！') 
@@ -880,7 +916,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    
+    dt='2024-07-05'
     for row in df.itertuples():
         print(row.名称)
         
@@ -945,7 +981,7 @@ def blockdayadd(request):
         
         
             
-        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_fall,Continuerise_30_limitup,Continuerise_days,row.市盈率,'2024-07-04')
+        everyday_block(row.代码,row.名称,row.今开,row.现价,row.最高,row.最低,row.总量,turnover,row.量比,row.昨收,limitup_number,row.涨幅,growth_pre,growth_3,growth_fall,Continuerise_30_limitup,Continuerise_days,row.市盈率,dt)
 
     return HttpResponse('执行完毕！')
 
@@ -963,6 +999,7 @@ def inflow(request):
         filename = path+"/Table2.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    dt='2024-07-05'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -990,7 +1027,7 @@ def inflow(request):
             except: 
                inf = 0
             
-        everyday_inflow0(code, inf, '2024-07-04')
+        everyday_inflow0(code, inf, dt)
     
     return HttpResponse('执行完毕！')
 
