@@ -791,6 +791,8 @@ def jquery(request):
 
 @prevent_duplicate_calls
 def dayadd(request):
+    setattr(request, 'no_cache', True)
+    
     path =  os.path.dirname(__file__)
    
     filename = ""
@@ -803,8 +805,8 @@ def dayadd(request):
     
     duplicates = df.duplicated()
          
-    dt='2024-07-10'
-    symbol='';
+    dt='2024-07-11'
+    symbol=''
     # 遍历非重复行
     for index, row in df[~duplicates].iterrows():
         if str(row.开盘).lstrip().rstrip()[0:1] != '―':
@@ -899,7 +901,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-07-10'
+    dt='2024-07-11'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -924,7 +926,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-07-10'
+    dt='2024-07-11'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -957,7 +959,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-07-10'
+    dt='2024-07-11'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1032,6 +1034,7 @@ def dayout(request):
 
 @prevent_duplicate_calls
 def inflow(request):
+    setattr(request, 'no_cache', True)
     path =  os.path.dirname(__file__)
     filename = "" 
     if(sysstr =="Windows"):
@@ -1042,7 +1045,7 @@ def inflow(request):
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     duplicates = df.duplicated()
     
-    dt='2024-07-10'
+    dt='2024-07-11'
      # 遍历非重复行
     for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
