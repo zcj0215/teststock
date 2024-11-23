@@ -793,22 +793,24 @@ def jquery(request):
 def dayadd(request):
     setattr(request, 'no_cache', True)
     
-    path =  os.path.dirname(__file__)
+    if request.method == 'GET':
+      path =  os.path.dirname(__file__)
    
-    filename = ""
-    if(sysstr =="Windows"):
+      filename = ""
+      if(sysstr =="Windows"):
         filename = path+"\\Table1.xls"       
-    else:
+      else:
         filename = path+"/Table1.xls"
     
-    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    
-    duplicates = df.duplicated()
+      df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+      df = df.drop_duplicates()
+      df = df.reset_index(drop=True)
+      duplicates = df.duplicated()
          
-    dt='2024-07-11'
-    symbol=''
-    # 遍历非重复行
-    for index, row in df[~duplicates].iterrows():
+      dt='2024-07-15'
+      symbol=''
+      # 遍历非重复行
+      for index, row in df[~duplicates].iterrows():
         if str(row.开盘).lstrip().rstrip()[0:1] != '―':
             code = str(row.代码).lstrip().rstrip()
             if len(code) == 1:
@@ -883,9 +885,9 @@ def dayadd(request):
                             print(data)
                             everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
                             symbol=code
-    # 处理重复行
-    for index, row in df[duplicates].iterrows():
-       print('重复行'+str(row.代码))                            
+      # 处理重复行
+      for index, row in df[duplicates].iterrows():
+        print('重复行'+str(row.代码))                            
                             
     return HttpResponse('执行完毕！')
 
@@ -901,7 +903,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-07-11'
+    dt='2024-07-15'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -926,7 +928,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-07-11'
+    dt='2024-07-15'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -959,7 +961,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-07-11'
+    dt='2024-07-15'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1035,19 +1037,22 @@ def dayout(request):
 @prevent_duplicate_calls
 def inflow(request):
     setattr(request, 'no_cache', True)
-    path =  os.path.dirname(__file__)
-    filename = "" 
-    if(sysstr =="Windows"):
+    if request.method == 'GET':
+      path =  os.path.dirname(__file__)
+      filename = "" 
+      if(sysstr =="Windows"):
         filename = path+"\\Table2.xls"       
-    else:
+      else:
         filename = path+"/Table2.xls"
         
-    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    duplicates = df.duplicated()
+      df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+      df = df.drop_duplicates()
+      df = df.reset_index(drop=True)
+      duplicates = df.duplicated()
     
-    dt='2024-07-11'
-     # 遍历非重复行
-    for index, row in df[~duplicates].iterrows():
+      dt='2024-07-15'
+      # 遍历非重复行
+      for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
         if len(code) == 1:
             code = '00000'+ code
@@ -1076,9 +1081,9 @@ def inflow(request):
             
         everyday_inflow0(code, inf, dt)
         
-    # 处理重复行
-    for index, row in df[duplicates].iterrows():
-       print('重复行'+str(row.代码))  
+      # 处理重复行
+      for index, row in df[duplicates].iterrows():
+        print('重复行'+str(row.代码))  
     
     return HttpResponse('执行完毕！')
 
