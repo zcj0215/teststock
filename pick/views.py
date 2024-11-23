@@ -13,7 +13,29 @@ from django.db.models import Sum
 
 import pandas as pd
 
+from functools import wraps
+
 sysstr = platform.system()
+
+def prevent_duplicate_calls(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not hasattr(request, '_prevent_duplicate_calls'):
+            request._prevent_duplicate_calls = []
+        
+        if view_func in request._prevent_duplicate_calls:
+            # 视图函数已经被调用过，返回一个合适的响应或错误
+            return HttpResponse("Function already called for this session.", status=400)
+        else:
+            # 将视图函数添加到会话标记列表中
+            request._prevent_duplicate_calls.append(view_func)
+            # 调用视图函数
+            response = view_func(request, *args, **kwargs)
+            # 视图函数调用完毕后，可以移除它的标记
+            request._prevent_duplicate_calls.remove(view_func)
+            return response
+    
+    return wrapper
 
 def readfile(mfn):
     '''
@@ -767,6 +789,7 @@ def jquery(request):
 
     return HttpResponse('执行完毕！')
 
+@prevent_duplicate_calls
 def dayadd(request):
     path =  os.path.dirname(__file__)
    
@@ -778,12 +801,12 @@ def dayadd(request):
     
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
-    df =  df.drop_duplicates()
-    df =  df.reset_index(drop=True)
-    df =  df.drop_duplicates()
-    dt='2024-07-09'
+    duplicates = df.duplicated()
+         
+    dt='2024-07-10'
     symbol='';
-    for row in df.itertuples():
+    # 遍历非重复行
+    for index, row in df[~duplicates].iterrows():
         if str(row.开盘).lstrip().rstrip()[0:1] != '―':
             code = str(row.代码).lstrip().rstrip()
             if len(code) == 1:
@@ -797,6 +820,7 @@ def dayadd(request):
             elif len(code) == 5:    
                 code = '0'+ code
             
+            print('非重复行'+code)
                        
             volume = 0
             if '万' in str(row.总量):
@@ -857,9 +881,13 @@ def dayadd(request):
                             print(data)
                             everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
                             symbol=code
+    # 处理重复行
+    for index, row in df[duplicates].iterrows():
+       print('重复行'+str(row.代码))                            
                             
     return HttpResponse('执行完毕！')
 
+@prevent_duplicate_calls
 def indexadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
@@ -871,7 +899,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-07-09'
+    dt='2024-07-10'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -884,6 +912,7 @@ def indexadd(request):
         
     return HttpResponse('执行完毕！')    
 
+@prevent_duplicate_calls
 def indexpe(request):
     path =  os.path.dirname(__file__)
     filename = "" 
@@ -895,7 +924,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-07-09'
+    dt='2024-07-10'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -917,7 +946,7 @@ def indexpe(request):
     
     return HttpResponse('执行完毕！') 
 
-      
+@prevent_duplicate_calls    
 def blockdayadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
@@ -928,7 +957,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-07-09'
+    dt='2024-07-10'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1001,7 +1030,7 @@ def dayout(request):
     everydayout('2023-02-08')
     return HttpResponse('执行完毕！')
 
-
+@prevent_duplicate_calls
 def inflow(request):
     path =  os.path.dirname(__file__)
     filename = "" 
@@ -1011,12 +1040,11 @@ def inflow(request):
         filename = path+"/Table2.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    df =  df.drop_duplicates()
-    df =  df.reset_index(drop=True)
-    df =  df.drop_duplicates()
+    duplicates = df.duplicated()
     
-    dt='2024-07-09'
-    for row in df.itertuples():
+    dt='2024-07-10'
+     # 遍历非重复行
+    for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
         if len(code) == 1:
             code = '00000'+ code
@@ -1029,7 +1057,7 @@ def inflow(request):
         elif len(code) == 5:    
             code = '0'+ code
             
-        print(code)
+        print('非重复行'+code)
         print(row.名称)
         inf = str(row.主力净流入)
     
@@ -1044,6 +1072,10 @@ def inflow(request):
                inf = 0
             
         everyday_inflow0(code, inf, dt)
+        
+    # 处理重复行
+    for index, row in df[duplicates].iterrows():
+       print('重复行'+str(row.代码))  
     
     return HttpResponse('执行完毕！')
 
