@@ -1301,7 +1301,7 @@ def stock_single(request):
         print(row.金额)
         amount = round((row.金额)/10000,2)
         
-        turnover('603666','SH',row.换手, amount, dt)
+        turnover('605598','SH',row.换手, amount, dt)
         
     return HttpResponse('执行完毕！')
 
