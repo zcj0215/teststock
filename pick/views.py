@@ -325,6 +325,59 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
                 pe = round(float(pe),2),
                 committee = round(float(committee),2)
             )
+
+def everyday_pe(code,turnover,volume_ratio,pe,committee,dt):
+
+    if code[:2] == '30':  
+        try:
+            stock = get_object_or_404(Stockszc, code=code,date=dt)
+            stock.turnover = round(float(turnover),2)
+            stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
+            stock.committee = round(float(committee),2)
+            stock.save()
+        except Http404:
+           pass
+    elif code[:2] == '00':
+        try:
+            stock = get_object_or_404(Stocksz, code=code,date=dt)
+            stock.turnover = round(float(turnover),2)
+            stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
+            stock.committee = round(float(committee),2)
+            stock.save()
+        except Http404:
+            pass
+    elif code[:2] == '68':
+        try:
+            stock = get_object_or_404(Stockshk, code=code,date=dt)   
+            stock.turnover = round(float(turnover),2)
+            stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
+            stock.committee = round(float(committee),2)
+            stock.save()   
+        except Http404:
+            pass
+    elif code[:2] == '60':    
+        try:
+            stock = get_object_or_404(Stocksh, code=code,date=dt)
+            stock.turnover = round(float(turnover),2)
+            stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
+            stock.committee = round(float(committee),2)
+            stock.save()
+        except Http404:
+          pass
+    else:
+        try:
+            stock = get_object_or_404(Stockbj, code=code,date=dt)
+            stock.turnover = round(float(turnover),2)
+            stock.volume_ratio = round(float(volume_ratio),2)
+            stock.pe = round(float(pe),2)
+            stock.committee = round(float(committee),2)
+            stock.save()
+        except Http404:
+            pass
             
 def everyday_inflow0(code,inflow,dt):
     
@@ -790,6 +843,70 @@ def jquery(request):
     return HttpResponse('执行完毕！')
 
 @prevent_duplicate_calls
+def dayadd_pe(request):
+    setattr(request, 'no_cache', True)
+    
+    if request.method == 'GET':
+      path =  os.path.dirname(__file__)
+   
+      filename = ""
+      if(sysstr =="Windows"):
+        filename = path+"\\Table1.xls"       
+      else:
+        filename = path+"/Table1.xls"
+    
+      df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+      df = df.drop_duplicates()
+      df = df.reset_index(drop=True)
+      duplicates = df.duplicated()
+         
+      dt='2024-07-16'
+      symbol=''
+      # 遍历非重复行
+      for index, row in df[~duplicates].iterrows():
+        if str(row.开盘).lstrip().rstrip()[0:1] != '―':
+            code = str(row.代码).lstrip().rstrip()
+            if len(code) == 1:
+                code = '00000'+ code
+            elif len(code) == 2:
+                code = '0000'+ code
+            elif len(code) == 3:    
+                code = '000'+ code
+            elif len(code) == 4:    
+                code = '00'+ code
+            elif len(code) == 5:    
+                code = '0'+ code
+            
+            print('非重复行'+code)
+                       
+            volume = 0
+            if '万' in str(row.总量):
+                volume = round(float(row.总量[0:-1])*10000,2)
+            else:
+                volume = round(float(row.总量*1),2)
+          
+            amount = 0
+            if '万' in (row.金额):
+                amount = round(float(row.金额[0:-1]),2)
+            elif '亿' in row.金额:
+                amount = round(float(row.金额[0:-1])*10000,2)
+            else:
+                amount = round(float(row.金额*0.0001),2)
+                          
+            data = [code,row.换手, row.量比, row.市盈率,row.委比]  
+            if symbol!=code:
+                print(data)
+                everyday_pe(data[0],data[1],data[2],data[3],data[4],dt)
+                symbol=code
+                    
+             
+      # 处理重复行
+      for index, row in df[duplicates].iterrows():
+        print('重复行'+str(row.代码))                            
+                            
+    return HttpResponse('执行完毕！')
+
+@prevent_duplicate_calls
 def dayadd(request):
     setattr(request, 'no_cache', True)
     
@@ -903,7 +1020,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-11-29'
+    dt='2024-07-16'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -928,7 +1045,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-11-29'
+    dt='2024-07-16'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -961,7 +1078,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-11-29'
+    dt='2024-07-16'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1050,7 +1167,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2024-11-29'
+      dt='2024-07-16'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
