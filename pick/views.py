@@ -843,7 +843,7 @@ def jquery(request):
     return HttpResponse('执行完毕！')
 
 @prevent_duplicate_calls
-def dayadd_pe(request):
+def pe_dayadd(request):
     setattr(request, 'no_cache', True)
     
     if request.method == 'GET':
