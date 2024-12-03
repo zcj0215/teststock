@@ -1167,7 +1167,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2024-12-03'
+      dt='2024-11-28'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
