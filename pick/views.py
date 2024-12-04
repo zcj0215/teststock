@@ -1025,7 +1025,7 @@ def indexadd(request):
         print(row.名称)
         code = str(row.代码)[-6:]
         print(code)
-        if code in ['000001','000016','000300','000688','000905','399001','399006','899050']: 
+        if code in ['000001','000016','000300','000688','000905','399001','399006','899050','888801']: 
             volume = round(float(row.总手*1/1000000),2)
             amount = round(float(row.金额/100000000),2)
         
@@ -1245,7 +1245,7 @@ def nf(request):
             except: 
                inf = 0
         print(inf)
-        everyday_nf(code, inf, '2024-05-28')
+        everyday_nf(code, inf, '2024-12-03')
     
     return HttpResponse('执行完毕！')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 
@@ -1467,7 +1467,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="人形机器人"
+    blockname ="陆股通"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
