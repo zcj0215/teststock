@@ -11,6 +11,9 @@ import platform
 from django.db.models import Q
 from django.db.models import Sum
 
+
+from django.core.exceptions import ObjectDoesNotExist
+
 import pandas as pd
 
 from functools import wraps
@@ -860,7 +863,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2024-08-19'
+      dt='2024-08-20'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -924,7 +927,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2024-08-19'
+      dt='2024-08-20'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1020,7 +1023,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-08-19'
+    dt='2024-08-20'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1045,7 +1048,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-08-19'
+    dt='2024-08-20'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1078,7 +1081,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-08-19'
+    dt='2024-08-20'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1167,7 +1170,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2024-08-19'
+      dt='2024-08-20'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1469,7 +1472,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="微盘精选"
+    blockname ="活跃小盘国企"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
@@ -1477,6 +1480,7 @@ def blockadd(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
+    code = [];
     for row in df.iloc[:,0:2].itertuples():
         my = str(row.代码)
         print(my)
@@ -1492,6 +1496,7 @@ def blockadd(request):
             my = '0'+ my    
         print(my)
         print(row.名称)
+        code.append(my)
         board = get_object_or_404(Board,name=blockname)  
         try:
             stocks = get_object_or_404(Stocks,code=my)
@@ -1512,5 +1517,20 @@ def blockadd(request):
             )
             stocks.boards.add(board)
             stocks.save() 
-
+        
+    print(code)
+    
+    stockses = Stocks.objects.all().filter(blockname=blockname)
+    
+    print(stockses)
+    board = get_object_or_404(Board,name=blockname)
+    for row in stockses:
+        if row.code not in code:
+            try:
+               print('删除：板块'+blockname+'中的个股'+row.name)
+               row.boards.remove(board)
+               row.save()
+            except ObjectDoesNotExist:
+               print("The object does not exist.")
+            
     return HttpResponse('执行完毕！')
