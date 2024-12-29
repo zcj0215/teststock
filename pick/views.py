@@ -863,7 +863,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2024-08-20'
+      dt='2024-12-27'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -927,7 +927,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2024-08-20'
+      dt='2024-12-27'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1023,7 +1023,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-08-20'
+    dt='2024-12-27'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1048,7 +1048,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-08-20'
+    dt='2024-12-27'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1081,7 +1081,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-08-20'
+    dt='2024-12-27'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1170,7 +1170,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2024-08-20'
+      dt='2024-12-27'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1217,7 +1217,7 @@ def nf(request):
         
     df = pd.read_excel(filename, sheet_name='Sheet1', header=0)
     
-    dt='2024-12-26'
+    dt='2024-12-27'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1472,7 +1472,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="活跃小盘国企"
+    blockname ="陆股通"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
@@ -1483,7 +1483,7 @@ def blockadd(request):
     code = [];
     for row in df.iloc[:,0:2].itertuples():
         my = str(row.代码)
-        print(my)
+       
         if len(my) == 1:
             my = '00000'+ my
         elif len(my) == 2:
@@ -1511,7 +1511,7 @@ def blockadd(request):
                     
         except Http404:
             stocks = Stocks.objects.create(
-                code = str(my),
+                code = my,
                 name = row.名称,
                 blockname = blockname
             )
@@ -1525,11 +1525,13 @@ def blockadd(request):
     print(stockses)
     board = get_object_or_404(Board,name=blockname)
     for row in stockses:
+        print(row.code)
         if row.code not in code:
             try:
-               print('删除：板块'+blockname+'中的个股'+row.name)
+               print('删除：板块 '+blockname+' 中的个股 '+row.name)
                row.boards.remove(board)
                row.save()
+               row.delete()
             except ObjectDoesNotExist:
                print("The object does not exist.")
             
