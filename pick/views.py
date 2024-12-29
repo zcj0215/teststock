@@ -1519,18 +1519,14 @@ def blockadd(request):
             stocks.save() 
         
     print(code)
-    
-    stockses = Stocks.objects.all().filter(blockname=blockname)
-    
-    print(stockses)
+
+    stockses = Stocks.objects.all()
     board = get_object_or_404(Board,name=blockname)
     for row in stockses:
-        print(row.code)
-        if row.code not in code:
+        if row.code not in code  and row.boards.filter(name=blockname):
             try:
                print('删除：板块 '+blockname+' 中的个股 '+row.name)
                row.boards.remove(board)
-               row.blockname = ''
                row.save()
             except ObjectDoesNotExist:
                print("The object does not exist.")
