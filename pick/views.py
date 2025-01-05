@@ -863,7 +863,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
       
-      dt='2024-09-25'
+      dt='2024-09-26'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -927,7 +927,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2024-09-25'
+      dt='2024-09-26'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1023,7 +1023,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-09-25'
+    dt='2024-09-26'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1048,7 +1048,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2024-09-25'
+    dt='2024-09-26'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1170,7 +1170,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2024-09-25'
+      dt='2024-09-26'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1472,7 +1472,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="消费电子概念"
+    blockname ="低市盈率"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
