@@ -1081,7 +1081,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2024-09-26'
+    dt='2024-09-25'
     for row in df.itertuples():
         print(row.名称)
         
