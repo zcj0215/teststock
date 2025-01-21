@@ -238,6 +238,7 @@ class Stocksector(models.Model):
     date = models.DateField(max_length=10,db_index=True,null=True)
     name = models.CharField(max_length=50,db_index=True,null=True)
     pe = models.DecimalField(max_digits=7, decimal_places=2,null=True) 
+    inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)     # 主力资金净流入
     
     def __str__(self):
         return self.name
