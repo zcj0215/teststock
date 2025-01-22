@@ -1472,7 +1472,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="算力租赁"
+    blockname ="算力概念"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
