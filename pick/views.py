@@ -381,6 +381,14 @@ def everyday_pe(code,turnover,volume_ratio,pe,committee,dt):
             stock.save()
         except Http404:
             pass
+        
+def everyday_binflow(code,inflow,dt):
+    try:
+        block = get_object_or_404(Stocksector, code=code,date=dt)
+        block.inflow = inflow
+        block.save()
+    except Http404:
+        pass
             
 def everyday_inflow0(code,inflow,dt):
     
@@ -1200,6 +1208,68 @@ def inflow(request):
                inf = 0
             
         everyday_inflow0(code, inf, dt)
+        
+      # 处理重复行
+      for index, row in df[duplicates].iterrows():
+        print('重复行'+str(row.代码))  
+    
+    return HttpResponse('执行完毕！')
+
+@prevent_duplicate_calls
+def binflow(request):
+    setattr(request, 'no_cache', True)
+    if request.method == 'GET':
+      path =  os.path.dirname(__file__)
+      filename = "" 
+      if(sysstr =="Windows"):
+        filename = path+"\\Table4.xls"       
+      else:
+        filename = path+"/Table4.xls"
+        
+      df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+      df = df.drop_duplicates()
+      df = df.reset_index(drop=True)
+      duplicates = df.duplicated()
+      
+      
+      filename1 = "" 
+      if(sysstr =="Windows"):
+        filename1 = path+"\\板块指数.xls"
+        
+      else:
+        filename1 = path+"/板块指数.xls"
+      df1 = pd.read_excel(filename1, sheet_name='工作表1', header=0)
+      mylist=[]
+      for row in df1.itertuples():
+          dict={}
+          dict[str(row.代码)]=str(row.名称)
+          mylist.append(dict)
+        
+    
+      dt='2025-01-21'
+      # 遍历非重复行
+      for index, row in df[~duplicates].iterrows():
+        name = str(row.名称)
+        inf = str(row.主力净流入)
+    
+        if '万' in inf:
+            inf = round(float(inf[0:-1]),2)
+        elif '亿' in inf:
+            inf = round(float(inf[0:-1])*10000,2)
+        else:
+            try:
+               inf = round(float(inf[0:-1])*0.0001,2)
+            except: 
+               inf = 0
+               
+        for di in mylist:
+            for k,v in di.items():
+                if v[0:5] in name:
+                    print(k)
+                    print(v)
+                    print(inf)
+            
+                    everyday_binflow(k, inf, dt)
         
       # 处理重复行
       for index, row in df[duplicates].iterrows():

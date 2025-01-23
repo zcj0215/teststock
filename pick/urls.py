@@ -14,6 +14,7 @@ urlpatterns = [
     path('blockdayadd/', pick_views.blockdayadd,name='blockdayadd'), 
     path('dayout/', pick_views.dayout,name='dayout'), 
     path('inflow/', pick_views.inflow,name='inflow'),
+    path('binflow/', pick_views.binflow,name='binflow'),
     path('inflow_single/', pick_views.inflow_single,name='inflow_single'),
     path('inflow_files/', pick_views.inflow_files,name='inflow_files'),
     path('stock_single/', pick_views.stock_single,name='stock_single'),
