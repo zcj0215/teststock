@@ -15,6 +15,7 @@
         <th>30天涨停</th>
         <th>连涨天数</th>
         <th>上涨，下跌</th>
+        <th>主力净流入（万）</th>
       </tr>
     </thead>
     <tbody>
@@ -45,6 +46,13 @@
           </td>
           <td class="align-middle">
             <span style="color:blue">{{ board.growth_fall }}</span>
+          </td>
+          <td class="align-middle">
+            {% if board.inflow > 0 %}
+               <span style="color:red">{{ board.inflow }}</span>
+            {% else %}
+               <span style="color:green">{{ board.inflow }}</span>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}

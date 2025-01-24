@@ -40,7 +40,7 @@ class ByTypeBoardListView(ListView):
         names = []
         for board in bds:
             names.append(board.name)
-        queryset = Stocksector.objects.filter(name__in = names,date=date).order_by('-Continuerise_30_limitup')
+        queryset = Stocksector.objects.filter(name__in = names,date=date).order_by('-inflow')
         return queryset
     
     
