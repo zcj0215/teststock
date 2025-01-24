@@ -392,6 +392,13 @@ def everyday_binflow(code,inflow,dt):
             
 def everyday_inflow0(code,inflow,dt):
     
+    try:
+        stock = get_object_or_404(Stocks, code=code)
+        stock.inflow = round(float(inflow),2) 
+        stock.save()
+    except Http404:
+        pass
+    
     if code[:2] == '30':  
         try:
             stock = get_object_or_404(Stockszc, code=code,date=dt)
@@ -429,6 +436,12 @@ def everyday_inflow0(code,inflow,dt):
             pass
         
 def everyday_nf(code,nf,dt):
+    try:
+        stock = get_object_or_404(Stocks, code=code)
+        stock.nf = round(float(nf),2) 
+        stock.save()
+    except Http404:
+        pass
     
     if code[:2] == '30':  
         try:
