@@ -97,7 +97,8 @@ class StockListView(ListView):
                         dict["high"] = str(row.high)
                         dict["vol"] = str(row.volume)
                         dict["trade_date"] = str(row.date)
-                        dict["pe"] = str(row.pe)  
+                        dict["pe"] = str(row.pe) 
+                        dict["inflow"] = ''  
                         blocklist.append(dict) 
                 except EXCEPTION:
                     pass
@@ -115,17 +116,18 @@ class StockListView(ListView):
                         dict["vol"] = str(row.volume)
                         dict["trade_date"] = str(row.date)  
                         dict["pe"] = str(row.pe) 
+                        dict["inflow"] = str(row.inflow) 
                         blocklist.append(dict) 
                 except EXCEPTION:
                     pass
             blocklist.reverse()
-            mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date','pe'])
+            mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date','pe','inflow'])
             bsignals = generate_signals(mybpd)
             
             self.data = json.dumps(blocklist)
             self.bsignals = bsignals.to_json()
         
-        queryset = Stocks.objects.filter(boards__name__in = [self.board.name]).order_by('-capital_inflow')
+        queryset = Stocks.objects.filter(boards__name__in = [self.board.name]).order_by('-growth')
         return queryset
 
 class PostListView(ListView):
