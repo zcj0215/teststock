@@ -127,7 +127,7 @@ class StockListView(ListView):
             self.data = json.dumps(blocklist)
             self.bsignals = bsignals.to_json()
         
-        queryset = Stocks.objects.filter(boards__name__in = [self.board.name]).order_by('-growth')
+        queryset = Stocks.objects.filter(boards__name__in = [self.board.name]).order_by('-inflow')
         return queryset
 
 class PostListView(ListView):
