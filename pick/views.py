@@ -1300,7 +1300,7 @@ def nf(request):
         
     df = pd.read_excel(filename, sheet_name='Sheet1', header=0)
     
-    dt='2025-01-27'
+    dt='2025-01-21'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1555,7 +1555,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="燃料电池"
+    blockname ="陆股通"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
