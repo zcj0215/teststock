@@ -1300,7 +1300,7 @@ def nf(request):
         
     df = pd.read_excel(filename, sheet_name='Sheet1', header=0)
     
-    dt='2025-01-21'
+    dt='2025-01-22'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
