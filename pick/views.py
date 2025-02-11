@@ -438,8 +438,13 @@ def everyday_inflow0(code,inflow,dt):
 def everyday_nf(code,nf,dt):
     try:
         stock = get_object_or_404(Stocks, code=code)
-        stock.nf = round(float(nf),2) 
-        stock.save()
+        if nf is None:
+           stock.nf = None
+           stock.save()
+           return
+        else:
+           stock.nf = round(float(nf),2) 
+           stock.save()
     except Http404:
         pass
     
@@ -1293,14 +1298,42 @@ def binflow(request):
 def nf(request):
     path =  os.path.dirname(__file__)
     filename = "" 
+    filename1 = ""
     if(sysstr =="Windows"):
         filename = path+"\\北向资金排名.xls"       
     else:
         filename = path+"/北向资金排名.xls"
         
+    if(sysstr =="Windows"):
+        filename1 = path+"\\陆股通.xls"       
+    else:
+        filename1 = path+"/陆股通.xls"
+        
     df = pd.read_excel(filename, sheet_name='Sheet1', header=0)
     
+    df1 = pd.read_excel(filename1, sheet_name='工作表1', header=0)
+    
     dt='2025-02-10'
+    
+    for row1 in df1.itertuples():
+        code = str(row1.代码)
+        if len(code) == 1:
+            code = '00000'+ code
+        elif len(code) == 2:
+            code = '0000'+ code
+        elif len(code) == 3:    
+            code = '000'+ code
+        elif len(code) == 4:    
+            code = '00'+ code
+        elif len(code) == 5:    
+            code = '0'+ code
+            
+        print(code)
+        print(row1.名称)    
+        inf =  None
+        everyday_nf(code, inf, dt)
+        
+    
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
