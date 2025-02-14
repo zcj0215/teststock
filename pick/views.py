@@ -1588,7 +1588,7 @@ def block_single(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="DeepSeek概念"
+    blockname ="AI医疗概念"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
