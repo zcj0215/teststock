@@ -209,19 +209,25 @@ CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 86400
 
-
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/1',
         'TIMEOUT': 300,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     },
-    'session': {  # 专门存储会话
+    'session': {  # 专用会话缓存
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/2',
         'TIMEOUT': 86400,  # 1 天
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
 
-# Session
-SESSION_ENGINE='django.contrib.sessions.backends.cache'
+# 会话配置
+SESSION_CACHE_ALIAS = 'session'  # 关键：指定使用 'session' 缓存
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'  # 缓存 + 数据库回写
