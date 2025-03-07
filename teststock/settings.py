@@ -216,6 +216,7 @@ CACHES = {
         'TIMEOUT': 300,
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'KEY_PREFIX': 'teststock', 
         }
     },
     'session': {  # 专用会话缓存
@@ -224,6 +225,7 @@ CACHES = {
         'TIMEOUT': 86400,  # 1 天
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'KEY_PREFIX': 'teststock', 
         }
     }
 }
