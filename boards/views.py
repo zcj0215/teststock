@@ -188,7 +188,12 @@ def reply_topic(request, pk, topic_pk):
 
 def stock_detail(request, board_name, stock_name):
     print('板块：'+ board_name + ' 个股：' + stock_name)
-    stock = get_object_or_404(Stocks, name=stock_name)
+    stock = None
+    try:    
+        stock = get_object_or_404(Stocks, name=stock_name)
+    except Stocks.MultipleObjectsReturned:
+        print('抓住')
+        
     print('在Stocks中'+  stock.name+ ' ' + stock.code)
     boards = stock.boards
     if board_name == stock.name:
@@ -249,7 +254,7 @@ def stock_detail(request, board_name, stock_name):
     bsignals = generate_signals(mybpd)
     
     key = code + time.strftime("%Y-%m-%d", time.localtime())
-    
+    data = None
     if request.session.get(key):
         return render(request, 'stock.html', {'stock':stock,'boards':boards,"data": json.dumps(jsonlist),"bdata":json.dumps(blocklist),"signals":{},"bsignals":bsignals.to_json()})
     else:
@@ -306,6 +311,10 @@ def stock_detail(request, board_name, stock_name):
                       jsonlist.append(dict) 
               
               except EXCEPTION:
+                  for row in data:
+                      print(name)
+                      print(str(row.code))
+                      print(str(row.date))
                   pass
         elif flag == 'SH':
             if code[:2] == '68':  
