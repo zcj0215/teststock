@@ -1621,7 +1621,7 @@ def blockadd(request):
     
     code = [];
     for row in df.iloc[:,0:2].itertuples():
-        my = str(row.代码)
+        my = str(row.代码).strip()
        
         if len(my) == 1:
             my = '00000'+ my
