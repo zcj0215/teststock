@@ -1585,10 +1585,33 @@ def block_single(request):
        
     return HttpResponse('执行完毕！')
 
+def block_weihu(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    blockname ="陆股通"
+    if(sysstr =="Windows"):
+            filename = path+"\\"+blockname+".xls"
+    else:
+        filename = path+"/"+blockname+".xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.iloc[:,0:2].itertuples():
+        my = str(row.代码)
+        print(my)
+        print(row.名称)
+       
+        try:
+            stocks = get_object_or_404(Stocks,code=my+'.0')     
+            if  stocks:
+                stocks.delete()           
+        except Http404:
+            pass
+    return HttpResponse('执行完毕！')
+
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="光伏"
+    blockname ="陆股通"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
