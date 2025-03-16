@@ -228,7 +228,8 @@ def stock_detail(request, board_name, stock_name):
                 dict["high"] = str(row.high)
                 dict["vol"] = str(row.volume)
                 dict["trade_date"] = str(row.date)
-                dict["pe"] = str(row.pe)  
+                dict["pe"] = str(row.pe)
+                dict["inflow"] = ''   
                 blocklist.append(dict)         
             
         else:
@@ -244,12 +245,13 @@ def stock_detail(request, board_name, stock_name):
                 dict["high"] = str(row.high)
                 dict["vol"] = str(row.volume)
                 dict["trade_date"] = str(row.date)
-                dict["pe"] = str(row.pe)  
+                dict["pe"] = str(row.pe) 
+                dict["inflow"] = str(row.inflow) 
                 blocklist.append(dict)         
     except EXCEPTION:
         pass
     blocklist.reverse()
-    mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date','pe'])
+    mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date','pe','inflow'])
     #bcci = round(calculate_CCI(mybpd), 2).tolist()
     bsignals = generate_signals(mybpd)
     
@@ -398,7 +400,7 @@ def stock_detail(request, board_name, stock_name):
               pass
         jsonlist.reverse()
         
-        mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow','pe'])
+        mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow','pe','nf'])
         # cci = round(calculate_CCI(mypd), 2).tolist() 
         signals = generate_signals(mypd)
              
@@ -541,11 +543,12 @@ def blockget(request):
                 dict["high"] = str(row.high)
                 dict["vol"] = str(row.volume)
                 dict["trade_date"] = str(row.date)
-                dict["pe"] = str(row.pe)   
+                dict["pe"] = str(row.pe)
+                dict["inflow"] = str(row.inflow)   
                 blocklist.append(dict)      
                  
             blocklist.reverse()  
-            mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date'])
+            mybpd = pd.DataFrame(blocklist,columns=['name','code','open','close','low','high','vol','trade_date','pe','inflow'])
             bsignals = generate_signals(mybpd)
             
             return JsonResponse({"data": json.dumps(blocklist),"bsignals":bsignals.to_json()})
@@ -698,7 +701,7 @@ def singleget(request):
               pass
         jsonlist.reverse()
         
-        mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow'])
+        mypd = pd.DataFrame(jsonlist,columns=['name','code','open','close','low','high','vol','change','pct_chg','amount','pre_close','turnover','trade_date','capital_inflow','pe','nf'])
         signals = generate_signals(mypd)
         
         return JsonResponse({"data": json.dumps(jsonlist),"signals":signals.to_json()})

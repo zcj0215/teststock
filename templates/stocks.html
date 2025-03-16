@@ -233,7 +233,7 @@
             var date = []
         
             for (var i = 0; i < rawData.length; i++) {
-                open_close_low_high.push([rawData[i].open, rawData[i].close, rawData[i].low, rawData[i].high,rawData[i].vol,rawData[i].trade_date,rawData[i].pe])
+                open_close_low_high.push([rawData[i].open, rawData[i].close, rawData[i].low, rawData[i].high,rawData[i].vol,rawData[i].trade_date,rawData[i].pe,rawData[i].inflow])
                 volumes.push(rawData[i].vol)
                 date.push(rawData[i].trade_date)
             }
@@ -353,6 +353,23 @@
                     value:  open_close[i][4],
                     itemStyle: {
                         color: open_close[i][0] >= open_close[i][1] ? downColor : upColor
+                    }
+                })
+            }
+        
+            return result
+        }
+
+        function inflowColor(open_close) {
+            const upColor = '#ec0000';
+            const downColor = '#00da3c';
+        
+            var result = []
+            for (var i = 0; i < open_close.length; i++) {
+                result.push({
+                    value:  open_close[i][7],
+                    itemStyle: {
+                        color: open_close[i][7] >= 0 ? upColor : downColor
                     }
                 })
             }
@@ -586,33 +603,39 @@
                    {
                     left: '10%',
                     right: '8%',
-                    top: '37%',
+                    top: '36%',
+                    height: '10%'
+                   },
+                   {
+                    left: '10%',
+                    right: '8%',
+                    top: '47%',
+                    height: '6%'
+                   },
+                   {
+                    left: '10%',
+                    right: '8%',
+                    top: '52%',
+                    height: '8%'
+                   },
+                   {
+                    left: '10%',
+                    right: '8%',
+                    top: '64%',
+                    height: '9%'
+                   },
+                   {
+                    left: '10%',
+                    right: '8%',
+                    top: '74%',
                     height: '11%'
                    },
                    {
                     left: '10%',
                     right: '8%',
-                    top: '48%',
-                    height: '10%'
-                   },
-                   {
-                    left: '10%',
-                    right: '8%',
-                    top: '61%',
-                    height: '10%'
-                   },
-                   {
-                    left: '10%',
-                    right: '8%',
-                    top: '71%',
-                    height: '12%'
-                   },
-                   {
-                    left: '10%',
-                    right: '8%',
-                    top: '82%',
-                    height: '13%'
-                   }      
+                    top: '85%',
+                    height: '11%'
+                  }        
                 ],
                 xAxis: [
                     {
@@ -686,6 +709,18 @@
                         axisLabel: { show: false },
                         min: 'dataMin',
                         max: 'dataMax'
+                    },
+                    {
+                        type: 'category',
+                        gridIndex: 6,
+                        data: data0.date,
+                        boundaryGap: false,
+                        axisLine: { onZero: false },
+                        axisTick: { show: false },
+                        splitLine: { show: false },
+                        axisLabel: { show: false },
+                        min: 'dataMin',
+                        max: 'dataMax'
                     }
                 ],
                 yAxis: [
@@ -739,18 +774,27 @@
                         axisLine: { show: false },
                         axisTick: { show: false },
                         splitLine: { show: false }
+                    },
+                    {
+                        scale: true,
+                        gridIndex: 6,
+                        splitNumber: 2,
+                        axisLabel: { show: false },
+                        axisLine: { show: false },
+                        axisTick: { show: false },
+                        splitLine: { show: false }
                     }
                 ],
                 dataZoom: [
                     {
                         type: 'inside',
-                        xAxisIndex: [0, 1, 2, 3, 4, 5],
+                        xAxisIndex: [0, 1, 2, 3, 4, 5, 6],
                         start: 100 - Math.floor((60 / data0.date.length) * 100),
                         end: 100
                     },
                     {
                         show: true,
-                        xAxisIndex: [0, 1, 2, 3, 4, 5],
+                        xAxisIndex: [0, 1, 2, 3, 4, 5, 6],
                         type: 'slider',
                         top: '95%',
                         start: 100 - Math.floor((60 / data0.date.length) * 100),
@@ -851,18 +895,25 @@
                         data: calculateVOL(60,data0.open_close_low_high)
                     },
                     {
-                        name: 'MACD',
+                        name: '主力流入量(万)',
                         type: 'bar',
                         xAxisIndex: 2,
                         yAxisIndex: 2,
+                        data: inflowColor(data0.open_close_low_high),
+                    },
+                    {
+                        name: 'MACD',
+                        type: 'bar',
+                        xAxisIndex: 3,
+                        yAxisIndex: 3,
                         color: '#FF0000',
                         data: barColor(calculateMACD(data0.open_close_low_high).OSC)
                     },
                     {
                         name: 'DIF',
                         type: 'line',
-                        xAxisIndex: 2,
-                        yAxisIndex: 2,
+                        xAxisIndex: 3,
+                        yAxisIndex: 3,
                         color: '#e9b002',
                         smooth: true,
                         showSymbol: false,
@@ -874,8 +925,8 @@
                     {
                         name: 'DEA',
                         type: 'line',
-                        xAxisIndex: 2,
-                        yAxisIndex: 2,
+                        xAxisIndex: 3,
+                        yAxisIndex: 3,
                         color: '#0099FF',
                         smooth: true,
                         showSymbol: false,
@@ -887,8 +938,8 @@
                     {
                         name: 'CCI1',
                         type: 'line',
-                        xAxisIndex: 3,
-                        yAxisIndex: 3,
+                        xAxisIndex: 4,
+                        yAxisIndex: 4,
                         color: '#e9b002',
                         smooth: true,
                         showSymbol: false,
@@ -903,8 +954,8 @@
                     {
                         name: 'CCI2',
                         type: 'line',
-                        xAxisIndex: 3,
-                        yAxisIndex: 3,
+                        xAxisIndex: 4,
+                        yAxisIndex: 4,
                         color: '#0099FF',
                         smooth: true,
                         showSymbol: false,
@@ -919,8 +970,8 @@
                     {
                         name: 'PDI',
                         type: 'line',
-                        xAxisIndex: 4,
-                        yAxisIndex: 4,
+                        xAxisIndex: 5,
+                        yAxisIndex: 5,
                         color: '#e9b002',
                         smooth: true,
                         showSymbol: false,
@@ -932,8 +983,8 @@
                     {
                         name: 'MDI',
                         type: 'line',
-                        xAxisIndex: 4,
-                        yAxisIndex: 4,
+                        xAxisIndex: 5,
+                        yAxisIndex: 5,
                         color: '#00ffff',
                         smooth: true,
                         showSymbol: false,
@@ -945,8 +996,8 @@
                     {
                         name: 'ADX',
                         type: 'line',
-                        xAxisIndex: 4,
-                        yAxisIndex: 4,
+                        xAxisIndex: 5,
+                        yAxisIndex: 5,
                         color: '#cc00ff',
                         smooth: true,
                         showSymbol: false,
@@ -958,8 +1009,8 @@
                     {
                         name: 'ADXR',
                         type: 'line',
-                        xAxisIndex: 4,
-                        yAxisIndex: 4,
+                        xAxisIndex: 5,
+                        yAxisIndex: 5,
                         color: '#009933',
                         smooth: true,
                         showSymbol: false,
@@ -971,8 +1022,8 @@
                     {
                         name: '市盈率',
                         type: 'line',
-                        xAxisIndex: 5,
-                        yAxisIndex: 5,
+                        xAxisIndex: 6,
+                        yAxisIndex: 6,
                         color: '#009933',
                         smooth: true,
                         showSymbol: false,

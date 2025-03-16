@@ -231,5 +231,6 @@ CACHES = {
 }
 
 # 会话配置
-SESSION_CACHE_ALIAS = 'session'  # 关键：指定使用 'session' 缓存
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'  # 缓存 + 数据库回写
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'session'
+SESSION_COOKIE_AGE = 3600 * 24 * 1  # 会话有效期1天（按需调整）
