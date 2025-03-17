@@ -9,7 +9,6 @@ urlpatterns = [
     path('jquery/', pick_views.jquery,name='jquery'), 
     path('pe_dayadd/', pick_views.pe_dayadd,name='pe_dayadd'), 
     path('dayadd/', pick_views.dayadd,name='dayadd'), 
-    path('block_weihu/', pick_views.block_weihu,name='block_weihu'),
     path('blockadd/', pick_views.blockadd,name='blockadd'), 
     path('indexadd/', pick_views.indexadd,name='indexadd'), 
     path('blockdayadd/', pick_views.blockdayadd,name='blockdayadd'), 
