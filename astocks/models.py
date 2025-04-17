@@ -88,6 +88,8 @@ class StockList(models.Model):
     area = models.CharField(max_length=50,null=True)
     industry = models.CharField(max_length=50,null=True)
     list_date = models.CharField(max_length=50)
+    market_value = models.DecimalField(max_digits=20, decimal_places=2,null=True)
+    circulation_market_value = models.DecimalField(max_digits=20, decimal_places=2,null=True)
     
     def __str__(self):
         return self.name
