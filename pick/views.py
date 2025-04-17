@@ -1684,6 +1684,33 @@ def update_aslist (request):
     else:
         filename = path+"/Table9.xls"
         
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.itertuples():
+        code = str(row.代码).strip()
+        if len(code) == 1:
+            code = '00000'+ code
+        elif len(code) == 2:
+            code = '0000'+ code
+        elif len(code) == 3:    
+            code = '000'+ code
+        elif len(code) == 4:    
+            code = '00'+ code
+        elif len(code) == 5:    
+            code = '0'+ code
+            
+        print(code)
+        try:
+            stock = get_object_or_404(StockList, symbol=code)
+        
+            stock.name = str(row.名称).strip()
+            stock.industry = str(row.所属行业).strip()
+            stock.market_value = str(row.总市值).strip()
+            stock.circulation_market_value = str(row.流通市值).strip()
+            stock.save()
+        except Http404:
+            pass
+        
+                
     return HttpResponse('执行完毕！')
         
     
