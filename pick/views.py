@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 import os
-from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stocksector,StockChoose,StockLimitup,Stockindex
+from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stocksector,StockChoose,StockLimitup,Stockindex,StockList
 from boards.models import Board,BoardType
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
@@ -1674,3 +1674,17 @@ def blockadd(request):
                print("The object does not exist.")
             
     return HttpResponse('执行完毕！')
+
+
+def update_aslist (request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\Table9.xls"       
+    else:
+        filename = path+"/Table9.xls"
+        
+    return HttpResponse('执行完毕！')
+        
+    
+    
