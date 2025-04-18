@@ -38,6 +38,8 @@
         <th>委比%</th>
         <th>主力净流入(万)</th>
         <th>北向净流入(万)</th>
+        <th>流通市值</th>
+        <th>总市值</th>
         <th>涉及板块</th>
       </tr>
     </thead>
@@ -78,6 +80,12 @@
             {% else %}
                <span style="color:green">{{ stock.nf }}</span>
             {% endif %}
+          </td>
+          <td class="align-middle">
+            <span style="color:red">{{ stock.circulation_market_value }}</span>
+          </td>
+          <td class="align-middle"> 
+            <span>{{ stock.market_value }}</span>
           </td>
           <td class="align-middle">
             {% with boards=stock.boards %}

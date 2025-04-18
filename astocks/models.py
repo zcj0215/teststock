@@ -77,6 +77,8 @@ class Stocks(models.Model):
     committee=models.DecimalField(max_digits=10, decimal_places=2,null=True)
     inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)
     nf = models.DecimalField(max_digits=15, decimal_places=2,null=True)
+    market_value = models.CharField(max_length=50,null=True)
+    circulation_market_value = models.CharField(max_length=50,null=True)
 
     def __str__(self):
         return self.name

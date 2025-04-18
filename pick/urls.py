@@ -27,6 +27,7 @@ urlpatterns = [
     path('indexpe/', pick_views.indexpe,name='indexpe'),
     path('indexpe_single/', pick_views.indexpe_single,name='indexpe_single'),
     path('update_aslist/', pick_views.update_aslist,name='update_aslist'),
+    path('same_aslist/', pick_views.same_aslist,name='same_aslist'),
 ]
 
 

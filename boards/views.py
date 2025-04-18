@@ -210,6 +210,8 @@ def stock_detail(request, board_name, stock_name):
     code = stock.ts_code[:6]
     flag = stock.ts_code[7:]
     name = stock.name
+    market_value = stock.market_value
+    circulation_market_value = stock.circulation_market_value
     jsonlist = []
     blocklist = []
     
@@ -284,6 +286,8 @@ def stock_detail(request, board_name, stock_name):
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
                       dict["nf"] = str(row.nf)
+                      dict["market_value"] = market_value
+                      dict["circulation_market_value"] = circulation_market_value
                       jsonlist.append(dict) 
                
               except EXCEPTION:
@@ -309,7 +313,9 @@ def stock_detail(request, board_name, stock_name):
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
-                      dict["nf"] = str(row.nf)  
+                      dict["nf"] = str(row.nf)
+                      dict["market_value"] = market_value
+                      dict["circulation_market_value"] = circulation_market_value  
                       jsonlist.append(dict) 
               
               except EXCEPTION:
@@ -341,6 +347,8 @@ def stock_detail(request, board_name, stock_name):
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
                       dict["nf"] = str(row.nf)
+                      dict["market_value"] = market_value
+                      dict["circulation_market_value"] = circulation_market_value
                       jsonlist.append(dict) 
               
                      
@@ -367,7 +375,9 @@ def stock_detail(request, board_name, stock_name):
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
-                      dict["nf"] = str(row.nf)  
+                      dict["nf"] = str(row.nf)
+                      dict["market_value"] = market_value
+                      dict["circulation_market_value"] = circulation_market_value 
                       jsonlist.append(dict) 
                     
               except EXCEPTION:
@@ -394,6 +404,8 @@ def stock_detail(request, board_name, stock_name):
                   dict["capital_inflow"] = str(row.capital_inflow) 
                   dict["pe"] = str(row.pe)
                   dict["nf"] = str(row.nf)
+                  dict["market_value"] = market_value
+                  dict["circulation_market_value"] = circulation_market_value
                   jsonlist.append(dict) 
                     
           except EXCEPTION:
@@ -564,6 +576,8 @@ def singleget(request):
         end = time.strftime("%Y-%m-%d", time.localtime())
         flag = stock.ts_code[7:]
         name = stock.name
+        market_value = stock.market_value
+        circulation_market_value = stock.circulation_market_value
         jsonlist = []
         
         if flag == 'SZ':
@@ -589,6 +603,8 @@ def singleget(request):
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
                       dict["nf"] = str(row.nf)
+                      dict["market_value"] = market_value
+                      dict["circulation_market_value"] = circulation_market_value
                       jsonlist.append(dict) 
                
               except EXCEPTION:
@@ -614,7 +630,9 @@ def singleget(request):
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
-                      dict["nf"] = str(row.nf)  
+                      dict["nf"] = str(row.nf)
+                      dict["market_value"] = market_value
+                      dict["circulation_market_value"] = circulation_market_value  
                       jsonlist.append(dict) 
               
               except EXCEPTION:
@@ -641,7 +659,9 @@ def singleget(request):
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
-                      dict["nf"] = str(row.nf)  
+                      dict["nf"] = str(row.nf)
+                      dict["market_value"] = market_value
+                      dict["circulation_market_value"] = circulation_market_value
                       jsonlist.append(dict) 
               
                      
@@ -668,7 +688,9 @@ def singleget(request):
                       dict["trade_date"] = str(row.date)
                       dict["capital_inflow"] = str(row.capital_inflow)
                       dict["pe"] = str(row.pe)
-                      dict["nf"] = str(row.nf)  
+                      dict["nf"] = str(row.nf)
+                      dict["market_value"] = market_value
+                      dict["circulation_market_value"] = circulation_market_value 
                       jsonlist.append(dict) 
                     
               except EXCEPTION:
@@ -694,7 +716,9 @@ def singleget(request):
                   dict["trade_date"] = str(row.date)
                   dict["capital_inflow"] = str(row.capital_inflow)
                   dict["pe"] = str(row.pe)
-                  dict["nf"] = str(row.nf)  
+                  dict["nf"] = str(row.nf)
+                  dict["market_value"] = market_value
+                  dict["circulation_market_value"] = circulation_market_value
                   jsonlist.append(dict) 
                     
           except EXCEPTION:
