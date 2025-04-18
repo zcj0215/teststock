@@ -1721,7 +1721,7 @@ def same_aslist (request):
     stocks = Stocks.objects.all().order_by('id')
     paginator = Paginator(stocks, 1000)
     try:
-        page_obj = paginator.get_page(1)  # 自动处理无效页码
+        page_obj = paginator.get_page(2)  # 自动处理无效页码
         for row in page_obj:
             stock = get_object_or_404(StockList, symbol=row.code)
             row.market_value = stock.market_value
