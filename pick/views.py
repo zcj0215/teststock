@@ -10,6 +10,7 @@ from .forms import CodeForm
 import platform
 from django.db.models import Q
 from django.db.models import Sum
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -393,8 +394,11 @@ def everyday_binflow(code,inflow,dt):
 def everyday_inflow0(code,inflow,dt):
     
     try:
+        stock0 = get_object_or_404(StockList, symbol=code)
         stock = get_object_or_404(Stocks, code=code)
-        stock.inflow = round(float(inflow),2) 
+        stock.inflow = round(float(inflow),2)
+        stock.market_value = stock0.market_value
+        stock.circulation_market_value = stock0.circulation_market_value
         stock.save()
     except Http404:
         pass
@@ -1611,13 +1615,13 @@ def block_weihu(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="陆股通"
+    blockname ="工业机械"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
         filename = path+"/"+blockname+".xls"
         
-    df = pd.read_excel(filename, sheet_name='导入陆股通', header=0)
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
     code = [];
     for row in df.iloc[:,0:2].itertuples():
@@ -1714,15 +1718,19 @@ def update_aslist (request):
     return HttpResponse('执行完毕！')
 
 def same_aslist (request):
-    
-    stocks = stocks.objects.all()
-    
-    for row in stocks:
-        stock = stock = get_object_or_404(StockList, symbol=row.code)
-        row.market_value = stock.market_value
-        row.circulation_market_value = stock.circulation_market_value
-        print(row.code,row.name)
-        row.save()
+    stocks = Stocks.objects.all().order_by('id')
+    paginator = Paginator(stocks, 1000)
+    try:
+        page_obj = paginator.get_page(1)  # 自动处理无效页码
+        for row in page_obj:
+            stock = get_object_or_404(StockList, symbol=row.code)
+            row.market_value = stock.market_value
+            row.circulation_market_value = stock.circulation_market_value
+            print(row.code,row.name,row.blockname)
+            row.save()
+    except (PageNotAnInteger, EmptyPage):
+            pass
+
         
     return HttpResponse('执行完毕！')
     
