@@ -893,7 +893,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
       
-      dt='2025-04-17'
+      dt='2025-04-18'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -957,7 +957,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2025-04-17'
+      dt='2025-04-18'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1053,7 +1053,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-04-17'
+    dt='2025-04-18'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1078,7 +1078,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-04-17'
+    dt='2025-04-18'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1111,7 +1111,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2025-04-17'
+    dt='2025-04-18'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1200,7 +1200,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2025-04-17'
+      dt='2025-04-18'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1268,7 +1268,7 @@ def binflow(request):
           mylist.append(dict)
         
     
-      dt='2025-04-17'
+      dt='2025-04-18'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         name = str(row.名称)
@@ -1721,7 +1721,7 @@ def same_aslist (request):
     stocks = Stocks.objects.all().order_by('id')
     paginator = Paginator(stocks, 1000)
     try:
-        page_obj = paginator.get_page(2)  # 自动处理无效页码
+        page_obj = paginator.get_page(3)  # 自动处理无效页码
         for row in page_obj:
             stock = get_object_or_404(StockList, symbol=row.code)
             row.market_value = stock.market_value
