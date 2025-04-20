@@ -1733,4 +1733,22 @@ def same_aslist (request):
 
         
     return HttpResponse('执行完毕！')
+
+
+def man(request):
+    stocks = Stocks.objects.filter(
+       market_value__isnull=True,
+       circulation_market_value__isnull=True
+    ).prefetch_related('boards')  # 关键优化
+
+    for stock in stocks:
+        print(f"Stock ID: {stock.id}")
+        print("关联的 Boards:")
     
+        print("删除单个 Stock 的所有关联板块（清空关联）")
+        stock.boards.clear()
+        print("删除该个股在板块中的信息")
+        stock.delete()
+        print("-" * 30)  # 分隔线
+        
+    return HttpResponse('执行完毕！')
