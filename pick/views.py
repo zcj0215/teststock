@@ -125,16 +125,26 @@ def turnover(code,flag,dd,amount,dt):
                 pass
 
 
-def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_change,price_change,pre_close,pe,committee,dt):
+def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_change,price_change,pre_close,pe,committee,mv,cmv,dt):
     
     try:
         stock = get_object_or_404(Stocks, code=code)
         stock.growth = round(float(p_change),2)
         stock.committee = round(float(committee),2)
+        stock.market_value = mv
+        stock.circulation_market_value = cmv
         stock.save()
     except Http404:
         pass
     
+    try:
+        lstock = get_object_or_404(StockList, symbol=code)
+        lstock.market_value = mv
+        lstock.circulation_market_value = cmv
+        stock.save()
+    except Http404:
+        pass    
+        
     try:
         stocks = StockChoose.objects.filter(code=code)
         if stocks:
@@ -893,7 +903,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
       
-      dt='2025-04-18'
+      dt='2025-04-21'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -957,7 +967,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2025-04-18'
+      dt='2025-04-21'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -994,46 +1004,46 @@ def dayadd(request):
                     try:
                         get_object_or_404(Stockszc, code=code,date=dt)
                     except Http404:
-                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]  
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比,str(row.总市值).strip(),str(row.流通市值).strip()]  
                         if symbol!=code:
                             print(data)
-                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
+                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14],data[15],dt)
                             symbol=code
             elif code[:2] == '00':
                     try:
                         get_object_or_404(Stocksz, code=code,date=dt)
                     except Http404:
-                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]  
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比,str(row.总市值).strip(),str(row.流通市值).strip()]  
                         if symbol!=code:
                             print(data)
-                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
+                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14],data[15],dt)
                             symbol=code
             elif code[:2] == '68':
                     try:
                         get_object_or_404(Stockshk, code=code,date=dt)   
                     except Http404:
-                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]  
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比,str(row.总市值).strip(),str(row.流通市值).strip()]  
                         if symbol!=code:
                             print(data)
-                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
+                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14],data[15],dt)
                             symbol=code
             elif code[:2] == '60':    
                     try:
                         get_object_or_404(Stocksh, code=code,date=dt)
                     except Http404:
-                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比,str(row.总市值).strip(),str(row.流通市值).strip()]
                         if symbol!=code:
                             print(data)
-                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)   
+                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14],data[15],dt)   
                             symbol=code
             else:
                     try:
                         get_object_or_404(Stockbj, code=code,date=dt)
                     except Http404:
-                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比]    
+                        data = [code,row.开盘,row.最新,row.最高,row.最低,volume,amount,row.换手,row.量比,row.涨幅,row.涨跌,row.昨收,row.市盈率,row.委比,str(row.总市值).strip(),str(row.流通市值).strip()]    
                         if symbol!=code:
                             print(data)
-                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],dt)
+                            everyday(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14],data[15],dt)
                             symbol=code
       # 处理重复行
       for index, row in df[duplicates].iterrows():
@@ -1053,7 +1063,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-04-18'
+    dt='2025-04-21'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1078,7 +1088,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-04-18'
+    dt='2025-04-21'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1111,7 +1121,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2025-04-18'
+    dt='2025-04-21'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1200,7 +1210,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2025-04-18'
+      dt='2025-04-21'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1268,7 +1278,7 @@ def binflow(request):
           mylist.append(dict)
         
     
-      dt='2025-04-18'
+      dt='2025-04-21'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         name = str(row.名称)
@@ -1615,7 +1625,7 @@ def block_weihu(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="婴童概念"
+    blockname ="跨境电商"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:

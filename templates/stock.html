@@ -162,7 +162,9 @@
                 'open_close_low_high': open_close_low_high,
                 'volumes': volumes,
                 'date': date,
-                'name': rawData[0].name
+                'name': rawData[0].name,
+                'cmv' : rawData[0].circulation_market_value,
+                'mv' : rawData[0].market_value
             }
         }
         
@@ -642,7 +644,7 @@
         function runChart() {
           option = {
             title: {  
-                text: data0.name,   
+                text: data0.name + '流通市值：' + data0.cmv + '  总市值：' + data0.mv,   
                 subtext:"估值变化",
                 subtextStyle:{
                   color:'red'
