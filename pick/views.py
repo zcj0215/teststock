@@ -1625,7 +1625,7 @@ def block_weihu(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="跨境电商"
+    blockname ="跨境支付CIPS"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
