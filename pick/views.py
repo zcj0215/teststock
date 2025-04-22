@@ -141,7 +141,7 @@ def everyday(code,open,close,high,low,volume,amount,turnover,volume_ratio,p_chan
         lstock = get_object_or_404(StockList, symbol=code)
         lstock.market_value = mv
         lstock.circulation_market_value = cmv
-        stock.save()
+        lstock.save()
     except Http404:
         pass    
         
