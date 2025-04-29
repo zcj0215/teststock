@@ -20,6 +20,7 @@
     <thead class="thead-inverse">
       <tr>
         <th>板块</th>
+        <th>涨跌幅%</th>
         <th>类别</th>
         <th>帖子</th>
         <th>主题</th>
@@ -32,6 +33,13 @@
           <td>
             <a href="{% url 'boards:board_topics' board.pk %}">{{ board.name }}</a>
             <small class="text-muted d-block">{{ board.description }}</small>
+          </td>
+          <td class="align-middle">
+            {% if board.growth > 0 and board.type.name != '普通' %}
+               <span style="color:red">{{ board.growth }}</span>
+            {% elif board.type.name != '普通' %}
+               <span style="color:green">{{ board.growth }}</span>
+            {% endif %}
           </td>
           <td class="align-middle">
             {% if board.type.name == '普通' %}

@@ -602,6 +602,13 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
         if str(pe).lstrip().rstrip() != '--':
             block.pe = round(float(pe),2)
         block.save()
+        try:
+            board =  get_object_or_404(Board,name=name)
+            board.growth = round(float(growth),2)
+            board.save()
+        except Http404:
+            pass    
+             
     except Http404:
         if str(pe).lstrip().rstrip() != '--':
             block = Stocksector.objects.create(
@@ -625,6 +632,12 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
                 date = dt,
                 pe = round(float(pe),2)
             )
+            try:
+                board =  get_object_or_404(Board,name=name)
+                board.growth = round(float(growth),2)
+                board.save()
+            except Http404:
+                pass  
         else:
             block = Stocksector.objects.create(
                 code = code,
@@ -645,7 +658,13 @@ def everyday_block(code,name,open,close,high,low,volume,tover,volume_ratio,pre_c
                 Continuerise_30_limitup = round(float(Continuerise_30_limitup),2),
                 Continuerise_days = round(float(Continuerise_days),2),
                 date = dt     
-            )    
+            )
+            try:
+                board =  get_object_or_404(Board,name=name)
+                board.growth = round(float(growth),2)
+                board.save()
+            except Http404:
+                pass      
         
 def everyday_blockpe(code,pe,dt):
     try:
@@ -903,7 +922,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
       
-      dt='2025-04-28'
+      dt='2025-04-29'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -967,7 +986,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2025-04-28'
+      dt='2025-04-29'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1063,7 +1082,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-04-28'
+    dt='2025-04-29'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1088,7 +1107,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-04-28'
+    dt='2025-04-29'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1121,7 +1140,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2025-04-28'
+    dt='2025-04-29'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1210,7 +1229,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2025-04-28'
+      dt='2025-04-29'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1278,7 +1297,7 @@ def binflow(request):
           mylist.append(dict)
         
     
-      dt='2025-04-28'
+      dt='2025-04-29'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         name = str(row.名称)

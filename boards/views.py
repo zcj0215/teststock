@@ -22,6 +22,10 @@ class BoardListView(ListView):
     context_object_name = 'boards'
     template_name = 'home.html'
     paginate_by = 20
+    
+    def get_queryset(self):
+        queryset = Board.objects.order_by('growth')
+        return queryset
 
 class ByTypeBoardListView(ListView):
     model = Stocksector
