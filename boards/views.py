@@ -24,7 +24,7 @@ class BoardListView(ListView):
     paginate_by = 20
     
     def get_queryset(self):
-        queryset = Board.objects.order_by('growth')
+        queryset = Board.objects.order_by('-growth')
         return queryset
 
 class ByTypeBoardListView(ListView):
