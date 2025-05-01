@@ -711,6 +711,12 @@ def everyday_index(code,name,open,close,high,low,volume,amount,price_change,grow
         block.amplitude = round(float(amplitude),2)
         block.name = name
         block.save()
+        try:
+            board =  get_object_or_404(Board,name=name)
+            board.growth = round(float(growth),2)
+            board.save()
+        except Http404:
+            pass 
     except Http404:
         block = Stockindex.objects.create(
                 code = code,
@@ -726,6 +732,12 @@ def everyday_index(code,name,open,close,high,low,volume,amount,price_change,grow
                 amplitude = round(float(amplitude),2),
                 date = dt     
         )
+        try:
+            board =  get_object_or_404(Board,name=name)
+            board.growth = round(float(growth),2)
+            board.save()
+        except Http404:
+            pass  
  
 def everyday_indexpe(code,pe,dt):
     try:
