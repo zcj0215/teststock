@@ -1356,7 +1356,7 @@ def nf(request):
         
     df = pd.read_excel(filename, sheet_name='Sheet1', header=0)
     
-    df1 = pd.read_excel(filename1, sheet_name='工作表1', header=0)
+    df1 = pd.read_excel(filename1, sheet_name='导入陆股通', header=0)
     
     dt='2025-04-15'
     
