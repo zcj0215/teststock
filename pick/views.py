@@ -707,13 +707,13 @@ def everyday_index(code,name,open,close,high,low,volume,amount,price_change,grow
         block.volume = volume
         block.amount = amount
         block.price_change = round(float(price_change),2)
-        block.growth = round(float(growth),2)
+        block.growth = round(float(growth),4)*100
         block.amplitude = round(float(amplitude),2)
         block.name = name
         block.save()
         try:
             board =  get_object_or_404(Board,name=name)
-            board.growth = round(float(growth),2)
+            board.growth = round(float(growth),4)*100
             board.save()
         except Http404:
             pass 
@@ -728,13 +728,13 @@ def everyday_index(code,name,open,close,high,low,volume,amount,price_change,grow
                 volume = volume,
                 amount = amount,
                 price_change = round(float(price_change),2),
-                growth = round(float(growth),2),
+                growth = round(float(growth),4)*100,
                 amplitude = round(float(amplitude),2),
                 date = dt     
         )
         try:
             board =  get_object_or_404(Board,name=name)
-            board.growth = round(float(growth),2)
+            board.growth = round(float(growth),4)*100
             board.save()
         except Http404:
             pass  
