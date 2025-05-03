@@ -1358,7 +1358,7 @@ def nf(request):
     
     df1 = pd.read_excel(filename1, sheet_name='导入陆股通', header=0)
     
-    dt='2025-04-25'
+    dt='2025-04-28'
     
     for row1 in df1.itertuples():
         code = str(row1.代码)
