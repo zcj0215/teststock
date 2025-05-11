@@ -1372,7 +1372,11 @@ def nf(request):
             code = '00'+ code
         elif len(code) == 5:    
             code = '0'+ code
-            
+        
+        
+        if len(code)>6:
+           code = code[2:]
+               
         print(code)
         print(row1.名称)    
         inf =  None
