@@ -1660,7 +1660,7 @@ def block_weihu(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="军工信息化"
+    blockname ="军民融合"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
