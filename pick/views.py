@@ -1660,7 +1660,7 @@ def block_weihu(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="数字货币"
+    blockname ="深股通"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
@@ -1686,7 +1686,7 @@ def blockadd(request):
                 my = '0'+ my    
                 
         print(my)
-        print(row.名称)
+        print(str(row.名称).strip())
         code.append(my)
         board = get_object_or_404(Board,name=blockname)  
         try:
@@ -1703,7 +1703,7 @@ def blockadd(request):
         except Http404:
             stocks = Stocks.objects.create(
                 code = my,
-                name = row.名称,
+                name = str(row.名称).strip(),
                 blockname = blockname
             )
             stocks.boards.add(board)
