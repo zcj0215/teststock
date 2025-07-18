@@ -934,7 +934,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
       
-      dt='2025-07-17'
+      dt='2025-07-18'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -998,7 +998,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2025-07-17'
+      dt='2025-07-18'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1094,7 +1094,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-07-17'
+    dt='2025-07-18'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1119,7 +1119,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-07-17'
+    dt='2025-07-18'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1152,7 +1152,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2025-07-17'
+    dt='2025-07-18'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1241,7 +1241,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2025-07-17'
+      dt='2025-07-18'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1309,7 +1309,7 @@ def binflow(request):
           mylist.append(dict)
         
     
-      dt='2025-07-17'
+      dt='2025-07-18'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         name = str(row.名称)
@@ -1358,7 +1358,7 @@ def nf(request):
     
     df1 = pd.read_excel(filename1, sheet_name='导入陆股通', header=0)
     
-    dt='2025-07-17'
+    dt='2025-07-18'
     
     for row1 in df1.itertuples():
         code = str(row1.代码)
@@ -1596,9 +1596,9 @@ def index_single(request):
     path =  os.path.dirname(__file__)
     filename = ""
     if(sysstr =="Windows"):
-        filename = path+"\\Table5.xls"       
+        filename = path+"\\Table11.xls"       
     else:
-        filename = path+"/Table5.xls"
+        filename = path+"/Table11.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     for row in df.itertuples():
@@ -1607,8 +1607,9 @@ def index_single(request):
         
         volume = round(float(row.总手*1/1000000),2)
         amount = round(float(row.金额/100000000),2)
+        price_change = 0
         
-        everyday_index('899050','北证50', row.开盘, row.收盘, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, dt)
+        everyday_index('888802','深股通', row.开盘, row.收盘, row.最高, row.最低, volume, amount, price_change,  row.涨幅, row.振幅, dt)
        
     return HttpResponse('执行完毕！')
 
