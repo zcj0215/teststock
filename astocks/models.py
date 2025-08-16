@@ -269,3 +269,8 @@ class Stockindex(models.Model):
     date = models.DateField(max_length=10,db_index=True,null=True)
     pe = models.DecimalField(max_digits=7, decimal_places=2,null=True) 
     
+    
+class Indexinflow(models.Model):
+    code = models.CharField(max_length=11, db_index=True) 
+    name = models.CharField(max_length=50,db_index=True,null=True)       
+    
