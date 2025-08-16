@@ -1661,14 +1661,13 @@ def block_weihu(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="陆股通"
+    blockname ="深股通"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
         filename = path+"/"+blockname+".xls"
         
-    #df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    df = pd.read_excel(filename, sheet_name='导入陆股通', header=0)
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
     
     code = [];
     for row in df.iloc[:,0:2].itertuples():
