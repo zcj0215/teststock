@@ -1661,7 +1661,7 @@ def block_weihu(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="互联金融"
+    blockname ="稀缺资源"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
