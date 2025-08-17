@@ -272,5 +272,8 @@ class Stockindex(models.Model):
     
 class Indexinflow(models.Model):
     code = models.CharField(max_length=11, db_index=True) 
-    name = models.CharField(max_length=50,db_index=True,null=True)       
-    
+    name = models.CharField(max_length=50,db_index=True,null=True) 
+    inf =  models.DecimalField(max_digits=15, decimal_places=2,null=True)     # 流入
+    outf =  models.DecimalField(max_digits=15, decimal_places=2,null=True)    # 流出
+    inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)   # 主力资金净流入
+    date = models.DateField(max_length=10,db_index=True,null=True)
