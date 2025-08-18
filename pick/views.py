@@ -1218,6 +1218,8 @@ def indexinflow(request):
         print(inflow)
         
         everyday_indexinflow(code, row.名称, inf, outf, inflow, dt)
+        
+    return HttpResponse('执行完毕！') 
 
 @prevent_duplicate_calls    
 def blockdayadd(request):
