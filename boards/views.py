@@ -35,8 +35,10 @@ class ByTypeBoardListView(ListView):
    
     
     def get(self, request, *args, **kwargs):
-        if self.kwargs.get('type_pk') == 6:
+        pk = self.kwargs.get('type_pk')
+        if int(pk) == 6:
             return redirect('boards:dtype_boards')
+
     
     def get_context_data(self, **kwargs):
         kwargs['type'] = self.type

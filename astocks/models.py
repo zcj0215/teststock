@@ -277,3 +277,4 @@ class Indexinflow(models.Model):
     outf =  models.DecimalField(max_digits=15, decimal_places=2,null=True)    # 流出
     inflow = models.DecimalField(max_digits=15, decimal_places=2,null=True)   # 主力资金净流入
     date = models.DateField(max_length=10,db_index=True,null=True)
+    growth=models.DecimalField(max_digits=10, decimal_places=2,null=True)  

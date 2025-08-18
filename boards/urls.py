@@ -19,5 +19,5 @@ urlpatterns = [
     path('blockquery', views.blockquery, name='blockquery'),
     path('blockget', views.blockget, name='blockget'),
     path('singleget', views.singleget, name='singleget'),
-     path('dtype_boards', views.ByDTypeBoardListView.as_view(), name='dtype_boards'),
+    path('dtype_boards', views.ByDTypeBoardListView.as_view(), name='dtype_boards'),
 ]
