@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
+  <li class="breadcrumb-item active">{{ type.name }}</li>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>板块</th>
+        <th>涨跌幅</th>
+        <th>流入（万）</th>
+        <th>流出（万）</th>
+        <th>主力净流入（万）</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for board in boards %}
+        <tr>
+          <td>
+            <a href="{% url 'boards:board_stocks' board.name %}">{{ board.name }}</a>
+          </td>
+          <td class="align-middle">
+            {% if board.growth > 0 %}
+               <span style="color:red">{{ board.growth }}</span>
+            {% else %}
+               <span style="color:green">{{ board.growth }}</span>
+            {% endif %}
+          </td>
+          <td class="align-middle">
+            <span style="color:red">{{ board.inf }}</span>
+          </td>
+          <td class="align-middle">
+            <span style="color:green">{{ board.outf }}</span>
+          </td>
+          <td class="align-middle">
+            {% if board.inflow > 0 %}
+               <span style="color:red">{{ board.inflow }}</span>
+            {% else %}
+               <span style="color:green">{{ board.inflow }}</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% include 'includes/pagination.html' %}
+{% endblock %}

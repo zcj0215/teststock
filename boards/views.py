@@ -8,7 +8,7 @@ from django.db.models import Count
 
 from .forms import NewTopicForm, PostForm, CodeForm
 from .models import Board, Topic, Post, BoardType
-from astocks.models import Stocks,StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocksector,Stockindex
+from astocks.models import Stocks,StockList,Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocksector,Stockindex,Indexinflow
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 import time
@@ -33,6 +33,11 @@ class ByTypeBoardListView(ListView):
     template_name = 'homebytype.html'
     paginate_by = 20
    
+    
+    def get(self, request, *args, **kwargs):
+        if self.kwargs.get('type_pk') == 6:
+            return redirect('boards:dtype_boards')
+    
     def get_context_data(self, **kwargs):
         kwargs['type'] = self.type
         return super().get_context_data(**kwargs)    
@@ -46,7 +51,22 @@ class ByTypeBoardListView(ListView):
             names.append(board.name)
         queryset = Stocksector.objects.filter(name__in = names,date=date).order_by('-inflow')
         return queryset
+
+class ByDTypeBoardListView(ListView):
+    model = Indexinflow
+    context_object_name = 'boards'
+    template_name = 'homedbytype.html'
+    paginate_by = 20
     
+    def get_queryset(self):
+        self.type = get_object_or_404(BoardType, pk=6)
+        bds = Board.objects.filter(type = self.type)
+        date =  Indexinflow.objects.order_by('date').last().date
+        names = []
+        for board in bds:
+            names.append(board.name)
+        queryset = Indexinflow.objects.filter(name__in = names,date=date).order_by('-inflow')
+        return queryset
     
 class TopicListView(ListView):
     model = Topic

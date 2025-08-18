@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 import os
-from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stocksector,StockChoose,StockLimitup,Stockindex,StockList
+from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stocksector,StockChoose,StockLimitup,Stockindex,StockList,Indexinflow
 from boards.models import Board,BoardType
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
@@ -746,6 +746,24 @@ def everyday_indexpe(code,pe,dt):
         block.save()
     except Http404:
        pass
+   
+def everyday_indexinflow(code, name, inf, outf, inflow, dt):
+    try:
+        block = get_object_or_404(Indexinflow,code=code,date=dt)
+        block.name = name
+        block.inf = round(float(inf),2)
+        block.outf = round(float(outf),2)
+        block.inflow = round(float(inflow),2)
+        block.save()
+    except Http404:
+        block = Stockindex.objects.create(
+            code = code,
+            name = name,
+            inf = round(float(inf),2),
+            outf = round(float(outf),2),
+            inflow = round(float(inflow),2),
+            date = dt     
+        )
     
 def everydayout(dt):
     path =  os.path.dirname(__file__)   
@@ -1140,6 +1158,62 @@ def indexpe(request):
             
     
     return HttpResponse('执行完毕！') 
+
+@prevent_duplicate_calls
+def indexinflow(request):
+    path =  os.path.dirname(__file__)
+    filename = "" 
+    if(sysstr =="Windows"):
+        filename = path+"\\指数主力资金.xls"
+        
+    else:
+        filename = path+"/指数主力资金.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
+    
+    dt='2025-08-15'
+    for row in df.itertuples():
+        code = str(row.代码)
+        if len(code) == 1:
+            code = '00000'+ code
+        elif len(code) == 2:
+            code = '0000'+ code
+        elif len(code) == 3:    
+            code = '000'+ code
+        elif len(code) == 4:    
+            code = '00'+ code
+        elif len(code) == 5:    
+            code = '0'+ code
+                
+        print(code)
+        print(row.名称)
+        print(row.净流入)
+        
+        inflow = 0
+        if '万' in (row.净流入):
+            inflow = round(float(row.净流入[0:-1]),2)
+        elif '亿' in row.净流入:
+            inflow = round(float(row.净流入[0:-1])*10000,2)
+        else:
+            inflow = round(float(row.净流入*0.0001),2)
+            
+        inf = 0
+        if '万' in (row.流入):
+            inf = round(float(row.流入[0:-1]),2)
+        elif '亿' in row.流入:
+            inf = round(float(row.流入[0:-1])*10000,2)
+        else:
+            inf = round(float(row.流入*0.0001),2)
+            
+        outf = 0
+        if '万' in (row.流出):
+            outf = round(float(row.流出[0:-1]),2)
+        elif '亿' in row.流出:
+            outf = round(float(row.流出[0:-1])*10000,2)
+        else:
+            outf = round(float(row.流出*0.0001),2)
+        
+        everyday_indexinflow(code, row.名称, inf, outf, inflow, dt)
 
 @prevent_duplicate_calls    
 def blockdayadd(request):
