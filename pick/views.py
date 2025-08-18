@@ -756,7 +756,7 @@ def everyday_indexinflow(code, name, inf, outf, inflow, dt):
         block.inflow = round(float(inflow),2)
         block.save()
     except Http404:
-        block = Stockindex.objects.create(
+        block = Indexinflow.objects.create(
             code = code,
             name = name,
             inf = round(float(inf),2),
@@ -1212,6 +1212,10 @@ def indexinflow(request):
             outf = round(float(row.流出[0:-1])*10000,2)
         else:
             outf = round(float(row.流出*0.0001),2)
+            
+        print(inf)
+        print(outf)
+        print(inflow)
         
         everyday_indexinflow(code, row.名称, inf, outf, inflow, dt)
 
