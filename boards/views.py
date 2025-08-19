@@ -38,6 +38,8 @@ class ByTypeBoardListView(ListView):
         pk = self.kwargs.get('type_pk')
         if int(pk) == 6:
             return redirect('boards:dtype_boards')
+        
+        return super().get(request, *args, **kwargs)
 
     
     def get_context_data(self, **kwargs):
