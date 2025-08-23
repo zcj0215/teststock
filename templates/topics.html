@@ -9,7 +9,7 @@
   <li class="breadcrumb-item"><a href="{% url 'boards:home' %}">板块</a></li>
   <li class="breadcrumb-item active">{{ board.name }}</li>
   {% if board.type.name != "普通" %}
-    <li class="ml-auto"><a href="{% url 'boards:board_stocks' board.name %}">板块个股</a></li>
+    <li class="ml-auto"><a href="{% url 'boards:board_stocks' board.name %}">板块<span style="color:red">K线</span>及个股</a></li>
   {% endif %}
 {% endblock %}
 
