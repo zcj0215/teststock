@@ -1704,7 +1704,7 @@ def index_single(request):
         amount = round(float(row.金额/100000000),2)
         price_change = 0
         
-        everyday_index('888803','沪股通', row.开盘, row.收盘, row.最高, row.最低, volume, amount, price_change,  row.涨幅, row.振幅, dt)
+        everyday_index('888802','深股通', row.开盘, row.收盘, row.最高, row.最低, volume, amount, price_change,  row.涨幅, row.振幅, dt)
        
     return HttpResponse('执行完毕！')
 
