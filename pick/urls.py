@@ -20,6 +20,7 @@ urlpatterns = [
     path('stock_single/', pick_views.stock_single,name='stock_single'),
     path('stock_select/', select_views.stock_select,name='stock_select'),
     path('index_single/', pick_views.index_single,name='index_single'),
+    path('index_single1/', pick_views.index_single1,name='index_single1'),
     path('block_single/', pick_views.block_single,name='block_single'),
     path('stock_pe/', pick_views.stock_pe,name='stock_pe'),
     path('block_pe/', pick_views.block_pe,name='block_pe'),

@@ -1704,6 +1704,27 @@ def index_single(request):
         amount = round(float(row.金额/100000000),2)
         price_change = 0
         
+        everyday_index('888802','深股通', row.开盘, row.收盘, row.最高, row.最低, volume, amount, price_change,  row.涨幅, row.振幅, dt)
+       
+    return HttpResponse('执行完毕！')
+
+def index_single1(request):
+    path =  os.path.dirname(__file__)
+    filename = ""
+    if(sysstr =="Windows"):
+        filename = path+"\\Table11.xls"       
+    else:
+        filename = path+"/Table11.xls"
+        
+    df = pd.read_excel(filename, sheet_name='工作表1', header=0)
+    for row in df.itertuples():
+        dt = str(row.时间[0:10])
+        print(dt)
+        
+        volume = round(float(row.总手*1/1000000),2)
+        amount = round(float(row.金额/100000000),2)
+        price_change = 0
+        
         everyday_index('888803','沪股通', row.开盘, row.收盘, row.最高, row.最低, volume, amount, price_change,  row.涨幅, row.振幅, dt)
        
     return HttpResponse('执行完毕！')
