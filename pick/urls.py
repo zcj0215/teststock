@@ -31,6 +31,7 @@ urlpatterns = [
     path('update_aslist/', pick_views.update_aslist,name='update_aslist'),
     path('same_aslist/', pick_views.same_aslist,name='same_aslist'),
     path('man/', pick_views.man,name='man'),
+    path('rwxls/', pick_views.rwxls,name='rwxls'),
 ]
 
 

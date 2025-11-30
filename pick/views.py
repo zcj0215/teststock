@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 import os
+import xlwt
 from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stocksector,StockChoose,StockLimitup,Stockindex,StockList,Indexinflow
 from boards.models import Board,BoardType
 from django.shortcuts import get_object_or_404
@@ -967,7 +968,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
       
-      dt='2025-10-15'
+      dt='2025-10-16'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1031,7 +1032,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2025-10-15'
+      dt='2025-10-16'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1127,7 +1128,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-10-15'
+    dt='2025-10-16'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1152,7 +1153,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-10-15'
+    dt='2025-10-16'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1186,7 +1187,7 @@ def indexinflow(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-10-15'
+    dt='2025-10-16'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1247,7 +1248,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2025-10-15'
+    dt='2025-10-16'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1336,7 +1337,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2025-10-15'
+      dt='2025-10-16'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1404,7 +1405,7 @@ def binflow(request):
           mylist.append(dict)
         
     
-      dt='2025-10-15'
+      dt='2025-10-16'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         name = str(row.名称)
@@ -1453,7 +1454,7 @@ def nf(request):
     
     df1 = pd.read_excel(filename1, sheet_name='导入陆股通', header=0)
     
-    dt='2025-10-15'
+    dt='2025-10-16'
     
     for row1 in df1.itertuples():
         code = str(row1.代码)
@@ -1912,5 +1913,54 @@ def man(request):
         print("删除该个股在板块中的信息")
         stock.delete()
         print("-" * 30)  # 分隔线
+        
+    return HttpResponse('执行完毕！')
+
+def rwxls(request):
+    """
+    使用pandas读取、修改和写入.xls文件
+    """
+    path =  os.path.dirname(__file__)
+    infilename = "" 
+    outfilename = "" 
+    if(sysstr =="Windows"):
+        infilename = path+"\\导入.xls"   
+        outfilename = path+"\\导出.xls"  
+    else:
+        infilename = path+"/导入.xls"
+        outfilename = path+"/导出.xls"
+    
+    try:
+        # 1. 读取.xls文件
+        print(f"正在读取文件: {infilename}")
+        df = pd.read_excel(infilename, sheet_name='Sheet1', header=0)
+        
+        
+        # 2. 显示原始数据
+        print("\n原始数据:")
+        for row in df.itertuples():
+            code = str(row.代码).strip()
+            print(code)
+        
+        
+        
+        # 3. 修改数据
+        print("\n正在修改数据...")
+        
+        if '代码' in df.columns:
+            df['代码'] =  df['代码'].astype(str).str[4:10]
+ 
+        # 4. 显示修改数据
+        print("\n修改数据:")
+        for row in df.itertuples():
+            code = str(row.代码).strip()
+            print(code)    
+        
+        # 5. 保存修改后的数据    
+        df.to_excel(outfilename, index=False,engine='xlwt')
+        print(f"\n✓ 文件已成功导出到: {outfilename}")
+        
+    except Exception as e:
+        print(f"处理文件时出错: {e}")
         
     return HttpResponse('执行完毕！')
