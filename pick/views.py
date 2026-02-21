@@ -968,7 +968,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
       
-      dt='2025-10-23'
+      dt='2025-10-24'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1032,7 +1032,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2025-10-23'
+      dt='2025-10-24'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1128,7 +1128,7 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-10-23'
+    dt='2025-10-24'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
@@ -1153,7 +1153,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-10-23'
+    dt='2025-10-24'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1187,7 +1187,7 @@ def indexinflow(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2025-10-23'
+    dt='2025-10-24'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1248,7 +1248,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2025-10-23'
+    dt='2025-10-24'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1337,7 +1337,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2025-10-23'
+      dt='2025-10-24'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1405,7 +1405,7 @@ def binflow(request):
           mylist.append(dict)
         
     
-      dt='2025-10-23'
+      dt='2025-10-24'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         name = str(row.名称)
@@ -1454,7 +1454,7 @@ def nf(request):
     
     df1 = pd.read_excel(filename1, sheet_name='导入陆股通', header=0)
     
-    dt='2025-10-23'
+    dt='2025-10-24'
     
     for row1 in df1.itertuples():
         code = str(row1.代码)
