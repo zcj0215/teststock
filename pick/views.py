@@ -1778,7 +1778,7 @@ def block_weihu(request):
 def blockadd(request):
     path =  os.path.dirname(__file__)
     filename = "" 
-    blockname ="石油"
+    blockname ="大基金持股"
     if(sysstr =="Windows"):
         filename = path+"\\"+blockname+".xls"
     else:
@@ -1963,4 +1963,26 @@ def rwxls(request):
     except Exception as e:
         print(f"处理文件时出错: {e}")
         
+    return HttpResponse('执行完毕！')
+
+def sxj(request):
+    path =  os.path.dirname(__file__)
+    filename = ""
+    code = "sxj"
+    
+    if(sysstr =="Windows"):
+        filename = path+"\\"+code+".csv"       
+    else:
+        filename = path+"/"+code+".csv"
+        
+    df = pd.read_csv(filename, encoding='utf-8')
+    for row in df.itertuples():
+        dt = str(row.日期)
+        print(dt)
+       
+        print(name)
+        
+        volume = round(float(row.成交量*1),2)
+        block_history(code,name, row.开盘, row.收盘, row.最高, row.最低, volume, dt)
+       
     return HttpResponse('执行完毕！')
