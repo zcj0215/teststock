@@ -968,7 +968,7 @@ def pe_dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
       
-      dt='2026-07-31'
+      dt='2026-08-03'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1032,7 +1032,7 @@ def dayadd(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
          
-      dt='2026-07-31'
+      dt='2026-08-03'
       symbol=''
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
@@ -1128,14 +1128,27 @@ def indexadd(request):
      
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2026-07-31'
+    dt='2026-08-03'
     for row in df.itertuples():
         print(row.名称)
         code = str(row.代码)[-6:]
         print(code)
         if code in ['000001','000016','000300','000688','000905','399001','399006','899050','888801','888802','888803']: 
-            volume = round(float(row.总手*1/1000000),2)
-            amount = round(float(row.金额/100000000),2)
+            volume = 0
+            if '万' in (row.总手):
+                volume = round(float(row.总手[0:-1]),2)
+            elif '亿' in row.总手:
+                volume = round(float(row.总手[0:-1])*10000,2)
+            else:
+                volume = round(float(row.总手*0.0001),2)
+
+            amount = 0
+            if '万' in (row.金额):
+                amount = round(float(row.金额[0:-1]),2)
+            elif '亿' in row.金额:
+                amount = round(float(row.金额[0:-1])*10000,2)
+            else:
+                amount = round(float(row.金额*0.0001),2)
         
             everyday_index(code,row.名称, row.开盘, row.现价, row.最高, row.最低, volume, amount, row.涨跌,  row.涨幅, row.振幅, dt)
         
@@ -1153,7 +1166,7 @@ def indexpe(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2026-07-31'
+    dt='2026-08-03'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1187,7 +1200,7 @@ def indexinflow(request):
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)  
     
-    dt='2026-07-31'
+    dt='2026-08-03'
     for row in df.itertuples():
         code = str(row.代码)
         if len(code) == 1:
@@ -1248,7 +1261,7 @@ def blockdayadd(request):
         filename = path+"/板块指数.xls"
         
     df = pd.read_excel(filename, sheet_name='工作表1', header=0)
-    dt='2026-07-31'
+    dt='2026-08-03'
     for row in df.itertuples():
         print(row.名称)
         
@@ -1337,7 +1350,7 @@ def inflow(request):
       df = df.reset_index(drop=True)
       duplicates = df.duplicated()
     
-      dt='2026-07-31'
+      dt='2026-08-03'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         code = str(row.代码)
@@ -1405,7 +1418,7 @@ def binflow(request):
           mylist.append(dict)
         
     
-      dt='2026-07-31'
+      dt='2026-08-03'
       # 遍历非重复行
       for index, row in df[~duplicates].iterrows():
         name = str(row.名称)
@@ -1454,7 +1467,7 @@ def nf(request):
     
     df1 = pd.read_excel(filename1, sheet_name='导入陆股通', header=0)
     
-    dt='2026-07-31'
+    dt='2026-08-03'
     
     for row1 in df1.itertuples():
         code = str(row1.代码)
