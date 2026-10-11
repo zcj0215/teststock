@@ -654,7 +654,7 @@
             animation: false,
             legend: {
                 top: 10,
-                data: ['日K', 'MA5', 'MA8','MA13','MA120']
+                data: ['日K', 'MA5', 'MA8','MA13','MA55','MA120']
             },
             tooltip: {
                 trigger: 'axis',
@@ -977,6 +977,15 @@
                     }
                 },
                 {
+                    name: 'MA55',
+                    type: 'line',
+                    data: calculateMA(55,data0.open_close_low_high),
+                    smooth: true,
+                    lineStyle: {
+                        opacity: 0.5
+                    }
+                },
+                {
                     name: 'MA120',
                     type: 'line',
                     data: calculateMA(120,data0.open_close_low_high),
@@ -1179,7 +1188,7 @@
             animation: false,
             legend: {
                 top: 10,
-                data: ['日K', 'MA5', 'MA8','MA13','MA120']
+                data: ['日K', 'MA5', 'MA8','MA13','MA55','MA120']
             },
             tooltip: {
                 trigger: 'axis',
@@ -1496,6 +1505,15 @@
                     name: 'MA13',
                     type: 'line',
                     data: calculateMA(13,data1.open_close_low_high),
+                    smooth: true,
+                    lineStyle: {
+                        opacity: 0.5
+                    }
+                },
+                {
+                    name: 'MA55',
+                    type: 'line',
+                    data: calculateMA(55,data1.open_close_low_high),
                     smooth: true,
                     lineStyle: {
                         opacity: 0.5
