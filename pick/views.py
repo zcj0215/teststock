@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 import os
-import xlwt
+import pandas_xlwt
 from astocks.models import Stocksz,Stockszc,Stocksh,Stockshk,Stockbj,Stocks,Stocksector,StockChoose,StockLimitup,Stockindex,StockList,Indexinflow
 from boards.models import Board,BoardType
 from django.shortcuts import get_object_or_404
@@ -1961,7 +1961,7 @@ def rwxls(request):
         print("\n正在修改数据...")
         
         if '代码' in df.columns:
-            df['代码'] =  df['代码'].astype(str).str[4:10]
+            df['代码'] =  df['代码'].astype(str).str[2:10]
  
         # 4. 显示修改数据
         print("\n修改数据:")
