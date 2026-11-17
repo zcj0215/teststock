@@ -1961,7 +1961,7 @@ def rwxls(request):
         print("\n正在修改数据...")
         
         if '代码' in df.columns:
-            df['代码'] =  df['代码'].astype(str).str[2:10]
+            df['代码'] =  df['代码'].astype(str).str[4:10]
  
         # 4. 显示修改数据
         print("\n修改数据:")
